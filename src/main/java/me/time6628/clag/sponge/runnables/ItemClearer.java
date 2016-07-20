@@ -35,6 +35,6 @@ public class ItemClearer implements Runnable {
             entities.forEach(Entity::remove);
         });
         //broadcast that they have all been removed
-        game.getServer().getBroadcastChannel().send(Text.of("All ground items have been cleared."));
+        game.getServer().getBroadcastChannel().send(Text.of(TextColors.RED + "All ground items have been cleared."));
     }
 }
