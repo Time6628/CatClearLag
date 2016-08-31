@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.1", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.2", description = "DIE LAG, DIE!")
 public class CatClearLag {
     @Inject
     private Game game;
