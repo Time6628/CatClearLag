@@ -27,6 +27,8 @@ public class CatClearLag {
     public void onPreInit(GamePreInitializationEvent event) {
         scheduler = game.getScheduler();
         builder = scheduler.createTaskBuilder();
+
+        game.getEventManager().registerListeners(this, new EventHandler());
         Task task = builder.execute(new ItemClearer(game))
                 .async()
                 .delay(10, TimeUnit.MINUTES)
