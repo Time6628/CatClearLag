@@ -52,13 +52,13 @@ public class CatClearLag {
                 .interval(10, TimeUnit.MINUTES)
                 .name("CatClearLag Item Remover")
                 .submit(this);
-        Task warningTaskOne = builder.execute(new ItemClearingWarning(60, game))
+        Task warningTaskOne = builder.execute(new ItemClearingWarning(60, this))
                 .async()
                 .delay((long) 9, TimeUnit.MINUTES)
                 .interval(10, TimeUnit.MINUTES)
                 .name("CatClearLag Removal warning 1")
                 .submit(this);
-        Task warningTaskTwo = builder.execute(new ItemClearingWarning(30, game))
+        Task warningTaskTwo = builder.execute(new ItemClearingWarning(30, this))
                 .async()
                 .delay((long) 9.5, TimeUnit.MINUTES)
                 .interval(10, TimeUnit.MINUTES)

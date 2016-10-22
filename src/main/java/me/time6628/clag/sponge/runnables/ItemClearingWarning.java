@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.runnables;
 
+import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -10,15 +11,15 @@ import org.spongepowered.api.text.format.TextColors;
 public class ItemClearingWarning implements Runnable {
 
     private int seconds;
-    private Game game;
+    private CatClearLag plugin;
 
-    public ItemClearingWarning(int seconds, Game game) {
+    public ItemClearingWarning(int seconds, CatClearLag game) {
         this.seconds = seconds;
-        this.game = game;
+        this.plugin = game;
     }
 
     @Override
     public void run() {
-        game.getServer().getBroadcastChannel().send(Text.of(TextColors.RED + "All ground items will be cleared in" + seconds + "."));
+        plugin.game.getServer().getBroadcastChannel().send(Text.builder().append(plugin.prefix).color(TextColors.RED).append(Text.of("All ground items have been cleared.")).build());
     }
 }
