@@ -39,7 +39,8 @@ public class CatClearLag {
     public Text prefix = Text.of(TextColors.DARK_PURPLE + "[KKMCClearLag] ");
 
     @Subscribe
-    public void onPreInit(GamePreInitializationEvent event) {
+    public void onInit(GameInitializationEvent event) {
+        registerCommands();
         scheduler = game.getScheduler();
         builder = scheduler.createTaskBuilder();
         Task task = builder.execute(new ItemClearer(this))
@@ -60,11 +61,6 @@ public class CatClearLag {
                 .interval(10, TimeUnit.MINUTES)
                 .name("CatClearLag Removal warning 1")
                 .submit(this);
-    }
-
-    @Subscribe
-    public void onInit(GameInitializationEvent event) {
-        registerCommands();
     }
 
     private void registerCommands() {
