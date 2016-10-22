@@ -18,6 +18,7 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.World;
@@ -38,7 +39,7 @@ public class CatClearLag {
 
     private Scheduler scheduler = Sponge.getScheduler();
 
-    public Text prefix = Text.of(TextColors.DARK_PURPLE + "[KKMCClearLag] ");
+    public Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[KKMCClearLag]")).build();
 
     @Listener
     public void onInit(GameInitializationEvent event) {

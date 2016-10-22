@@ -28,6 +28,6 @@ public class ItemClearer implements Runnable {
     public void run() {
         plugin.clearGoundItems();
         //broadcast that they have all been removed
-        plugin.game.getServer().getBroadcastChannel().send(Text.of(TextColors.RED + "All ground items have been cleared."));
+        plugin.game.getServer().getBroadcastChannel().send(Text.builder().append(plugin.prefix).color(TextColors.RED).append(Text.of("All ground items have been cleared.")).build());
     }
 }
