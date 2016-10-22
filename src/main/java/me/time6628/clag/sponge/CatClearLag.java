@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.1", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.3", description = "DIE LAG, DIE!")
 public class CatClearLag {
     @Inject
     public Game game;
