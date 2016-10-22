@@ -19,6 +19,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="CatClearLag_main" target="1.8" />
+      <module name="CatClearLag_test" target="1.8" />
       <module name="ClearLag_main" target="1.8" />
       <module name="ClearLag_test" target="1.8" />
     </bytecodeTargetLevel>

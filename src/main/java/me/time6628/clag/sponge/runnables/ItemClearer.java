@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.runnables;
 
+import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -18,23 +19,15 @@ import java.util.function.Predicate;
  * Created by pturc_000 on 7/13/2016.
  */
 public class ItemClearer implements Runnable {
-    private Game game;
-    public ItemClearer(Game game) {
-        this.game = game;
+    private CatClearLag plugin;
+    public ItemClearer(CatClearLag plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     public void run() {
-        //get all the worlds
-        Collection<World> worlds = game.getServer().getWorlds();
-        //for each world
-        worlds.forEach((temp) -> {
-            //get all the item entities in the world
-            Collection<Entity> entities = temp.getEntities(Predicate.isEqual(EntityTypes.ITEM));
-            //remove them all
-            entities.forEach(Entity::remove);
-        });
+        plugin.clearGoundItems();
         //broadcast that they have all been removed
-        game.getServer().getBroadcastChannel().send(Text.of(TextColors.RED + "All ground items have been cleared."));
+        plugin.game.getServer().getBroadcastChannel().send(Text.of(TextColors.RED + "All ground items have been cleared."));
     }
 }

@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ClearLag.iml" filepath="$PROJECT_DIR$/.idea/modules/ClearLag.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ClearLag_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ClearLag_main.iml" group="ClearLag" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ClearLag_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ClearLag_test.iml" group="ClearLag" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CatClearLag.iml" filepath="$PROJECT_DIR$/.idea/modules/CatClearLag.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CatClearLag_main.iml" filepath="$PROJECT_DIR$/.idea/modules/CatClearLag_main.iml" group="CatClearLag" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CatClearLag_test.iml" filepath="$PROJECT_DIR$/.idea/modules/CatClearLag_test.iml" group="CatClearLag" />
     </modules>
   </component>
 </project>
