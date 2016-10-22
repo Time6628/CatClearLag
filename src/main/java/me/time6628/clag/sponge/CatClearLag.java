@@ -12,6 +12,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Hostile;
+import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -24,25 +25,26 @@ import org.spongepowered.api.world.World;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
 @Plugin(name = "CatClearLag", id = "catclearlag", version = "0.3", description = "DIE LAG, DIE!")
 public class CatClearLag {
-    @Inject
-    public Game game;
 
-    private Scheduler scheduler;
-    private Task.Builder builder;
+    public static Logger cclLogger = Logger.getLogger("CCL");
+    public Game game = Sponge.getGame();
+
+    private Scheduler scheduler = Sponge.getScheduler();
 
     public Text prefix = Text.of(TextColors.DARK_PURPLE + "[KKMCClearLag] ");
 
-    @Subscribe
+    @Listener
     public void onInit(GameInitializationEvent event) {
+        CatClearLag.cclLogger.info("Starting plugin...");
         registerCommands();
-        scheduler = game.getScheduler();
-        builder = scheduler.createTaskBuilder();
+        Task.Builder builder = scheduler.createTaskBuilder();
         Task task = builder.execute(new ItemClearer(this))
                 .async()
                 .delay(10, TimeUnit.MINUTES)
@@ -64,6 +66,7 @@ public class CatClearLag {
     }
 
     private void registerCommands() {
+        CatClearLag.cclLogger.info("Registering commands...");
         CommandSpec cSpec = CommandSpec.builder()
                 .description(Text.of("Remove all hostile entities from the server."))
                 .permission("catclearlag.command.removehostile")
@@ -80,7 +83,7 @@ public class CatClearLag {
 
     public void clearGoundItems() {
         //get all the worlds
-        Collection<World> worlds = game.getServer().getWorlds();
+        Collection<World> worlds = Sponge.getServer().getWorlds();
         //for each world
         worlds.forEach((temp) -> {
             //get all the item entities in the world
@@ -92,7 +95,7 @@ public class CatClearLag {
 
     public void removeHostile() {
         //get all worlds
-        Collection<World> worlds = game.getServer().getWorlds();
+        Collection<World> worlds = Sponge.getServer().getWorlds();
         //for each world
         worlds.forEach((temp) -> {
             //get all the hostile entities in the world
@@ -108,7 +111,7 @@ public class CatClearLag {
 
     public void removeAll() {
         //get all the worlds
-        Collection<World> worlds = game.getServer().getWorlds();
+        Collection<World> worlds = Sponge.getServer().getWorlds();
         //for each world
         worlds.forEach((temp) -> {
             //get all the entities in the world
