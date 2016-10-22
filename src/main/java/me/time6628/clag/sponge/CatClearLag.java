@@ -54,13 +54,13 @@ public class CatClearLag {
                 .submit(this);
         Task warningTaskOne = builder.execute(new ItemClearingWarning(60, this))
                 .async()
-                .delay((long) 9, TimeUnit.MINUTES)
+                .delay(540, TimeUnit.SECONDS)
                 .interval(10, TimeUnit.MINUTES)
                 .name("CatClearLag Removal warning 1")
                 .submit(this);
         Task warningTaskTwo = builder.execute(new ItemClearingWarning(30, this))
                 .async()
-                .delay((long) 9.5, TimeUnit.MINUTES)
+                .delay(570, TimeUnit.SECONDS)
                 .interval(10, TimeUnit.MINUTES)
                 .name("CatClearLag Removal warning 1")
                 .submit(this);
