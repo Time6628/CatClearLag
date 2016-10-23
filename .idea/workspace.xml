@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="05c4b445-b70b-45e4-a663-49e9a0211831" name="Default" comment="Fix color scheme,">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveGItemsCommand.java" />
+    <list default="true" id="05c4b445-b70b-45e4-a663-49e9a0211831" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java" afterPath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearer.java" afterPath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java" afterPath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java" />
     </list>
     <ignored path="ClearLag.iws" />
@@ -44,7 +41,68 @@
           <activation />
         </task>
         <projects_view>
-          <tree_state />
+          <tree_state>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="CatClearLag" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ProjectNode" />
+              </PATH_ELEMENT>
+            </PATH>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="CatClearLag" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ProjectNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="Tasks" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode" />
+              </PATH_ELEMENT>
+            </PATH>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="CatClearLag" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ProjectNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="Tasks" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="other" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode$1" />
+              </PATH_ELEMENT>
+            </PATH>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="CatClearLag" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ProjectNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="Tasks" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="build" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode$1" />
+              </PATH_ELEMENT>
+            </PATH>
+          </tree_state>
         </projects_view>
       </state>
     </system>
@@ -54,11 +112,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CatClearLag.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CatClearLag.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="84" column="25" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
+            <state relative-caret-position="459">
+              <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -141,11 +199,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ItemClearingWarning.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ItemClearingWarning.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="22" column="177" selection-start-line="22" selection-start-column="177" selection-end-line="22" selection-end-column="177" />
+              <caret line="22" column="190" selection-start-line="22" selection-start-column="190" selection-end-line="22" selection-end-column="190" />
               <folding />
             </state>
           </provider>
@@ -405,10 +463,10 @@
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveAllCommand.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveGItemsCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/CCLInfoCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java" />
       </list>
     </option>
   </component>
@@ -1104,7 +1162,7 @@
       <workItem from="1477147829076" duration="4434000" />
       <workItem from="1477176618731" duration="2085000" />
       <workItem from="1477180343319" duration="2767000" />
-      <workItem from="1477185199493" duration="700000" />
+      <workItem from="1477185199493" duration="1742000" />
     </task>
     <task id="LOCAL-00001" summary="Version 0.2:&#10;- Adds warnings at 30 seconds and 60 seconds.">
       <created>1469054265735</created>
@@ -1162,15 +1220,22 @@
       <option name="project" value="LOCAL" />
       <updated>1477182951713</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="add a command to remove all ground items, various other fixes&#10;">
+      <created>1477185938738</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1477185938738</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18890000" />
+    <option name="totallyTimeSpent" value="19932000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1180,13 +1245,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31310943" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31310943" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24946696" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24946696" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1220,7 +1285,8 @@
     <MESSAGE value="forgot a few things" />
     <MESSAGE value="Minutes -&gt; Seconds for the warning tasks&#10;" />
     <MESSAGE value="Version 0.4" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 0.4" />
+    <MESSAGE value="add a command to remove all ground items, various other fixes&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add a command to remove all ground items, various other fixes&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1546,14 +1612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="22" column="177" selection-start-line="22" selection-start-column="177" selection-end-line="22" selection-end-column="177" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveAllCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1599,11 +1657,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="84" column="25" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
+        <state relative-caret-position="459">
+          <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="22" column="190" selection-start-line="22" selection-start-column="190" selection-end-line="22" selection-end-column="190" />
+          <folding />
         </state>
       </provider>
     </entry>

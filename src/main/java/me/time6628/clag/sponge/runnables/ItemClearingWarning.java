@@ -20,6 +20,6 @@ public class ItemClearingWarning implements Runnable {
 
     @Override
     public void run() {
-        plugin.game.getServer().getBroadcastChannel().send(Text.builder().append(plugin.prefix).color(TextColors.RED).append(Text.of("Ground items will be cleared in " + seconds)).build());
+        plugin.game.getServer().getBroadcastChannel().send(Text.builder().append(plugin.prefix).color(TextColors.RED).append(Text.of("Ground items will be cleared in " + seconds + " seconds.")).build());
     }
 }
