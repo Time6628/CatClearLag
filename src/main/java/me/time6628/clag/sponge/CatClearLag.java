@@ -11,6 +11,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -112,7 +113,7 @@ public class CatClearLag {
             Collection<Entity> entities = temp.getEntities();
             //remove them all
             entities.forEach((entity) -> {
-                if (entity instanceof Hostile) {
+                if (entity instanceof Hostile && !(entity instanceof Player)) {
                     entity.remove();
                 }
             });
