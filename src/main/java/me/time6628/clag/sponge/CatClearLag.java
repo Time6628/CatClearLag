@@ -1,8 +1,7 @@
 package me.time6628.clag.sponge;
 
-import com.google.common.eventbus.Subscribe;
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.commands.RemoveAllCommand;
+import me.time6628.clag.sponge.commands.RemoveGItemsCommand;
 import me.time6628.clag.sponge.commands.RemoveHostilesCommand;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
@@ -10,23 +9,19 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.World;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -40,7 +35,7 @@ public class CatClearLag {
 
     private Scheduler scheduler = Sponge.getScheduler();
 
-    public Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[KKMCClearLag]")).build();
+    public Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[KKMCClearLag] ")).build();
 
     @Listener
     public void onInit(GameInitializationEvent event) {
@@ -68,19 +63,31 @@ public class CatClearLag {
     }
 
     private void registerCommands() {
+
         CatClearLag.cclLogger.info("Registering commands...");
+
         CommandSpec cSpec = CommandSpec.builder()
                 .description(Text.of("Remove all hostile entities from the server."))
                 .permission("catclearlag.command.removehostile")
                 .executor(new RemoveHostilesCommand(this))
                 .build();
+
         CommandSpec cSpec2 = CommandSpec.builder()
                 .description(Text.of("Remove all entities from the server."))
                 .permission("catclearlag.command.removeall")
                 .executor(new RemoveAllCommand(this))
                 .build();
+
+        CommandSpec cSpec3 = CommandSpec.builder()
+                .description(Text.of("Remove all ground items from the server."))
+                .permission("catclearlag.command.removegitems")
+                .executor(new RemoveGItemsCommand(this))
+                .build();
+
         Sponge.getCommandManager().register(this, cSpec, "removehostiles", "rhost");
         Sponge.getCommandManager().register(this, cSpec2, "removeall", "rall");
+        Sponge.getCommandManager().register(this, cSpec3, "removegrounditems", "rgitems");
+
     }
 
 
