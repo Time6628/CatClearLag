@@ -11,6 +11,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.3", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.4", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
     public static Logger cclLogger = Logger.getLogger("CCL");
@@ -79,6 +80,7 @@ public class CatClearLag {
                 .executor(new RemoveAllCommand(this))
                 .build();
         Sponge.getCommandManager().register(this, cSpec, "removehostiles", "rhost");
+        Sponge.getCommandManager().register(this, cSpec2, "removeall", "rall");
     }
 
 
@@ -88,9 +90,9 @@ public class CatClearLag {
         //for each world
         worlds.forEach((temp) -> {
             //get all the item entities in the world
-            Collection<Entity> entities = temp.getEntities(Predicate.isEqual(EntityTypes.ITEM));
-            //remove them all
-            entities.forEach(Entity::remove);
+            Collection<Entity> entities = temp.getEntities();
+            //for all the entities, remove the item ones
+            entities.stream().filter(entity -> entity instanceof Item).forEach(Entity::remove);
         });
     }
 
