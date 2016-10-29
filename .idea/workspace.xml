@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05c4b445-b70b-45e4-a663-49e9a0211831" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/ForceGCCommand.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java" afterPath="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java" />
     </list>
     <ignored path="ClearLag.iws" />
@@ -115,10 +117,24 @@
       <file leaf-file-name="CatClearLag.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="115" column="49" selection-start-line="115" selection-start-column="49" selection-end-line="115" selection-end-column="49" />
+            <state relative-caret-position="527">
+              <caret line="31" column="66" selection-start-line="31" selection-start-column="66" selection-end-line="31" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ForceGCCommand.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/ForceGCCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" column="150" selection-start-line="24" selection-start-column="150" selection-end-line="24" selection-end-column="150" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#637#638#0" expanded="true" />
+                <element signature="e#678#679#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -127,12 +143,9 @@
       <file leaf-file-name="RemoveGItemsCommand.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveGItemsCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="25" column="39" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
-              <folding>
-                <element signature="e#647#648#0" expanded="true" />
-                <element signature="e#688#689#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="221">
+              <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="149" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -142,7 +155,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
               <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -152,7 +167,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
               <caret line="22" column="8" selection-start-line="22" selection-start-column="8" selection-end-line="24" selection-end-column="142" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#649#650#0" expanded="false" />
+                <element signature="e#690#691#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -160,10 +179,11 @@
       <file leaf-file-name="RemoveHostilesCommand.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveHostilesCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="255">
               <caret line="24" column="140" selection-start-line="24" selection-start-column="140" selection-end-line="24" selection-end-column="140" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#651#652#0" expanded="false" />
+                <element signature="e#692#693#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -173,7 +193,7 @@
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -194,7 +214,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
               <caret line="30" column="125" selection-start-line="30" selection-start-column="125" selection-end-line="30" selection-end-column="125" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#715#716#0" expanded="false" />
+                <element signature="e#751#752#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -204,7 +228,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
               <caret line="22" column="190" selection-start-line="22" selection-start-column="190" selection-end-line="22" selection-end-column="190" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -461,11 +487,13 @@
         <option value="$PROJECT_DIR$/settings.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveHostilesCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveAllCommand.java" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearer.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveGItemsCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/CCLInfoCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/ForceGCCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/ForceGCCommand.java" />
+        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java" />
       </list>
     </option>
@@ -484,7 +512,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1912" />
+    <option name="x" value="-3848" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
@@ -514,6 +542,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -622,9 +653,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -639,11 +667,12 @@
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="me.time6628.clag.sponge" />
+      <recent name="me.time6628.clag.sponge.commands" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\TimeTheCat\IdeaProjects\CatClearLag\r" />
-    </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="me.time6628.clag.sponge.commands" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.CatClearLag [build]">
@@ -693,7 +722,10 @@
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
-      <method />
+      <method>
+        <option name="Make" enabled="true" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
@@ -716,7 +748,10 @@
       <Profilers>
         <option name="GAPID_DISABLE_PCS" value="false" />
       </Profilers>
-      <method />
+      <method>
+        <option name="Make" enabled="true" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
@@ -1162,7 +1197,12 @@
       <workItem from="1477147829076" duration="4434000" />
       <workItem from="1477176618731" duration="2085000" />
       <workItem from="1477180343319" duration="2767000" />
-      <workItem from="1477185199493" duration="1998000" />
+      <workItem from="1477185199493" duration="2393000" />
+      <workItem from="1477270185203" duration="8000" />
+      <workItem from="1477274204889" duration="135000" />
+      <workItem from="1477275739992" duration="15000" />
+      <workItem from="1477528603924" duration="337000" />
+      <workItem from="1477704409508" duration="931000" />
     </task>
     <task id="LOCAL-00001" summary="Version 0.2:&#10;- Adds warnings at 30 seconds and 60 seconds.">
       <created>1469054265735</created>
@@ -1234,15 +1274,22 @@
       <option name="project" value="LOCAL" />
       <updated>1477186970690</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="make sure to not kill players&#10;">
+      <created>1477187211858</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1477187211858</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20188000" />
+    <option name="totallyTimeSpent" value="22009000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-3848" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1251,8 +1298,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31310943" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31310943" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1271,6 +1318,24 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -1294,26 +1359,21 @@
     <MESSAGE value="Version 0.4" />
     <MESSAGE value="add a command to remove all ground items, various other fixes&#10;" />
     <MESSAGE value="the warnings now make more sense" />
-    <option name="LAST_COMMIT_MESSAGE" value="the warnings now make more sense" />
+    <MESSAGE value="make sure to not kill players&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="make sure to not kill players&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="21" column="129" selection-start-line="21" selection-start-column="129" selection-end-line="21" selection-end-column="129" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1347,7 +1407,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#715#716#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1381,7 +1445,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
           <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#715#716#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1415,7 +1483,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#715#716#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1449,7 +1521,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#715#716#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1467,7 +1543,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#715#716#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1587,14 +1667,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/spongeapi/5.0.0-SNAPSHOT/a97a3724ae9d8d5dd1059780e240b2af0e35765d/spongeapi-5.0.0-SNAPSHOT-sources.jar!/org/spongepowered/api/world/extent/EntityUniverse.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -1614,7 +1686,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="22" column="8" selection-start-line="22" selection-start-column="8" selection-end-line="24" selection-end-column="142" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#649#650#0" expanded="false" />
+            <element signature="e#690#691#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1622,17 +1698,8 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveGItemsCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="25" column="39" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
           <folding>
-            <element signature="e#647#648#0" expanded="true" />
-            <element signature="e#688#689#0" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1641,40 +1708,68 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="30" column="125" selection-start-line="30" selection-start-column="125" selection-end-line="30" selection-end-column="125" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#715#716#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/CCLInfoCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="49" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/CCLInfoCommand.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/runnables/ItemClearingWarning.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="22" column="190" selection-start-line="22" selection-start-column="190" selection-end-line="22" selection-end-column="190" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveHostilesCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="255">
           <caret line="24" column="140" selection-start-line="24" selection-start-column="140" selection-end-line="24" selection-end-column="140" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#651#652#0" expanded="false" />
+            <element signature="e#692#693#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/RemoveGItemsCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="149" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/commands/ForceGCCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="150" selection-start-line="24" selection-start-column="150" selection-end-line="24" selection-end-column="150" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#637#638#0" expanded="true" />
+            <element signature="e#678#679#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/time6628/clag/sponge/CatClearLag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="115" column="49" selection-start-line="115" selection-start-column="49" selection-end-line="115" selection-end-column="49" />
+        <state relative-caret-position="527">
+          <caret line="31" column="66" selection-start-line="31" selection-start-column="66" selection-end-line="31" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

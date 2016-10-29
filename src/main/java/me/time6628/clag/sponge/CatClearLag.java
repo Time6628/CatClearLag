@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge;
 
+import me.time6628.clag.sponge.commands.ForceGCCommand;
 import me.time6628.clag.sponge.commands.RemoveAllCommand;
 import me.time6628.clag.sponge.commands.RemoveGItemsCommand;
 import me.time6628.clag.sponge.commands.RemoveHostilesCommand;
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.4", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.4.1", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
     public static Logger cclLogger = Logger.getLogger("CCL");
@@ -84,11 +85,16 @@ public class CatClearLag {
                 .permission("catclearlag.command.removegitems")
                 .executor(new RemoveGItemsCommand(this))
                 .build();
+        CommandSpec cSpec4 = CommandSpec.builder()
+                .description(Text.of("Force Garabage Collection"))
+                .permission("catclearlag.command.forcegc")
+                .executor(new ForceGCCommand(this))
+                .build();
 
         Sponge.getCommandManager().register(this, cSpec, "removehostiles", "rhost");
         Sponge.getCommandManager().register(this, cSpec2, "removeall", "rall");
         Sponge.getCommandManager().register(this, cSpec3, "removegrounditems", "rgitems");
-
+        Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
     }
 
 
