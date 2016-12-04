@@ -1,15 +1,13 @@
 package me.time6628.clag.sponge;
 
-import me.time6628.clag.sponge.commands.ForceGCCommand;
-import me.time6628.clag.sponge.commands.RemoveAllCommand;
-import me.time6628.clag.sponge.commands.RemoveGItemsCommand;
-import me.time6628.clag.sponge.commands.RemoveHostilesCommand;
+import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.player.Player;
@@ -43,6 +41,7 @@ public class CatClearLag {
     public void onInit(GameInitializationEvent event) {
         CatClearLag.cclLogger.info("Starting plugin...");
         registerCommands();
+        //registerEvents();
         Task.Builder builder = scheduler.createTaskBuilder();
         Task task = builder.execute(new ItemClearer(this))
                 .async()
@@ -62,6 +61,10 @@ public class CatClearLag {
                 .interval(10, TimeUnit.MINUTES)
                 .name("CatClearLag Removal warning 1")
                 .submit(this);
+    }
+
+    private void registerEvents() {
+        Sponge.getEventManager().registerListeners(this, new EventHandler());
     }
 
     private void registerCommands() {
@@ -119,7 +122,7 @@ public class CatClearLag {
             Collection<Entity> entities = temp.getEntities();
             //remove them all
             entities.forEach((entity) -> {
-                if (entity instanceof Hostile && !(entity instanceof Player)) {
+                if (entity instanceof Hostile && !entity.getType().getId().equals("minecraft:player")) {
                     entity.remove();
                 }
             });
@@ -134,7 +137,11 @@ public class CatClearLag {
             //get all the entities in the world
             Collection<Entity> entities = temp.getEntities();
             //remove them all
-            entities.forEach(Entity::remove);
+            entities.forEach(entity -> {
+                if (!entity.getType().getId().equals("minecraft:player")) {
+                    entity.remove();
+                }
+            });
         });
     }
 }
