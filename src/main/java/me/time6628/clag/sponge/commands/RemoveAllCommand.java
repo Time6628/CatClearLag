@@ -21,8 +21,8 @@ public class RemoveAllCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         src.sendMessage(Text.builder().append(plugin.prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Removing all entities...")).build());
-        plugin.removeAll();
-        src.sendMessage(Text.builder().append(plugin.prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("All entities removed.")).build());
-        return CommandResult.success();
+        int affectedEnts = plugin.removeAll();
+        src.sendMessage(Text.builder().append(plugin.prefix).color(TextColors.LIGHT_PURPLE).append(Text.of(affectedEnts + " entities removed.")).build());
+        return CommandResult.builder().affectedEntities(affectedEnts).build();
     }
 }
