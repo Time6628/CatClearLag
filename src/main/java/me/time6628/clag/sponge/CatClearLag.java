@@ -31,6 +31,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -44,7 +45,6 @@ import java.util.function.Function;
 public class CatClearLag {
 
     @Inject
-    static
     org.slf4j.Logger logger;
 
     //config stuff
@@ -64,7 +64,7 @@ public class CatClearLag {
     @Inject
     public Game game;
 
-    private Scheduler scheduler = game.getScheduler();
+    private Scheduler scheduler;
 
     public Text prefix;
 
@@ -73,7 +73,7 @@ public class CatClearLag {
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
-        logger.info("Making config...");
+        getLogger().info("Making config...");
         try {
             if (!defaultCfg.exists()) {
                 defaultCfg.createNewFile();
@@ -83,8 +83,8 @@ public class CatClearLag {
                 this.cfg.getNode("Version").setValue(0.1);
 
                 this.cfg.getNode("interval").setValue(10);
-                this.cfg.getNode("warnings").setValue(Arrays.asList(new int[]{540, 570}));
-                this.cfg.getNode("prefix").setValue("&5[ClearLag]");
+                this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
+                this.cfg.getNode("prefix").setValue(TextSerializers.LEGACY_FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
             }
@@ -95,7 +95,7 @@ public class CatClearLag {
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
-
+            scheduler = game.getScheduler();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,7 +103,7 @@ public class CatClearLag {
 
     @Listener
     public void onInit(GameInitializationEvent event) {
-        logger.info("Starting plugin...");
+        getLogger().info("Starting plugin...");
         registerCommands();
         //registerEvents();
         Task.Builder builder = scheduler.createTaskBuilder();
@@ -128,7 +128,7 @@ public class CatClearLag {
 
     private void registerCommands() {
 
-        logger.info("Registering commands...");
+        getLogger().info("Registering commands...");
 
         CommandSpec cSpec = CommandSpec.builder()
                 .description(Text.of("Remove all hostile entities from the server."))
@@ -215,7 +215,7 @@ public class CatClearLag {
         return cfgMgr;
     }
 
-    public static Logger getLogger() {
+    public Logger getLogger() {
         return logger;
     }
 }
