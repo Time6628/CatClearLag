@@ -40,7 +40,7 @@ import java.util.function.Function;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.4.2", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.5.1", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
     @Inject
@@ -64,8 +64,7 @@ public class CatClearLag {
     @Inject
     public Game game;
 
-    @Inject
-    private Scheduler scheduler;
+    private Scheduler scheduler = game.getScheduler();
 
     public Text prefix;
 
