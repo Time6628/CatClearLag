@@ -23,6 +23,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializer;
@@ -45,31 +46,31 @@ import java.util.function.Function;
 public class CatClearLag {
 
     @Inject
-    org.slf4j.Logger logger;
+    private org.slf4j.Logger logger;
 
     //config stuff
     private ConfigurationNode cfg;
 
     @Inject
     PluginContainer pluginContainer;
-
+    //config stuff
     @Inject
     @DefaultConfig(sharedRoot = false)
     private File defaultCfg;
-
     @Inject
     @DefaultConfig(sharedRoot = false)
     private ConfigurationLoader<CommentedConfigurationNode> cfgMgr;
 
+    //public
     @Inject
     public Game game;
-
-    private Scheduler scheduler;
-
     public Text prefix;
 
+    //private
+    private Scheduler scheduler;
     private int interval = 0;
     private List<Integer> warning;
+    private PaginationService paginationService;
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -120,6 +121,7 @@ public class CatClearLag {
                         .interval(interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
                         .submit(this));
+        paginationService = game.getServiceManager().provide(PaginationService.class).get();
     }
 
     private void registerEvents() {
@@ -152,11 +154,17 @@ public class CatClearLag {
                 .permission("catclearlag.command.forcegc")
                 .executor(new ForceGCCommand(this))
                 .build();
+        CommandSpec cSpec5 = CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least entities."))
+                .permission("catclearlag.command.laggychunks")
+                .executor(new LaggyChunksCommand(this))
+                .build();
 
         Sponge.getCommandManager().register(this, cSpec, "removehostiles", "rhost");
         Sponge.getCommandManager().register(this, cSpec2, "removeall", "rall");
         Sponge.getCommandManager().register(this, cSpec3, "removegrounditems", "rgitems");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
+        Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
     }
 
 
@@ -217,5 +225,9 @@ public class CatClearLag {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public PaginationService getPaginationService() {
+        return paginationService;
     }
 }
