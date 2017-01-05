@@ -11,6 +11,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.Entity;
@@ -19,6 +20,8 @@ import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Scheduler;
@@ -71,6 +74,7 @@ public class CatClearLag {
     private int interval = 0;
     private List<Integer> warning;
     private PaginationService paginationService;
+    private List<ItemType> whitelistedItems;
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -81,20 +85,32 @@ public class CatClearLag {
 
                 this.cfg = getCfgMgr().load();
 
-                this.cfg.getNode("Version").setValue(0.1);
+                this.cfg.getNode("Version").setValue(0.2);
 
                 this.cfg.getNode("interval").setValue(10);
                 this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
                 this.cfg.getNode("prefix").setValue(TextSerializers.LEGACY_FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
+                this.cfg.getNode("whitelist").setValue(new ArrayList<ItemType>(){{add(ItemTypes.DIAMOND);}});
+
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
             }
 
             this.cfg = getCfgMgr().load();
 
+            if (this.cfg.getNode("version").getDouble() < 0.2) {
+                logger.info("Outdated config... adding new options...");
+                this.cfg.getNode("whitelist").setValue(new ArrayList<ItemType>(){{add(ItemTypes.DIAMOND);}});
+                getCfgMgr().save(cfg);
+            } else {
+                logger.info("Config up to date!");
+            }
+
             this.prefix = TextSerializers.LEGACY_FORMATTING_CODE.deserialize(cfg.getNode("prefix").getString());
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
+
+            this.whitelistedItems = cfg.getNode("whitelist").getList(o -> (ItemType) o);
 
             scheduler = game.getScheduler();
         } catch (Exception e) {
@@ -176,7 +192,11 @@ public class CatClearLag {
             //get all the item entities in the world
             Collection<Entity> entities = temp.getEntities();
             //for all the entities, remove the item ones
-            entities.stream().filter(entity -> entity instanceof Item).forEach(Entity::remove);
+            entities.stream().filter(entity -> entity instanceof Item).forEach((entity -> {
+                Item entityItem = (Item) entity;
+                if (whitelistedItems.contains(entityItem.getItemType())) return;
+                else entity.remove();
+            }));
         });
     }
 
