@@ -25,7 +25,9 @@ public class WhiteListItemCommand implements CommandExecutor {
         if (!(src instanceof Player)) return CommandResult.empty();
         Optional<ItemStack> is = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
         if (is.isPresent()) {
-            plugin.addItemIDToWhiteList(is.get().getItem().getType());
+            ItemStack si = is.get();
+            plugin.getLogger().info(si.getItem().getId());
+            plugin.addItemIDToWhiteList(si.getItem());
             src.sendMessage(Text.builder()
                     .color(TextColors.DARK_PURPLE)
                     .append(Text.of("Added "))

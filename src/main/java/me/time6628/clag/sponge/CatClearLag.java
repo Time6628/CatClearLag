@@ -1,13 +1,17 @@
 package me.time6628.clag.sponge;
 
 import com.google.inject.Inject;
+
 import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
+
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+
 import org.slf4j.Logger;
+
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.spec.CommandSpec;
@@ -41,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 @Plugin(name = "CatClearLag", id = "catclearlag", version = "0.5.1", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
-    public static CatClearLag instance = new CatClearLag();
+    public static CatClearLag instance;
 
 
     @Inject
@@ -71,6 +75,7 @@ public class CatClearLag {
     private int interval = 0;
     private List<Integer> warning;
     private PaginationService paginationService;
+    private List<String> whitelistItemsAsStrings = new ArrayList<>();
     private List<ItemType> whitelistedItems = new ArrayList<>();
 
     @Listener
@@ -107,8 +112,8 @@ public class CatClearLag {
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
-            List<String> preI = cfg.getNode("whitelist").getList(o -> (String) o);
-            for (String s : preI) {
+            whitelistItemsAsStrings = cfg.getNode("whitelist").getList(o -> (String) o);
+            for (String s : whitelistItemsAsStrings) {
                 Optional<ItemType> a = getItemTypeFromString(s);
                 a.ifPresent(itemType -> whitelistedItems.add(itemType));
             }
@@ -117,6 +122,10 @@ public class CatClearLag {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        pluginContainer.getInstance().ifPresent( a -> {
+            instance = (CatClearLag) a;
+        });
     }
 
     @Listener
@@ -263,18 +272,24 @@ public class CatClearLag {
     }
 
     public void addItemIDToWhiteList(ItemType type) {
-        List<String> ii = this.cfg.getNode("whitelist").getList(o -> (String) o);
-        ii.add(type.getId());
-        this.cfg.getNode("whitelist").setValue(ii);
         try {
+            this.cfg.getNode("whitelist").setValue(getWhitelistItemsAsStrings().add(type.getId()));
             this.cfgMgr.save(cfg);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        whitelistedItems.add(type);
+        getWhitelistedItems().add(type);
     }
 
     public List<ItemType> getWhitelistedItems() {
         return this.whitelistedItems;
+    }
+
+    public List<String> getWhitelistItemsAsStrings() {
+        return this.whitelistItemsAsStrings;
+    }
+
+    public ConfigurationNode getCfg() {
+        return cfg;
     }
 }

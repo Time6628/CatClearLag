@@ -54,15 +54,18 @@ public class LaggyChunksCommand implements CommandExecutor {
         return TextActions.executeCallback((commandSource -> {
             Player player = (Player) commandSource;
             Location<World> a = new Location<>(chunk.getWorld(), chunk.getPosition());
+            a.sub(a.getX(), 100, a.getZ());
+            /*
             Location<World> b = new Location<>(a.getExtent(), a.getX(), a.getExtent().getBlockMax().getY(), a.getZ());
             Optional<BlockRayHit<World>> c = BlockRay.from(b).stopFilter(BlockRay.onlyAirFilter()).to(a.getPosition().sub(0,0,0)).end();
+
             if (c.isPresent()) {
                 BlockRayHit<World> d = c.get();
                 player.setLocation(d.getLocation());
             } else {
                 source.sendMessage(Text.of("Could not send you to: " + a.getX() + "," + a.getZ()));
-
-            }
+            }*/
+            player.setLocation(a);
         }));
     }
 }
