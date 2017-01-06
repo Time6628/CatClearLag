@@ -13,10 +13,7 @@ import org.spongepowered.api.text.format.TextColors;
  * Created by TimeTheCat on 10/22/2016.
  */
 public class RemoveHostilesCommand implements CommandExecutor {
-    CatClearLag plugin;
-    public RemoveHostilesCommand(CatClearLag catClearLag) {
-        this.plugin = catClearLag;
-    }
+    CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

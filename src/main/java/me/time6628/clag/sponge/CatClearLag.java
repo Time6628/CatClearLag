@@ -1,6 +1,5 @@
 package me.time6628.clag.sponge;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.runnables.ItemClearer;
@@ -11,7 +10,6 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.Entity;
@@ -29,24 +27,22 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializer;
-import org.spongepowered.api.text.serializer.TextSerializerFactory;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
 @Plugin(name = "CatClearLag", id = "catclearlag", version = "0.5.1", description = "DIE LAG, DIE!")
 public class CatClearLag {
+
+    public static CatClearLag instance = new CatClearLag();
+
 
     @Inject
     private org.slf4j.Logger logger;
@@ -56,6 +52,7 @@ public class CatClearLag {
 
     @Inject
     PluginContainer pluginContainer;
+
     //config stuff
     @Inject
     @DefaultConfig(sharedRoot = false)
@@ -74,7 +71,7 @@ public class CatClearLag {
     private int interval = 0;
     private List<Integer> warning;
     private PaginationService paginationService;
-    private List<ItemType> whitelistedItems;
+    private List<ItemType> whitelistedItems = new ArrayList<>();
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -90,7 +87,7 @@ public class CatClearLag {
                 this.cfg.getNode("interval").setValue(10);
                 this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
                 this.cfg.getNode("prefix").setValue(TextSerializers.LEGACY_FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
-                this.cfg.getNode("whitelist").setValue(new ArrayList<ItemType>(){{add(ItemTypes.DIAMOND);}});
+                this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
 
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
@@ -100,7 +97,7 @@ public class CatClearLag {
 
             if (this.cfg.getNode("version").getDouble() < 0.2) {
                 logger.info("Outdated config... adding new options...");
-                this.cfg.getNode("whitelist").setValue(new ArrayList<ItemType>(){{add(ItemTypes.DIAMOND);}});
+                this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
                 getCfgMgr().save(cfg);
             } else {
                 logger.info("Config up to date!");
@@ -110,7 +107,11 @@ public class CatClearLag {
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
-            this.whitelistedItems = cfg.getNode("whitelist").getList(o -> (ItemType) o);
+            List<String> preI = cfg.getNode("whitelist").getList(o -> (String) o);
+            for (String s : preI) {
+                Optional<ItemType> a = getItemTypeFromString(s);
+                a.ifPresent(itemType -> whitelistedItems.add(itemType));
+            }
 
             scheduler = game.getScheduler();
         } catch (Exception e) {
@@ -124,14 +125,14 @@ public class CatClearLag {
         registerCommands();
         //registerEvents();
         Task.Builder builder = scheduler.createTaskBuilder();
-        Task task = builder.execute(new ItemClearer(this))
+        Task task = builder.execute(new ItemClearer())
                 .async()
                 .delay(10, TimeUnit.MINUTES)
                 .interval(interval, TimeUnit.MINUTES)
                 .name("CatClearLag Item Remover")
                 .submit(this);
         warning.forEach((d) ->
-                builder.execute(new ItemClearingWarning(((interval * 60) - d), this))
+                builder.execute(new ItemClearingWarning(((interval * 60) - d)))
                         .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(interval, TimeUnit.MINUTES)
@@ -151,29 +152,34 @@ public class CatClearLag {
         CommandSpec cSpec = CommandSpec.builder()
                 .description(Text.of("Remove all hostile entities from the server."))
                 .permission("catclearlag.command.removehostile")
-                .executor(new RemoveHostilesCommand(this))
+                .executor(new RemoveHostilesCommand())
                 .build();
 
         CommandSpec cSpec2 = CommandSpec.builder()
                 .description(Text.of("Remove all entities from the server."))
                 .permission("catclearlag.command.removeall")
-                .executor(new RemoveAllCommand(this))
+                .executor(new RemoveAllCommand())
                 .build();
 
         CommandSpec cSpec3 = CommandSpec.builder()
                 .description(Text.of("Remove all ground items from the server."))
                 .permission("catclearlag.command.removegitems")
-                .executor(new RemoveGItemsCommand(this))
+                .executor(new RemoveGItemsCommand())
                 .build();
         CommandSpec cSpec4 = CommandSpec.builder()
                 .description(Text.of("Force Garabage Collection"))
                 .permission("catclearlag.command.forcegc")
-                .executor(new ForceGCCommand(this))
+                .executor(new ForceGCCommand())
                 .build();
         CommandSpec cSpec5 = CommandSpec.builder()
                 .description(Text.of("List chunks in order of most to least entities."))
                 .permission("catclearlag.command.laggychunks")
-                .executor(new LaggyChunksCommand(this))
+                .executor(new LaggyChunksCommand())
+                .build();
+        CommandSpec cSpec6 = CommandSpec.builder()
+                .description(Text.of("Add an itemtype to the clearlag whitelist"))
+                .permission("catclearlag.command.whitelistitem")
+                .executor(new WhiteListItemCommand())
                 .build();
 
         Sponge.getCommandManager().register(this, cSpec, "removehostiles", "rhost");
@@ -181,6 +187,7 @@ public class CatClearLag {
         Sponge.getCommandManager().register(this, cSpec3, "removegrounditems", "rgitems");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
         Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
+        Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
     }
 
 
@@ -249,5 +256,20 @@ public class CatClearLag {
 
     public PaginationService getPaginationService() {
         return paginationService;
+    }
+
+    private Optional<ItemType> getItemTypeFromString(String id) {
+        return game.getRegistry().getType(ItemType.class, id);
+    }
+
+    public void addItemIDToWhiteList(ItemType type) {
+        List<String> ii = this.cfg.getNode("whitelist").getList(o -> (String) o);
+        ii.add(type.getId());
+        this.cfg.getNode("whitelist").setValue(ii);
+        try {
+            this.cfgMgr.save(cfg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

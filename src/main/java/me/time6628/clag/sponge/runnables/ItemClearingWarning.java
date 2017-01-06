@@ -11,11 +11,10 @@ import org.spongepowered.api.text.format.TextColors;
 public class ItemClearingWarning implements Runnable {
 
     private int seconds;
-    private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
-    public ItemClearingWarning(int seconds, CatClearLag game) {
+    public ItemClearingWarning(int seconds) {
         this.seconds = seconds;
-        this.plugin = game;
     }
 
     @Override
