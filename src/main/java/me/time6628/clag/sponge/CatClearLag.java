@@ -271,5 +271,10 @@ public class CatClearLag {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        whitelistedItems.add(type);
+    }
+
+    public List<ItemType> getWhitelistedItems() {
+        return this.whitelistedItems;
     }
 }
