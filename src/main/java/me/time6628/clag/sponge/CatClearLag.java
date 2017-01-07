@@ -103,6 +103,7 @@ public class CatClearLag {
             if (this.cfg.getNode("version").getDouble() < 0.2) {
                 logger.info("Outdated config... adding new options...");
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
+                this.cfg.getNode("version").setValue(0.2);
                 getCfgMgr().save(cfg);
             } else {
                 logger.info("Config up to date!");
