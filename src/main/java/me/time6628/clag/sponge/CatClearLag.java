@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.5.1", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.6.5", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
     public static CatClearLag instance;
