@@ -3,6 +3,7 @@ package me.time6628.clag.sponge;
 import com.google.inject.Inject;
 
 import me.time6628.clag.sponge.commands.*;
+import me.time6628.clag.sponge.handlers.MobEventHandler;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
 
@@ -77,6 +78,7 @@ public class CatClearLag {
     private PaginationService paginationService;
     private List<String> whitelistItemsAsStrings = new ArrayList<>();
     private List<ItemType> whitelistedItems = new ArrayList<>();
+    private Integer mobLimitPerChunk = 20;
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -91,8 +93,9 @@ public class CatClearLag {
 
                 this.cfg.getNode("interval").setValue(10);
                 this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
-                this.cfg.getNode("prefix").setValue(TextSerializers.LEGACY_FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
+                this.cfg.getNode("prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
+                this.cfg.getNode("mob-limit-per-chunk").setValue(20);
 
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
@@ -100,9 +103,13 @@ public class CatClearLag {
 
             this.cfg = getCfgMgr().load();
 
-            if (this.cfg.getNode("version").getDouble() < 0.2) {
+            if (this.cfg.getNode("version").getDouble() == 0.1) {
                 logger.info("Outdated config... adding new options...");
-                this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
+                this.cfg.getNode("whitelist").setValue(new ArrayList<String>() {{
+                    add(ItemTypes.DIAMOND.getId());
+                }});
+                this.cfg.getNode("mob-limit-per-chunk").setValue(20);
+
                 this.cfg.getNode("version").setValue(0.2);
                 getCfgMgr().save(cfg);
             } else {
@@ -114,10 +121,14 @@ public class CatClearLag {
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
             whitelistItemsAsStrings = cfg.getNode("whitelist").getList(o -> (String) o);
+
             for (String s : whitelistItemsAsStrings) {
                 Optional<ItemType> a = getItemTypeFromString(s);
                 a.ifPresent(itemType -> whitelistedItems.add(itemType));
             }
+
+            this.mobLimitPerChunk = this.cfg.getNode("mob-limit-per-chunk").getInt();
+
 
             scheduler = game.getScheduler();
         } catch (Exception e) {
@@ -152,7 +163,7 @@ public class CatClearLag {
     }
 
     private void registerEvents() {
-        Sponge.getEventManager().registerListeners(this, new EventHandler());
+        Sponge.getEventManager().registerListeners(this, new MobEventHandler());
     }
 
     private void registerCommands() {
@@ -197,7 +208,7 @@ public class CatClearLag {
         Sponge.getCommandManager().register(this, cSpec3, "removegrounditems", "rgitems");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
         Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
-        Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
+        //Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
     }
 
 
@@ -292,5 +303,9 @@ public class CatClearLag {
 
     public ConfigurationNode getCfg() {
         return cfg;
+    }
+
+    public Integer getMobLimitPerChunk() {
+        return mobLimitPerChunk;
     }
 }

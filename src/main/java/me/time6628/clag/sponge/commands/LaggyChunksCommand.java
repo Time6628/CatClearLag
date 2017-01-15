@@ -35,11 +35,9 @@ public class LaggyChunksCommand implements CommandExecutor {
             sortedChunks.put(chunk, chunk.getEntities().size());
         }
         List<Text> texts = new ArrayList<>();
-        sortedChunks.forEach(((chunk, integer) -> {
-            texts.add(
-                    Text.builder().append(Text.of(chunk.getPosition().getX() + "," + chunk.getPosition().getZ() + " contains " + integer + " entities."))
-                            .onClick(callback(chunk, src)).build());
-        }));
+        sortedChunks.forEach(((chunk, integer) -> texts.add(
+                Text.builder().append(Text.of(chunk.getPosition().getX() + "," + chunk.getPosition().getZ() + " contains " + integer + " entities."))
+                        .onClick(callback(chunk, src)).build())));
         plugin.getPaginationService().builder()
                 .contents((texts))
                 .title(
@@ -54,18 +52,16 @@ public class LaggyChunksCommand implements CommandExecutor {
         return TextActions.executeCallback((commandSource -> {
             Player player = (Player) commandSource;
             Location<World> a = new Location<>(chunk.getWorld(), chunk.getPosition());
-            a.sub(a.getX(), 100, a.getZ());
-            /*
             Location<World> b = new Location<>(a.getExtent(), a.getX(), a.getExtent().getBlockMax().getY(), a.getZ());
-            Optional<BlockRayHit<World>> c = BlockRay.from(b).stopFilter(BlockRay.onlyAirFilter()).to(a.getPosition().sub(0,0,0)).end();
+            Optional<BlockRayHit<World>> c = BlockRay.from(b).stopFilter(BlockRay.onlyAirFilter()).to(a.getPosition().sub(a.getX(), 1, a.getZ())).end();
 
             if (c.isPresent()) {
                 BlockRayHit<World> d = c.get();
                 player.setLocation(d.getLocation());
             } else {
                 source.sendMessage(Text.of("Could not send you to: " + a.getX() + "," + a.getZ()));
-            }*/
-            player.setLocation(a);
+            }
+            //player.setLocation(a);
         }));
     }
 }
