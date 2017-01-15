@@ -116,7 +116,7 @@ public class CatClearLag {
                 logger.info("Config up to date!");
             }
 
-            this.prefix = TextSerializers.LEGACY_FORMATTING_CODE.deserialize(cfg.getNode("prefix").getString());
+            this.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("prefix").getString());
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
