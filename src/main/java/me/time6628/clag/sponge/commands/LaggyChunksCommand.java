@@ -28,23 +28,15 @@ public class LaggyChunksCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-
-        List<Chunk> chunksToSort = (List<Chunk>) ((Player) src).getWorld().getLoadedChunks();
-        TreeMap<Chunk, Integer> sortedChunks = new TreeMap<>((o1, o2) -> Integer.compare(o2.getEntities().size(), o1.getEntities().size()));
-        for (Chunk chunk : chunksToSort) {
-            sortedChunks.put(chunk, chunk.getEntities().size());
+        Optional<String> arg = args.getOne(Text.of("entity"));
+        if (arg.isPresent()) {
+            if (arg.get().toLowerCase().equals("e")) {
+                laggyChunksEntity(src);
+            } else if (arg.get().toLowerCase().equals("te")) {
+                laggyChunksTiles(src);
+            }
         }
-        List<Text> texts = new ArrayList<>();
-        sortedChunks.forEach(((chunk, integer) -> texts.add(
-                Text.builder().append(Text.of(chunk.getPosition().getX() + "," + chunk.getPosition().getZ() + " contains " + integer + " entities."))
-                        .onClick(callback(chunk, src)).build())));
-        plugin.getPaginationService().builder()
-                .contents((texts))
-                .title(
-                        Text.builder().color(TextColors.LIGHT_PURPLE)
-                        .append(Text.of("Laggy Chunks"))
-                        .build())
-                .sendTo(src);
+
         return CommandResult.success();
     }
 
@@ -63,5 +55,43 @@ public class LaggyChunksCommand implements CommandExecutor {
             }
             //player.setLocation(a);
         }));
+    }
+
+    void laggyChunksEntity(CommandSource src) {
+        List<Chunk> chunksToSort = (List<Chunk>) ((Player) src).getWorld().getLoadedChunks();
+        TreeMap<Chunk, Integer> sortedChunks = new TreeMap<>((o1, o2) -> Integer.compare(o2.getEntities().size(), o1.getEntities().size()));
+        for (Chunk chunk : chunksToSort) {
+            sortedChunks.put(chunk, chunk.getEntities().size());
+        }
+        List<Text> texts = new ArrayList<>();
+        sortedChunks.forEach(((chunk, integer) -> texts.add(
+                Text.builder().append(Text.of(chunk.getPosition().getX() + "," + chunk.getPosition().getZ() + " contains " + integer + " entities."))
+                        .onClick(callback(chunk, src)).build())));
+        plugin.getPaginationService().builder()
+                .contents((texts))
+                .title(
+                        Text.builder().color(TextColors.LIGHT_PURPLE)
+                                .append(Text.of("Laggy Chunks"))
+                                .build())
+                .sendTo(src);
+    }
+
+    void laggyChunksTiles(CommandSource src) {
+        List<Chunk> chunksToSort = (List<Chunk>) ((Player) src).getWorld().getLoadedChunks();
+        TreeMap<Chunk, Integer> sortedChunks = new TreeMap<>((o1, o2) -> Integer.compare(o2.getTileEntities().size(), o1.getTileEntities().size()));
+        for (Chunk chunk : chunksToSort) {
+            sortedChunks.put(chunk, chunk.getTileEntities().size());
+        }
+        List<Text> texts = new ArrayList<>();
+        sortedChunks.forEach(((chunk, integer) -> texts.add(
+                Text.builder().append(Text.of(chunk.getPosition().getX() + "," + chunk.getPosition().getZ() + " contains " + integer + " tiles."))
+                        .onClick(callback(chunk, src)).build())));
+        plugin.getPaginationService().builder()
+                .contents((texts))
+                .title(
+                        Text.builder().color(TextColors.LIGHT_PURPLE)
+                                .append(Text.of("Laggy Chunks"))
+                                .build())
+                .sendTo(src);
     }
 }

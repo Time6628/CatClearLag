@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.args.CommandElement;
+import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.Entity;
@@ -196,6 +198,7 @@ public class CatClearLag {
                 .description(Text.of("List chunks in order of most to least entities."))
                 .permission("catclearlag.command.laggychunks")
                 .executor(new LaggyChunksCommand())
+                .arguments(GenericArguments.choices(Text.of("entity"), new HashMap<String, String>(){{put("entities", "e");put("tiles", "te");}}))
                 .build();
         CommandSpec cSpec6 = CommandSpec.builder()
                 .description(Text.of("Add an itemtype to the clearlag whitelist"))
