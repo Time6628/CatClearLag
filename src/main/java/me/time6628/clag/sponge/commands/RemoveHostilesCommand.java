@@ -17,9 +17,9 @@ public class RemoveHostilesCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        src.sendMessage(Text.builder().append(plugin.prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Removing hostiles...")).build());
+        src.sendMessage(Text.builder().append(plugin.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removing hostiles...")).build());
         int affectedEnts = plugin.removeHostile();
-        src.sendMessage(Text.builder().append(plugin.prefix).color(TextColors.LIGHT_PURPLE).append(Text.of(affectedEnts + "hostiles removed...")).build());
+        src.sendMessage(Text.builder().append(plugin.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of(affectedEnts + "hostiles removed...")).build());
         return CommandResult.builder().affectedEntities(affectedEnts).build();
     }
 }

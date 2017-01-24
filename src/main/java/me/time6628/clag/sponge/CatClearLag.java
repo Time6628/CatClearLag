@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 
 import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
+import me.time6628.clag.sponge.runnables.HostileChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
 
@@ -70,17 +71,19 @@ public class CatClearLag {
 
     //public
     @Inject
-    public Game game;
-    public Text prefix;
+    private Game game;
+
+    private Text prefix;
 
     //private
     private Scheduler scheduler;
     private int interval = 0;
     private List<Integer> warning;
-    private PaginationService paginationService;
     private List<String> whitelistItemsAsStrings = new ArrayList<>();
     private List<ItemType> whitelistedItems = new ArrayList<>();
     private Integer mobLimitPerChunk = 20;
+    private int hostileLimit;
+    private int hostileLimitInterval;
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -91,13 +94,15 @@ public class CatClearLag {
 
                 this.cfg = getCfgMgr().load();
 
-                this.cfg.getNode("Version").setValue(0.2);
+                this.cfg.getNode("Version").setValue(0.3);
 
                 this.cfg.getNode("interval").setValue(10);
                 this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
                 this.cfg.getNode("prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
-                this.cfg.getNode("mob-limit-per-chunk").setValue(20);
+                this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
+                this.cfg.getNode("limits", "hostile-limit").setValue(500);
+                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
 
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
@@ -107,12 +112,26 @@ public class CatClearLag {
 
             if (this.cfg.getNode("version").getDouble() == 0.1) {
                 logger.info("Outdated config... adding new options...");
+                //2.0
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>() {{
                     add(ItemTypes.DIAMOND.getId());
                 }});
-                this.cfg.getNode("mob-limit-per-chunk").setValue(20);
+                //this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
 
-                this.cfg.getNode("version").setValue(0.2);
+                //3.0
+                this.cfg.getNode("limits", "hostile-limit").setValue(500);
+                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
+                this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
+                //version
+                this.cfg.getNode("version").setValue(0.3);
+                getCfgMgr().save(cfg);
+            } else if (this.cfg.getNode("version").getDouble() == 0.2) {
+                //3.0
+                this.cfg.getNode("limits", "hostile-limit").setValue(500);
+                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
+                this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
+                //version
+                this.cfg.getNode("version").setValue(0.3);
                 getCfgMgr().save(cfg);
             } else {
                 logger.info("Config up to date!");
@@ -129,7 +148,9 @@ public class CatClearLag {
                 a.ifPresent(itemType -> whitelistedItems.add(itemType));
             }
 
-            this.mobLimitPerChunk = this.cfg.getNode("mob-limit-per-chunk").getInt();
+            this.mobLimitPerChunk = this.cfg.getNode("limits", "mob-limit-per-chunk").getInt();
+            this.hostileLimit = this.cfg.getNode("limits", "hostile-limit").getInt();
+            this.hostileLimitInterval = this.cfg.getNode("limits", "hostile-entity-check-interval").getInt();
 
 
             scheduler = game.getScheduler();
@@ -146,11 +167,11 @@ public class CatClearLag {
     public void onInit(GameInitializationEvent event) {
         getLogger().info("Starting plugin...");
         registerCommands();
-        //registerEvents();
+        registerEvents();
         Task.Builder builder = scheduler.createTaskBuilder();
-        Task task = builder.execute(new ItemClearer())
+        builder.execute(new ItemClearer())
                 .async()
-                .delay(10, TimeUnit.MINUTES)
+                .delay(interval, TimeUnit.MINUTES)
                 .interval(interval, TimeUnit.MINUTES)
                 .name("CatClearLag Item Remover")
                 .submit(this);
@@ -161,7 +182,12 @@ public class CatClearLag {
                         .interval(interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
                         .submit(this));
-        paginationService = game.getServiceManager().provide(PaginationService.class).get();
+        builder.execute(new HostileChecker())
+                .async()
+                .delay(hostileLimitInterval, TimeUnit.MINUTES)
+                .interval(interval, TimeUnit.MINUTES)
+                .name("CatClearLag hostile checker")
+                .submit(this);
     }
 
     private void registerEvents() {
@@ -233,19 +259,10 @@ public class CatClearLag {
 
     public Integer removeHostile() {
         final int[] i = {0};
-        //get all worlds
-        Collection<World> worlds = Sponge.getServer().getWorlds();
-        //for each world
-        worlds.forEach((temp) -> {
-            //get all the hostile entities in the world
-            Collection<Entity> entities = temp.getEntities();
-            //remove them all
-            entities.forEach((entity) -> {
-                if (entity instanceof Hostile && !entity.getType().getId().equals("minecraft:player")) {
-                    entity.remove();
-                    i[0]++;
-                }
-            });
+        List<Entity> hostiles = getHostiles();
+        hostiles.forEach((entity) -> {
+            entity.remove();
+            i[0]++;
         });
         return i[0];
     }
@@ -279,7 +296,7 @@ public class CatClearLag {
     }
 
     public PaginationService getPaginationService() {
-        return paginationService;
+        return game.getServiceManager().provide(PaginationService.class).get();
     }
 
     private Optional<ItemType> getItemTypeFromString(String id) {
@@ -296,6 +313,24 @@ public class CatClearLag {
         getWhitelistedItems().add(type);
     }
 
+    public List<Entity> getHostiles() {
+        List<Entity> hosts = new ArrayList<>();
+        //get all worlds
+        Collection<World> worlds = Sponge.getServer().getWorlds();
+        //for each world
+        worlds.forEach((temp) -> {
+            //get all the hostile entities in the world
+            Collection<Entity> entities = temp.getEntities();
+            //get them all
+            entities.forEach((entity) -> {
+                if (entity instanceof Hostile && !entity.getType().getId().equals("minecraft:player")) {
+                    hosts.add(entity);
+                }
+            });
+        });
+        return hosts;
+    }
+
     public List<ItemType> getWhitelistedItems() {
         return this.whitelistedItems;
     }
@@ -310,5 +345,17 @@ public class CatClearLag {
 
     public Integer getMobLimitPerChunk() {
         return mobLimitPerChunk;
+    }
+
+    public int getHostileLimit() {
+        return hostileLimit;
+    }
+
+    public Text getPrefix() {
+        return prefix;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

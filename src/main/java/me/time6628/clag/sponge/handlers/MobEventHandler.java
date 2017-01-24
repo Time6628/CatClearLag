@@ -20,7 +20,6 @@ public class MobEventHandler {
         if (chunk.isPresent()) {
             if (chunk.get().getEntities().size() >= CatClearLag.instance.getMobLimitPerChunk()) {
                 event.setCancelled(true);
-
             }
         }
     }
