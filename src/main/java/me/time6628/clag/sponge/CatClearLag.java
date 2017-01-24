@@ -21,6 +21,7 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.event.Listener;
@@ -277,7 +278,7 @@ public class CatClearLag {
             Collection<Entity> entities = temp.getEntities();
             //remove them all
             entities.forEach(entity -> {
-                if (!entity.getType().getId().equals("minecraft:player")) {
+                if (!entity.getType().equals(EntityTypes.PLAYER)) {
                     entity.remove();
                     i[0]++;
                 }
