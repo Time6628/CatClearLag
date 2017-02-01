@@ -1,4 +1,4 @@
-package me.time6628.clag.sponge.commands;
+package me.time6628.clag.sponge.commands.subcommands.removeentities;
 
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.command.CommandException;
@@ -12,14 +12,14 @@ import org.spongepowered.api.text.format.TextColors;
 /**
  * Created by TimeTheCat on 10/22/2016.
  */
-public class RemoveHostilesCommand implements CommandExecutor {
+public class RemoveGItemsCommand implements CommandExecutor {
     CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        src.sendMessage(Text.builder().append(plugin.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removing hostiles...")).build());
-        int affectedEnts = plugin.removeHostile();
-        src.sendMessage(Text.builder().append(plugin.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of(affectedEnts + "hostiles removed...")).build());
-        return CommandResult.builder().affectedEntities(affectedEnts).build();
+        src.sendMessage(Text.builder().append(plugin.getPrefix()).append(plugin.colorMessage("Removing all ground items...")).build());
+        plugin.clearGoundItems();
+        src.sendMessage(Text.builder().append(plugin.getPrefix()).append(plugin.colorMessage("All items removed.")).build());
+        return CommandResult.success();
     }
 }

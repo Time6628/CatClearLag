@@ -3,8 +3,9 @@ package me.time6628.clag.sponge;
 import com.google.inject.Inject;
 
 import me.time6628.clag.sponge.commands.*;
+import me.time6628.clag.sponge.commands.subcommands.removeentities.*;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
-import me.time6628.clag.sponge.runnables.HostileChecker;
+import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
 
@@ -16,14 +17,15 @@ import org.slf4j.Logger;
 
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
+import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -35,6 +37,7 @@ import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.World;
@@ -43,6 +46,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Created by TimeTheCat on 7/2/2016.
@@ -85,6 +89,9 @@ public class CatClearLag {
     private Integer mobLimitPerChunk = 20;
     private int hostileLimit;
     private int hostileLimitInterval;
+    private TextColor messageColor;
+    private TextColor warningColor;
+    private int xpOrbLimit;
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -99,11 +106,14 @@ public class CatClearLag {
 
                 this.cfg.getNode("interval").setValue(10);
                 this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
-                this.cfg.getNode("prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
                 this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
+                this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
+                this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
+                this.cfg.getNode("messages", "prefix").setValue(this.cfg.getNode("prefix"));
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
 
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
@@ -123,6 +133,11 @@ public class CatClearLag {
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
                 this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
+                this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
+                this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
+                this.cfg.getNode("messages", "prefix").setValue(this.cfg.getNode("prefix"));
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
+
                 //version
                 this.cfg.getNode("version").setValue(0.3);
                 getCfgMgr().save(cfg);
@@ -131,27 +146,39 @@ public class CatClearLag {
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
                 this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
+                this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
+                this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
+                this.cfg.getNode("messages", "prefix").setValue(this.cfg.getNode("prefix"));
+
                 //version
                 this.cfg.getNode("version").setValue(0.3);
                 getCfgMgr().save(cfg);
             } else {
                 logger.info("Config up to date!");
             }
-
+            //messages
             this.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("prefix").getString());
+            Optional<TextColor> t = getColorFromID(this.cfg.getNode("messages", "message-color").getString());
+            Optional<TextColor> w = getColorFromID(this.cfg.getNode("messages", "warning-message-color").getString());
+            this.messageColor = t.orElse(TextColors.LIGHT_PURPLE);
+            this.warningColor = w.orElse(TextColors.RED);
+
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
+            //whitelist
             whitelistItemsAsStrings = cfg.getNode("whitelist").getList(o -> (String) o);
-
             for (String s : whitelistItemsAsStrings) {
                 Optional<ItemType> a = getItemTypeFromString(s);
                 a.ifPresent(itemType -> whitelistedItems.add(itemType));
             }
 
+            //limits
             this.mobLimitPerChunk = this.cfg.getNode("limits", "mob-limit-per-chunk").getInt();
             this.hostileLimit = this.cfg.getNode("limits", "hostile-limit").getInt();
             this.hostileLimitInterval = this.cfg.getNode("limits", "hostile-entity-check-interval").getInt();
+            this.xpOrbLimit = this.cfg.getNode("limits", "xp-orb-limit").getInt();
 
 
             scheduler = game.getScheduler();
@@ -183,7 +210,7 @@ public class CatClearLag {
                         .interval(interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
                         .submit(this));
-        builder.execute(new HostileChecker())
+        builder.execute(new EntityChecker())
                 .async()
                 .delay(hostileLimitInterval, TimeUnit.MINUTES)
                 .interval(interval, TimeUnit.MINUTES)
@@ -199,43 +226,66 @@ public class CatClearLag {
 
         getLogger().info("Registering commands...");
 
-        CommandSpec cSpec = CommandSpec.builder()
+        CommandSpec cSpecRH = CommandSpec.builder()
                 .description(Text.of("Remove all hostile entities from the server."))
                 .permission("catclearlag.command.removehostile")
                 .executor(new RemoveHostilesCommand())
                 .build();
 
-        CommandSpec cSpec2 = CommandSpec.builder()
+        CommandSpec cSpecRA = CommandSpec.builder()
                 .description(Text.of("Remove all entities from the server."))
                 .permission("catclearlag.command.removeall")
                 .executor(new RemoveAllCommand())
                 .build();
 
-        CommandSpec cSpec3 = CommandSpec.builder()
+        CommandSpec cSpecRG = CommandSpec.builder()
                 .description(Text.of("Remove all ground items from the server."))
                 .permission("catclearlag.command.removegitems")
                 .executor(new RemoveGItemsCommand())
                 .build();
+
+        CommandSpec cSpecRL = CommandSpec.builder()
+                .description(Text.of("Remove all living entities from the server."))
+                .permission("catclearlag.command.removelving")
+                .executor(new RemoveLivingCommand())
+                .build();
+
+        CommandSpec cSpecRXP = CommandSpec.builder()
+                .description(Text.of("Remove all XP Orbs from the server."))
+                .permission("catclearlag.command.removexp")
+                .executor(new RemoveXPCommand())
+                .build();
+
+        CommandSpec re = CommandSpec.builder()
+                .description(Text.of("Remove various types of entities."))
+                .permission("catclearlag.command.removeentities")
+                .child(cSpecRH, "hostiles", "host")
+                .child(cSpecRA, "all", "a")
+                .child(cSpecRG, "items", "i")
+                .child(cSpecRL, "living", "l")
+                .child(cSpecRXP, "xp", "x")
+                .build();
+
         CommandSpec cSpec4 = CommandSpec.builder()
                 .description(Text.of("Force Garabage Collection"))
                 .permission("catclearlag.command.forcegc")
                 .executor(new ForceGCCommand())
                 .build();
+
         CommandSpec cSpec5 = CommandSpec.builder()
                 .description(Text.of("List chunks in order of most to least entities."))
                 .permission("catclearlag.command.laggychunks")
                 .executor(new LaggyChunksCommand())
                 .arguments(GenericArguments.choices(Text.of("entity"), new HashMap<String, String>(){{put("entities", "e");put("tiles", "te");}}))
                 .build();
+
         CommandSpec cSpec6 = CommandSpec.builder()
                 .description(Text.of("Add an itemtype to the clearlag whitelist"))
                 .permission("catclearlag.command.whitelistitem")
                 .executor(new WhiteListItemCommand())
                 .build();
 
-        Sponge.getCommandManager().register(this, cSpec, "removehostiles", "rhost");
-        Sponge.getCommandManager().register(this, cSpec2, "removeall", "rall");
-        Sponge.getCommandManager().register(this, cSpec3, "removegrounditems", "rgitems");
+        Sponge.getCommandManager().register(this, re, "removehostiles", "rhost");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
         Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
         //Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
@@ -322,14 +372,82 @@ public class CatClearLag {
         worlds.forEach((temp) -> {
             //get all the hostile entities in the world
             Collection<Entity> entities = temp.getEntities();
+
+            hosts.addAll(entities.stream().filter(entity -> entity instanceof Hostile).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
+
+            /* removed for now
             //get them all
             entities.forEach((entity) -> {
-                if (entity instanceof Hostile && !entity.getType().getId().equals("minecraft:player")) {
+                if (entity instanceof Hostile) {
                     hosts.add(entity);
                 }
             });
+            */
         });
         return hosts;
+    }
+
+    public List<Entity> getLiving() {
+        List<Entity> liv = new ArrayList<>();
+        //get all worlds
+        Collection<World> worlds = Sponge.getServer().getWorlds();
+        //for each world
+        worlds.forEach((temp) -> {
+            //get all the entities in the world
+            Collection<Entity> entities = temp.getEntities();
+
+            liv.addAll(entities.stream().filter(entity -> entity instanceof Living).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
+
+            /* removed for now
+            //get them all
+            entities.forEach((entity) -> {
+                if (entity instanceof Living && !entity.getType().equals(EntityTypes.PLAYER)) {
+                    liv.add(entity);
+                }
+            });
+            */
+        });
+        return liv;
+    }
+
+    public Integer removeLiving() {
+        final int[] i = {0};
+        List<Entity> hostiles = getLiving();
+        hostiles.forEach((entity) -> {
+            entity.remove();
+            i[0]++;
+        });
+        return i[0];
+    }
+
+    public List<Entity> getXPOrbs() {
+        List<Entity> xp = new ArrayList<>();
+        //get all worlds
+        Collection<World> worlds = Sponge.getServer().getWorlds();
+        //for each world
+        worlds.forEach((temp) -> {
+            //get all the entities in the world
+            Collection<Entity> entities = temp.getEntities();
+            xp.addAll(entities.stream().filter(entity -> entity instanceof ExperienceOrb).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
+            /*removed for now
+            entities.forEach((entity) -> {
+
+                if (entity instanceof ExperienceOrb && !entity.getType().equals(EntityTypes.PLAYER)) {
+                    xp.add(entity);
+                }
+            });*/
+        });
+        return xp;
+    }
+
+    public Integer removeXP() {
+        final int[] i = {0};
+        List<Entity> hostiles = getXPOrbs();
+        hostiles.forEach((entity) -> {
+            entity.remove();
+            i[0]++;
+        });
+        return i[0];
     }
 
     public List<ItemType> getWhitelistedItems() {
@@ -358,5 +476,29 @@ public class CatClearLag {
 
     public Game getGame() {
         return game;
+    }
+
+    public int getXpOrbLimit() {
+        return xpOrbLimit;
+    }
+
+    public Text colorMessage(String text) {
+        return Text.builder().color(getMessageColor()).append(Text.of(text)).build();
+    }
+
+    public Text colorWarningMessage(String text) {
+        return Text.builder().color(getWarningColor()).append(Text.of(text)).build();
+    }
+
+    public Optional<TextColor> getColorFromID(String id) {
+        return game.getRegistry().getType(TextColor.class, id);
+    }
+
+    public TextColor getMessageColor() {
+        return messageColor;
+    }
+    
+    public TextColor getWarningColor() {
+        return warningColor;
     }
 }
