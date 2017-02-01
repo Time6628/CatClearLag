@@ -285,7 +285,7 @@ public class CatClearLag {
                 .executor(new WhiteListItemCommand())
                 .build();
 
-        Sponge.getCommandManager().register(this, re, "removehostiles", "rhost");
+        Sponge.getCommandManager().register(this, re, "re");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
         Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
         //Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
