@@ -1,20 +1,19 @@
 package me.time6628.clag.sponge;
 
 import com.google.inject.Inject;
-
-import me.time6628.clag.sponge.commands.*;
+import me.time6628.clag.sponge.commands.ForceGCCommand;
+import me.time6628.clag.sponge.commands.LaggyChunksCommand;
+import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
+import me.time6628.clag.sponge.commands.WhiteListItemCommand;
 import me.time6628.clag.sponge.commands.subcommands.removeentities.*;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
-
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-
 import org.slf4j.Logger;
-
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -51,7 +50,7 @@ import java.util.stream.Collectors;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.6.5", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.7", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
     public static CatClearLag instance;
@@ -109,10 +108,10 @@ public class CatClearLag {
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
-                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
+                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
-                this.cfg.getNode("messages", "prefix").setValue(this.cfg.getNode("prefix"));
+                this.cfg.getNode("messages", "prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
 
                 getLogger().info("Config created.");
@@ -131,11 +130,11 @@ public class CatClearLag {
 
                 //3.0
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
-                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
+                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
-                this.cfg.getNode("messages", "prefix").setValue(this.cfg.getNode("prefix"));
+                this.cfg.getNode("messages", "prefix").setValue(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build());
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
 
                 //version
@@ -144,12 +143,12 @@ public class CatClearLag {
             } else if (this.cfg.getNode("version").getDouble() == 0.2) {
                 //3.0
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
-                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(10);
+                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
-                this.cfg.getNode("messages", "prefix").setValue(this.cfg.getNode("prefix"));
+                this.cfg.getNode("messages", "prefix").setValue(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build());
 
                 //version
                 this.cfg.getNode("version").setValue(0.3);
@@ -158,7 +157,7 @@ public class CatClearLag {
                 logger.info("Config up to date!");
             }
             //messages
-            this.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("prefix").getString());
+            this.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString());
             Optional<TextColor> t = getColorFromID(this.cfg.getNode("messages", "message-color").getString());
             Optional<TextColor> w = getColorFromID(this.cfg.getNode("messages", "warning-message-color").getString());
             this.messageColor = t.orElse(TextColors.LIGHT_PURPLE);
@@ -264,6 +263,7 @@ public class CatClearLag {
                 .child(cSpecRG, "items", "i")
                 .child(cSpecRL, "living", "l")
                 .child(cSpecRXP, "xp", "x")
+                .executor(new RemoveEntitiesCommand())
                 .build();
 
         CommandSpec cSpec4 = CommandSpec.builder()
@@ -374,15 +374,6 @@ public class CatClearLag {
             Collection<Entity> entities = temp.getEntities();
 
             hosts.addAll(entities.stream().filter(entity -> entity instanceof Hostile).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
-
-            /* removed for now
-            //get them all
-            entities.forEach((entity) -> {
-                if (entity instanceof Hostile) {
-                    hosts.add(entity);
-                }
-            });
-            */
         });
         return hosts;
     }
@@ -397,15 +388,6 @@ public class CatClearLag {
             Collection<Entity> entities = temp.getEntities();
 
             liv.addAll(entities.stream().filter(entity -> entity instanceof Living).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
-
-            /* removed for now
-            //get them all
-            entities.forEach((entity) -> {
-                if (entity instanceof Living && !entity.getType().equals(EntityTypes.PLAYER)) {
-                    liv.add(entity);
-                }
-            });
-            */
         });
         return liv;
     }
@@ -429,13 +411,6 @@ public class CatClearLag {
             //get all the entities in the world
             Collection<Entity> entities = temp.getEntities();
             xp.addAll(entities.stream().filter(entity -> entity instanceof ExperienceOrb).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
-            /*removed for now
-            entities.forEach((entity) -> {
-
-                if (entity instanceof ExperienceOrb && !entity.getType().equals(EntityTypes.PLAYER)) {
-                    xp.add(entity);
-                }
-            });*/
         });
         return xp;
     }

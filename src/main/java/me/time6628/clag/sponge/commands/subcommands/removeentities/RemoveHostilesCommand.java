@@ -19,7 +19,7 @@ public class RemoveHostilesCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         src.sendMessage(Text.builder().append(plugin.getPrefix()).append(plugin.colorMessage("Removing hostiles...")).build());
         int affectedEnts = plugin.removeHostile();
-        src.sendMessage(Text.builder().append(plugin.getPrefix()).append(plugin.colorMessage(affectedEnts + "hostiles removed.")).build());
+        src.sendMessage(Text.builder().append(plugin.getPrefix()).append(plugin.colorMessage(affectedEnts + " hostiles removed.")).build());
         return CommandResult.affectedEntities(affectedEnts);
     }
 }
