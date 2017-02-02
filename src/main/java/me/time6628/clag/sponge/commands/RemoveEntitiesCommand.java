@@ -9,6 +9,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.ClickAction;
 import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +22,17 @@ public class RemoveEntitiesCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        pl.getPaginationService().builder().header(Text.of("Commands")).contents(getCommands()).sendTo(src);
+        pl.getPaginationService().builder().contents(getCommands()).title(Text.builder().color(TextColors.LIGHT_PURPLE).append(Text.of("Commands")).build()).sendTo(src);
         return CommandResult.success();
     }
 
     private List<Text> getCommands() {
         List<Text> texts = new ArrayList<>();
-        texts.add(Text.builder()
-                .onClick(TextActions.suggestCommand("re all")).onHover(TextActions.showText(Text.of("Remove all entities."))).append(Text.of("re all"))
-                .onClick(TextActions.suggestCommand("re hostiles")).onHover(TextActions.showText(Text.of("Remove all hostiles."))).append(Text.of("re hostiles"))
-                .onClick(TextActions.suggestCommand("re items")).onHover(TextActions.showText(Text.of("Remove all items."))).append(Text.of("re items"))
-                .onClick(TextActions.suggestCommand("re xp")).onHover(TextActions.showText(Text.of("Remove all XP Orbs."))).append(Text.of("re xp"))
-                .onClick(TextActions.suggestCommand("re living")).onHover(TextActions.showText(Text.of("Remove all XP Orbs."))).append(Text.of("re living"))
-                .build());
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/re all")).onHover(TextActions.showText(Text.of("Remove all entities."))).append(Text.of("/re all")).build());
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/re hostiles")).onHover(TextActions.showText(Text.of("Remove all hostiles."))).append(Text.of("/re hostiles")).build());
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/re items")).onHover(TextActions.showText(Text.of("Remove all items."))).append(Text.of("/re items")).build());
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/re xp")).onHover(TextActions.showText(Text.of("Remove all XP Orbs."))).append(Text.of("/re xp")).build());
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/re living")).onHover(TextActions.showText(Text.of("Remove all Living entities."))).append(Text.of("/re living")).build());
         return texts;
     }
 }
