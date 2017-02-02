@@ -87,7 +87,7 @@ public class CatClearLag {
     private List<ItemType> whitelistedItems = new ArrayList<>();
     private Integer mobLimitPerChunk = 20;
     private int hostileLimit;
-    private int hostileLimitInterval;
+    private int limitInterval;
     private TextColor messageColor;
     private TextColor warningColor;
     private int xpOrbLimit;
@@ -108,7 +108,7 @@ public class CatClearLag {
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
-                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(5);
+                this.cfg.getNode("limits", "entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
                 this.cfg.getNode("messages", "prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
@@ -130,7 +130,7 @@ public class CatClearLag {
 
                 //3.0
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
-                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(5);
+                this.cfg.getNode("limits", "entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
@@ -143,7 +143,7 @@ public class CatClearLag {
             } else if (this.cfg.getNode("version").getDouble() == 0.2) {
                 //3.0
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
-                this.cfg.getNode("limits", "hostile-entity-check-interval").setValue(5);
+                this.cfg.getNode("limits", "entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
@@ -176,7 +176,7 @@ public class CatClearLag {
             //limits
             this.mobLimitPerChunk = this.cfg.getNode("limits", "mob-limit-per-chunk").getInt();
             this.hostileLimit = this.cfg.getNode("limits", "hostile-limit").getInt();
-            this.hostileLimitInterval = this.cfg.getNode("limits", "hostile-entity-check-interval").getInt();
+            this.limitInterval = this.cfg.getNode("limits", "hostile-entity-check-interval").getInt();
             this.xpOrbLimit = this.cfg.getNode("limits", "xp-orb-limit").getInt();
 
 
@@ -211,7 +211,7 @@ public class CatClearLag {
                         .submit(this));
         builder.execute(new EntityChecker())
                 .async()
-                .delay(hostileLimitInterval, TimeUnit.MINUTES)
+                .delay(limitInterval, TimeUnit.MINUTES)
                 .interval(interval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
                 .submit(this);
