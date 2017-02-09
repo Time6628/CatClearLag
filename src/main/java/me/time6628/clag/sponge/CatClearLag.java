@@ -80,7 +80,7 @@ public class CatClearLag {
     private Text prefix;
 
     //private
-    private Scheduler scheduler;
+    //private Scheduler scheduler;
     private int interval = 0;
     private List<Integer> warning;
     private List<String> whitelistItemsAsStrings = new ArrayList<>();
@@ -179,8 +179,6 @@ public class CatClearLag {
             this.limitInterval = this.cfg.getNode("limits", "hostile-entity-check-interval").getInt();
             this.xpOrbLimit = this.cfg.getNode("limits", "xp-orb-limit").getInt();
 
-
-            scheduler = game.getScheduler();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,7 +193,7 @@ public class CatClearLag {
         getLogger().info("Starting plugin...");
         registerCommands();
         registerEvents();
-        Task.Builder builder = scheduler.createTaskBuilder();
+        Task.Builder builder = getGame().getScheduler().createTaskBuilder();
         builder.execute(new ItemClearer())
                 .async()
                 .delay(interval, TimeUnit.MINUTES)
