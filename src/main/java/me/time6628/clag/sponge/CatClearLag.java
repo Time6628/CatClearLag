@@ -16,6 +16,9 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
@@ -32,7 +35,6 @@ import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
@@ -57,7 +59,7 @@ public class CatClearLag {
 
 
     @Inject
-    private org.slf4j.Logger logger;
+    private Logger logger;
 
     //config stuff
     private ConfigurationNode cfg;
@@ -83,8 +85,8 @@ public class CatClearLag {
     //private Scheduler scheduler;
     private int interval = 0;
     private List<Integer> warning;
-    private List<String> whitelistItemsAsStrings = new ArrayList<>();
-    private List<ItemType> whitelistedItems = new ArrayList<>();
+    private List<String> whitelistItemsAsStrings;
+    private List<String> whitelistedItems;
     private Integer mobLimitPerChunk = 20;
     private int hostileLimit;
     private int limitInterval;
@@ -105,7 +107,7 @@ public class CatClearLag {
 
                 this.cfg.getNode("interval").setValue(10);
                 this.cfg.getNode("warnings").setValue(new ArrayList<Integer>(){{add(540);add(570);}});
-                this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());}});
+                this.cfg.getNode("whitelist").setValue(new ArrayList<String>(){{add(ItemTypes.DIAMOND.getId());add(BlockTypes.DIAMOND_BLOCK.getId());add(BlockTypes.BEACON.getDefaultState().getId());}});
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
                 this.cfg.getNode("limits", "entity-check-interval").setValue(5);
@@ -125,6 +127,8 @@ public class CatClearLag {
                 //2.0
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>() {{
                     add(ItemTypes.DIAMOND.getId());
+                    add(BlockTypes.DIAMOND_BLOCK.getId());
+                    add(BlockTypes.BEACON.getDefaultState().getId());
                 }});
                 //this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
 
@@ -168,9 +172,10 @@ public class CatClearLag {
 
             //whitelist
             whitelistItemsAsStrings = cfg.getNode("whitelist").getList(o -> (String) o);
+            whitelistedItems = new ArrayList<>();
             for (String s : whitelistItemsAsStrings) {
-                Optional<ItemType> a = getItemTypeFromString(s);
-                a.ifPresent(itemType -> whitelistedItems.add(itemType));
+                Optional<String> a = getItemIDFromString(s);
+                a.ifPresent(type -> whitelistedItems.add(type));
             }
 
             //limits
@@ -286,7 +291,7 @@ public class CatClearLag {
         Sponge.getCommandManager().register(this, re, "re");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
         Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
-        //Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
+        Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
     }
 
 
@@ -300,7 +305,11 @@ public class CatClearLag {
             //for all the entities, remove the item ones
             entities.stream().filter(entity -> entity instanceof Item).forEach((entity -> {
                 Item entityItem = (Item) entity;
-                if (whitelistedItems.contains(entityItem.getItemType())) return;
+                Optional<BlockType> type = entityItem.getItemType().getBlock();
+                String id;
+                id = type.map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> entityItem.getItemType().getId());
+
+                if (whitelistedItems.contains(id)) return;
                 else entity.remove();
             }));
         });
@@ -348,18 +357,18 @@ public class CatClearLag {
         return game.getServiceManager().provide(PaginationService.class).get();
     }
 
-    private Optional<ItemType> getItemTypeFromString(String id) {
-        return game.getRegistry().getType(ItemType.class, id);
-    }
-
-    public void addItemIDToWhiteList(ItemType type) {
-        try {
-            this.cfg.getNode("whitelist").setValue(getWhitelistItemsAsStrings().add(type.getId()));
-            this.cfgMgr.save(cfg);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private Optional<String> getItemIDFromString(String id) {
+        Optional<ItemType> type = game.getRegistry().getType(ItemType.class, id);
+        if (type.isPresent()) {
+            ItemType ii = type.get();
+            if (ii.getBlock().isPresent()) {
+                BlockState bt = ii.getBlock().get().getDefaultState();
+                return Optional.of(bt.getId());
+            } else {
+                return Optional.of(ii.getId());
+            }
         }
-        getWhitelistedItems().add(type);
+        return Optional.empty();
     }
 
     public List<Entity> getHostiles() {
@@ -423,12 +432,19 @@ public class CatClearLag {
         return i[0];
     }
 
-    public List<ItemType> getWhitelistedItems() {
-        return this.whitelistedItems;
+    public void addIDToWhiteList(String id) {
+        try {
+            logger.info("adding " + id + " to the whitelist.");
+            whitelistedItems.add(id);
+            cfg.getNode("whitelist").setValue(whitelistedItems);
+            cfgMgr.save(cfg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public List<String> getWhitelistItemsAsStrings() {
-        return this.whitelistItemsAsStrings;
+    public List<String> getWhitelistedItems() {
+        return this.whitelistedItems;
     }
 
     public ConfigurationNode getCfg() {

@@ -1,11 +1,13 @@
 package me.time6628.clag.sponge.commands;
 
 import me.time6628.clag.sponge.CatClearLag;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
@@ -29,13 +31,22 @@ public class WhiteListItemCommand implements CommandExecutor {
         Optional<ItemStack> is = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
         if (is.isPresent()) {
             ItemStack si = is.get();
-            plugin.getLogger().info(si.getItem().getId());
-            addItemIDToWhiteList(si.getItem());
+            String id = null;
+            if (si.supports(Keys.ITEM_BLOCKSTATE)) {
+                Optional<BlockState> bs = si.get(Keys.ITEM_BLOCKSTATE);
+                if (bs.isPresent()) {
+                    id = bs.get().getId();
+                }
+            } else {
+                id = si.getItem().getId();
+            }
+            //plugin.getLogger().info(id[0]);
+            plugin.addIDToWhiteList(id);
             src.sendMessage(Text.builder()
                     .color(TextColors.DARK_PURPLE)
                     .append(Text.of("Added "))
                     .color(TextColors.GREEN)
-                    .append(Text.of(is.get().getItem().getId() + " "))
+                    .append(Text.of(si + " "))
                     .color(TextColors.DARK_PURPLE)
                     .append(Text.of(" to the ClearLag whitelist."))
                     .build());
@@ -46,22 +57,5 @@ public class WhiteListItemCommand implements CommandExecutor {
                     .build());
         }
         return CommandResult.success();
-    }
-
-    public void addItemIDToWhiteList(ItemType type) {
-        if (type.getId() == null) {
-            plugin.getLogger().info("null itemtype");
-        return;
-    }
-        try {
-            List<String> aa = plugin.getWhitelistItemsAsStrings();
-            aa.add(type.getId());
-            plugin.getCfg().getNode("whitelist").setValue(aa);
-            plugin.getCfgMgr().save(plugin.getCfg());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        plugin.getWhitelistedItems().add(type);
-        plugin.getWhitelistItemsAsStrings().add(type.getId());
     }
 }
