@@ -45,7 +45,7 @@ public class LaggyChunksCommand implements CommandExecutor {
             Player player = (Player) commandSource;
             Location<World> a = new Location<>(chunk.getWorld(), chunk.getPosition());
             Location<World> b = new Location<>(a.getExtent(), a.getX() * 16, a.getExtent().getBlockMax().getY(), a.getZ()  * 16);
-            Optional<BlockRayHit<World>> c = BlockRay.from(b).stopFilter(BlockRay.onlyAirFilter()).to(a.getPosition().sub(a.getX()  * 16, 1, a.getZ() * 16)).end();
+            Optional<BlockRayHit<World>> c = BlockRay.from(b).stopFilter(BlockRay.onlyAirFilter()).to(a.getPosition().sub(a.getX(), 1, a.getZ())).end();
 
             if (c.isPresent()) {
                 BlockRayHit<World> d = c.get();
