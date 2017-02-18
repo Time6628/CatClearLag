@@ -22,7 +22,7 @@ apply plugin: "com.qixalite.spongestart"
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-version = '0.7'
+version = '0.7.1'
 
 repositories {
     mavenCentral()
