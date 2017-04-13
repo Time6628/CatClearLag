@@ -28,6 +28,7 @@ import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -261,7 +262,7 @@ public class CatClearLag {
         CommandSpec re = CommandSpec.builder()
                 .description(Text.of("Remove various types of entities."))
                 .permission("catclearlag.command.removeentities")
-                .child(cSpecRH, "hostiles", "host")
+                .child(cSpecRH, "hostiles", "host", "h")
                 .child(cSpecRA, "all", "a")
                 .child(cSpecRG, "items", "i")
                 .child(cSpecRL, "living", "l")
@@ -301,16 +302,15 @@ public class CatClearLag {
         //for each world
         worlds.forEach((temp) -> {
             //get all the item entities in the world
-            Collection<Entity> entities = temp.getEntities();
+            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof Item).collect(Collectors.toList());
             //for all the entities, remove the item ones
-            entities.stream().filter(entity -> entity instanceof Item).forEach((entity -> {
+            entities.forEach((entity -> {
                 Item entityItem = (Item) entity;
                 Optional<BlockType> type = entityItem.getItemType().getBlock();
                 String id;
                 id = type.map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> entityItem.getItemType().getId());
 
-                if (whitelistedItems.contains(id)) return;
-                else entity.remove();
+                if (!whitelistedItems.contains(id)) entity.remove();
             }));
         });
     }
@@ -332,13 +332,11 @@ public class CatClearLag {
         //for each world
         worlds.forEach((temp) -> {
             //get all the entities in the world
-            Collection<Entity> entities = temp.getEntities();
+            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> !(entity instanceof Player)).collect(Collectors.toList());
             //remove them all
             entities.forEach(entity -> {
-                if (!entity.getType().equals(EntityTypes.PLAYER)) {
-                    entity.remove();
-                    i[0]++;
-                }
+                entity.remove();
+                i[0]++;
             });
         });
         return i[0];
@@ -378,9 +376,8 @@ public class CatClearLag {
         //for each world
         worlds.forEach((temp) -> {
             //get all the hostile entities in the world
-            Collection<Entity> entities = temp.getEntities();
-
-            hosts.addAll(entities.stream().filter(entity -> entity instanceof Hostile).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
+            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof Hostile && !(entity instanceof Player)).collect(Collectors.toList());
+            hosts.addAll(entities);
         });
         return hosts;
     }
@@ -392,9 +389,9 @@ public class CatClearLag {
         //for each world
         worlds.forEach((temp) -> {
             //get all the entities in the world
-            Collection<Entity> entities = temp.getEntities();
+            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof Living && !(entity instanceof Player)).collect(Collectors.toList());
 
-            liv.addAll(entities.stream().filter(entity -> entity instanceof Living).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
+            liv.addAll(entities);
         });
         return liv;
     }
@@ -416,16 +413,16 @@ public class CatClearLag {
         //for each world
         worlds.forEach((temp) -> {
             //get all the entities in the world
-            Collection<Entity> entities = temp.getEntities();
-            xp.addAll(entities.stream().filter(entity -> entity instanceof ExperienceOrb).filter(entity -> !entity.getType().equals(EntityTypes.PLAYER)).collect(Collectors.toList()));
+            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof ExperienceOrb && !(entity instanceof Player)).collect(Collectors.toList());
+            xp.addAll(entities);
         });
         return xp;
     }
 
     public Integer removeXP() {
         final int[] i = {0};
-        List<Entity> hostiles = getXPOrbs();
-        hostiles.forEach((entity) -> {
+        List<Entity> ents = getXPOrbs();
+        ents.forEach((entity) -> {
             entity.remove();
             i[0]++;
         });
