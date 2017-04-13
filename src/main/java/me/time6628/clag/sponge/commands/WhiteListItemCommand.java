@@ -28,20 +28,22 @@ public class WhiteListItemCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (!(src instanceof Player)) return CommandResult.empty();
-        Optional<ItemStack> is = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
-        if (is.isPresent()) {
-            ItemStack si = is.get();
-            String id = null;
-            if (si.supports(Keys.ITEM_BLOCKSTATE)) {
-                Optional<BlockState> bs = si.get(Keys.ITEM_BLOCKSTATE);
-                if (bs.isPresent()) {
-                    id = bs.get().getId();
-                }
-            } else {
-                id = si.getItem().getId();
-            }
-            //plugin.getLogger().info(id[0]);
-            plugin.addIDToWhiteList(id);
+        Optional<ItemType> otype = args.getOne(Text.of("item"));
+        if (otype.isPresent()) {
+            plugin.addIDToWhiteList(otype.get().getId());
+            //TODO: replace with TextTemplate
+            src.sendMessage(Text.builder()
+                    .color(TextColors.DARK_PURPLE)
+                    .append(Text.of("Added "))
+                    .color(TextColors.GREEN)
+                    .append(Text.of(otype.get().getId() + " "))
+                    .color(TextColors.DARK_PURPLE)
+                    .append(Text.of(" to the ClearLag whitelist."))
+                    .build());
+        } else if (((Player) src).getItemInHand(HandTypes.MAIN_HAND).isPresent()) {
+            ItemStack si = ((Player) src).getItemInHand(HandTypes.MAIN_HAND).get();
+            plugin.addIDToWhiteList(plugin.getItemID(si));
+            //TODO: replace with TextTemplate
             src.sendMessage(Text.builder()
                     .color(TextColors.DARK_PURPLE)
                     .append(Text.of("Added "))
@@ -51,10 +53,7 @@ public class WhiteListItemCommand implements CommandExecutor {
                     .append(Text.of(" to the ClearLag whitelist."))
                     .build());
         } else {
-            src.sendMessage(Text.builder()
-                    .color(TextColors.DARK_PURPLE)
-                    .append(Text.of("Could not add to whitelist.. maybe try holding something?"))
-                    .build());
+            src.sendMessage(Text.of(TextColors.RED, "Could not add item to whitelist."));
         }
         return CommandResult.success();
     }
