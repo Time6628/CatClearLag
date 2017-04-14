@@ -3,14 +3,15 @@ package me.time6628.clag.sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 /**
  * Created by TimeTheCat on 4/13/2017.
  */
 public class Texts {
-    public static TextColor messageColor;
-    public static TextColor warningColor;
-    public static Text prefix;
+    public static TextColor messageColor = TextColors.LIGHT_PURPLE;
+    public static TextColor warningColor = TextColors.RED;
+    public static Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
     public static Text clearMsg = Text.builder().append(prefix).color(messageColor).append(Text.of("All ground items have been cleared.")).build();
 
 
@@ -35,9 +36,5 @@ public class Texts {
                 .append(Text.of(TextColors.WHITE, seconds))
                 .append(Text.of(" seconds."))
                 .build();
-    }
-
-    public static Text clearMessage() {
-        return Text.builder().append(prefix).color(messageColor).append(Text.of("All ground items have been cleared.")).build();
     }
 }

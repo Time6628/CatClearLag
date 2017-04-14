@@ -26,6 +26,6 @@ public class ItemClearer implements Runnable {
     public void run() {
         plugin.clearGroundItems();
         //broadcast that they have all been removed
-        plugin.getGame().getServer().getBroadcastChannel().send(Texts.clearMessage());
+        plugin.getGame().getServer().getBroadcastChannel().send(Texts.clearMsg);
     }
 }

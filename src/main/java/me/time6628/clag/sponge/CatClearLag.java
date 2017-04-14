@@ -115,7 +115,7 @@ public class CatClearLag {
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
                 this.cfg.getNode("limits", "entity-check-interval").setValue(5);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
-                this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
+                this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getName());
                 this.cfg.getNode("messages", "prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
                 //0.4
@@ -143,7 +143,7 @@ public class CatClearLag {
                 this.cfg.getNode("limits", "mob-limit-per-chunk").setValue(20);
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
-                this.cfg.getNode("messages", "prefix").setValue(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build());
+                this.cfg.getNode("messages", "prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
 
                 //0.4
@@ -159,7 +159,7 @@ public class CatClearLag {
                 this.cfg.getNode("limits", "xp-orb-limit").setValue(300);
                 this.cfg.getNode("messages", "message-color").setValue(TextColors.LIGHT_PURPLE.getId());
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
-                this.cfg.getNode("messages", "prefix").setValue(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build());
+                this.cfg.getNode("messages", "prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 //version
@@ -175,11 +175,11 @@ public class CatClearLag {
                 logger.info("Config up to date!");
             }
             //messages
-            Texts.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString());
+            Texts.setPrefix(TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString()));
             Optional<TextColor> t = getColorFromID(this.cfg.getNode("messages", "message-color").getString());
             Optional<TextColor> w = getColorFromID(this.cfg.getNode("messages", "warning-message-color").getString());
-            Texts.messageColor = t.orElse(TextColors.LIGHT_PURPLE);
-            Texts.warningColor = w.orElse(TextColors.RED);
+            Texts.setMessageColor(t.orElse(TextColors.LIGHT_PURPLE));
+            Texts.setWarningColor(w.orElse(TextColors.RED));
 
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
