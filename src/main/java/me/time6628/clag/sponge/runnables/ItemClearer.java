@@ -1,6 +1,7 @@
 package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
+import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -23,8 +24,8 @@ public class ItemClearer implements Runnable {
 
     @Override
     public void run() {
-        plugin.clearGoundItems();
+        plugin.clearGroundItems();
         //broadcast that they have all been removed
-        plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(plugin.getPrefix()).append(plugin.colorMessage("All ground items have been cleared.")).build());
+        plugin.getGame().getServer().getBroadcastChannel().send(Texts.clearMessage());
     }
 }

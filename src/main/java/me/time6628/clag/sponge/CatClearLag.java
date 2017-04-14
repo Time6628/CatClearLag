@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.7.1", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
     public static CatClearLag instance;
@@ -82,8 +82,6 @@ public class CatClearLag {
     //public
     @Inject
     private Game game;
-
-    private Text prefix;
 
     //private
     //private Scheduler scheduler;
@@ -129,7 +127,7 @@ public class CatClearLag {
 
             this.cfg = getCfgMgr().load();
 
-            if (this.cfg.getNode("version").getDouble() == 0.1) {
+            if (this.cfg.getNode("Version").getDouble() == 0.1) {
                 logger.info("Outdated config... adding new options...");
                 //2.0
                 this.cfg.getNode("whitelist").setValue(new ArrayList<String>() {{
@@ -151,9 +149,9 @@ public class CatClearLag {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 //version
-                this.cfg.getNode("version").setValue(0.4);
+                this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
-            } else if (this.cfg.getNode("version").getDouble() == 0.2) {
+            } else if (this.cfg.getNode("Version").getDouble() == 0.2) {
                 //3.0
                 this.cfg.getNode("limits", "hostile-limit").setValue(500);
                 this.cfg.getNode("limits", "entity-check-interval").setValue(5);
@@ -165,17 +163,23 @@ public class CatClearLag {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 //version
-                this.cfg.getNode("version").setValue(0.4);
+                this.cfg.getNode("Version").setValue(0.4);
+                getCfgMgr().save(cfg);
+            } else if (this.cfg.getNode("Version").getDouble() == 0.3) {
+                //0.4
+                this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
+                //version
+                this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
             } else {
                 logger.info("Config up to date!");
             }
             //messages
-            this.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString());
+            Texts.prefix = TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString());
             Optional<TextColor> t = getColorFromID(this.cfg.getNode("messages", "message-color").getString());
             Optional<TextColor> w = getColorFromID(this.cfg.getNode("messages", "warning-message-color").getString());
-            this.messageColor = t.orElse(TextColors.LIGHT_PURPLE);
-            this.warningColor = w.orElse(TextColors.RED);
+            Texts.messageColor = t.orElse(TextColors.LIGHT_PURPLE);
+            Texts.warningColor = w.orElse(TextColors.RED);
 
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
@@ -302,7 +306,7 @@ public class CatClearLag {
     }
 
 
-    public void clearGoundItems() {
+    public void clearGroundItems() {
         //get all the worlds
         Collection<World> worlds = Sponge.getServer().getWorlds();
         //for each world
@@ -341,8 +345,10 @@ public class CatClearLag {
             Collection<Entity> entities = temp.getEntities().stream().filter(entity -> !(entity instanceof Player)).collect(Collectors.toList());
             //remove them all
             entities.forEach(entity -> {
-                entity.remove();
-                i[0]++;
+                if (!whitelistedEntities.contains(entity.getType().getId())) {
+                    entity.remove();
+                    i[0]++;
+                }
             });
         });
         return i[0];
@@ -467,10 +473,6 @@ public class CatClearLag {
 
     public int getHostileLimit() {
         return hostileLimit;
-    }
-
-    public Text getPrefix() {
-        return prefix;
     }
 
     public Game getGame() {
