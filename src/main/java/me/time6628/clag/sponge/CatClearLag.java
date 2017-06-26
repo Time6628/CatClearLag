@@ -47,6 +47,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -128,6 +129,9 @@ public class CatClearLag {
                 this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.RED.getId());
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
+                this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
 
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
@@ -156,6 +160,9 @@ public class CatClearLag {
 
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
+                this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
                 //version
                 this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
@@ -170,12 +177,18 @@ public class CatClearLag {
                 this.cfg.getNode("messages", "prefix").setValue(TextSerializers.FORMATTING_CODE.serialize(Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build()));
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
+                this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
                 //version
                 this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
             } else if (this.cfg.getNode("Version").getDouble() == 0.3) {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
+                this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
+                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
                 //version
                 this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
@@ -186,8 +199,12 @@ public class CatClearLag {
             Texts.setPrefix(TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString()));
             Optional<TextColor> t = getColorFromID(this.cfg.getNode("messages", "message-color").getString());
             Optional<TextColor> w = getColorFromID(this.cfg.getNode("messages", "warning-message-color").getString());
+            Optional<TextColor> k = getColorFromID(this.cfg.getNode("messages", "seconds-color").getString());
             Texts.setMessageColor(t.orElse(TextColors.LIGHT_PURPLE));
             Texts.setWarningColor(w.orElse(TextColors.RED));
+            Texts.setSecondsColor(k.orElse(TextColors.WHITE));
+            Texts.setStringClearMsg(cfg.getNode("messages", "items-cleared-message").getString());
+            Texts.warningMessage = cfg.getNode("messages", "clear-warning-message").getValue(TypeToken.of(TextTemplate.class));
 
             this.interval = cfg.getNode("interval").getInt();
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
@@ -323,7 +340,8 @@ public class CatClearLag {
     }
 
 
-    public void clearGroundItems() {
+    public Integer clearGroundItems() {
+        final int[] i = {0};
         //get all the worlds
         Collection<World> worlds = Sponge.getServer().getWorlds();
         //for each world
@@ -336,10 +354,11 @@ public class CatClearLag {
                 Optional<BlockType> type = entityItem.getItemType().getBlock();
                 String id;
                 id = type.map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> entityItem.getItemType().getId());
-
+                i[0]++;
                 if (!whitelistedItems.contains(id)) entity.remove();
             }));
         });
+        return i[0];
     }
 
     public Integer removeHostile() {
