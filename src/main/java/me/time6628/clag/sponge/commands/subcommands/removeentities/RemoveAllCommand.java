@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.commands.subcommands.removeentities;
 
+import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.command.CommandException;
@@ -14,7 +15,7 @@ import org.spongepowered.api.text.format.TextColors;
  * Created by TimeTheCat on 10/22/2016.
  */
 public class RemoveAllCommand implements CommandExecutor {
-    private CatClearLag plugin = CatClearLag.instance;
+    @Inject private CatClearLag plugin;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

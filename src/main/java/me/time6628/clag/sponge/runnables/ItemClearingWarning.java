@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.runnables;
 
+import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.Game;
@@ -12,7 +13,7 @@ import org.spongepowered.api.text.format.TextColors;
 public class ItemClearingWarning implements Runnable {
 
     private int seconds;
-    private CatClearLag plugin = CatClearLag.instance;
+    @Inject private CatClearLag plugin;
 
     public ItemClearingWarning(int seconds) {
         this.seconds = seconds;

@@ -1,13 +1,18 @@
 package me.time6628.clag.sponge;
 
 import com.google.common.reflect.TypeToken;
+import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import me.time6628.clag.sponge.commands.ForceGCCommand;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
 import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
 import me.time6628.clag.sponge.commands.WhiteListItemCommand;
+import me.time6628.clag.sponge.commands.subcommands.laggychunks.EntitiesCommand;
+import me.time6628.clag.sponge.commands.subcommands.laggychunks.TilesCommand;
 import me.time6628.clag.sponge.commands.subcommands.removeentities.*;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
+import me.time6628.clag.sponge.injectors.InjectorModule;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
@@ -59,31 +64,24 @@ import java.util.stream.Collectors;
 @Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8", description = "DIE LAG, DIE!")
 public class CatClearLag {
 
-    public static CatClearLag instance;
 
-
-    @Inject
     private Logger logger;
 
     //config stuff
     private ConfigurationNode cfg;
 
-    @Inject
-    PluginContainer pluginContainer;
+    private PluginContainer pluginContainer;
 
-    //config stuff
     @Inject
     @DefaultConfig(sharedRoot = false)
     private File defaultCfg;
+
     @Inject
     @DefaultConfig(sharedRoot = false)
     private ConfigurationLoader<CommentedConfigurationNode> cfgMgr;
 
-    //public
-    @Inject
     private Game game;
 
-    //private
     //private Scheduler scheduler;
     private int interval = 0;
     private List<Integer> warning;
@@ -96,6 +94,16 @@ public class CatClearLag {
     private TextColor warningColor;
     private int xpOrbLimit;
     private List<String> whitelistedEntities;
+
+    private final Injector injector;
+
+    @Inject
+    public CatClearLag(Logger logger, Game game, PluginContainer instance) {
+        this.logger = logger;
+        this.game = game;
+        this.pluginContainer = instance;
+        this.injector = Guice.createInjector(new InjectorModule(this));
+    }
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
@@ -197,10 +205,6 @@ public class CatClearLag {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        pluginContainer.getInstance().ifPresent( a -> {
-            instance = (CatClearLag) a;
-        });
     }
 
     @Listener
@@ -285,11 +289,24 @@ public class CatClearLag {
                 .executor(new ForceGCCommand())
                 .build();
 
-        CommandSpec cSpec5 = CommandSpec.builder()
+        CommandSpec cSpecLCE = CommandSpec.builder()
                 .description(Text.of("List chunks in order of most to least entities."))
                 .permission("catclearlag.command.laggychunks")
+                .executor(new EntitiesCommand())
+                .build();
+
+        CommandSpec cSpecLCT = CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least tiles."))
+                .permission("catclearlag.command.laggychunks")
+                .executor(new TilesCommand())
+                .build();
+
+        CommandSpec cSpecLC = CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least entities or tiles."))
+                .permission("catclearlag.command.laggychunks")
                 .executor(new LaggyChunksCommand())
-                .arguments(GenericArguments.choices(Text.of("entity"), new HashMap<String, String>(){{put("entities", "e");put("tiles", "te");}}))
+                .child(cSpecLCE, "entities", "e")
+                .child(cSpecLCT, "tiles", "t")
                 .build();
 
         CommandSpec cSpec6 = CommandSpec.builder()
@@ -301,7 +318,7 @@ public class CatClearLag {
 
         Sponge.getCommandManager().register(this, re, "re");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
-        Sponge.getCommandManager().register(this, cSpec5, "laggychunks", "lc");
+        Sponge.getCommandManager().register(this, cSpecLC, "laggychunks", "lc");
         Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
     }
 

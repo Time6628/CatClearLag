@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.commands;
 
+import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.command.CommandException;
@@ -23,7 +24,7 @@ import java.util.Optional;
  * Created by TimeTheCat on 1/5/2017.
  */
 public class WhiteListItemCommand implements CommandExecutor {
-    CatClearLag plugin = CatClearLag.instance;
+    @Inject private CatClearLag plugin;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

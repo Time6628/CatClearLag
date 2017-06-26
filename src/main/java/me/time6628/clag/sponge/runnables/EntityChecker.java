@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.runnables;
 
+import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.text.Text;
@@ -9,7 +10,7 @@ import org.spongepowered.api.text.format.TextColors;
  * Created by TimeTheCat on 1/23/2017.
  */
 public class EntityChecker implements Runnable {
-    CatClearLag plugin = CatClearLag.instance;
+    @Inject private CatClearLag plugin;
 
     @Override
     public void run() {

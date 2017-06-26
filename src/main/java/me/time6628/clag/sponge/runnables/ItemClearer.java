@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge.runnables;
 
+import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.Game;
@@ -20,7 +21,7 @@ import java.util.function.Predicate;
  * Created by pturc_000 on 7/13/2016.
  */
 public class ItemClearer implements Runnable {
-    private CatClearLag plugin = CatClearLag.instance;
+    @Inject private CatClearLag plugin;
 
     @Override
     public void run() {
