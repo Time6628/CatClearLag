@@ -15,7 +15,7 @@ import org.spongepowered.api.text.format.TextColors;
  * Created by TimeTheCat on 1/30/2017.
  */
 public class RemoveLivingCommand implements CommandExecutor {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
 
     @Override

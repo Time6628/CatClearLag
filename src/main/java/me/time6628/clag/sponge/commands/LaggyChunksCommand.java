@@ -26,7 +26,7 @@ import java.util.*;
  * Created by TimeTheCat on 12/18/2016.
  */
 public class LaggyChunksCommand implements CommandExecutor {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

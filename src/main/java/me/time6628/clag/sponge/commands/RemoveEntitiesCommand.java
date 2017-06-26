@@ -19,7 +19,7 @@ import java.util.List;
  * Created by TimeTheCat on 1/30/2017.
  */
 public class RemoveEntitiesCommand implements CommandExecutor {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

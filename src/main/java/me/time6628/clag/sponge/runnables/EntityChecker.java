@@ -10,7 +10,7 @@ import org.spongepowered.api.text.format.TextColors;
  * Created by TimeTheCat on 1/23/2017.
  */
 public class EntityChecker implements Runnable {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public void run() {

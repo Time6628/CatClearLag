@@ -21,7 +21,7 @@ import java.util.function.Predicate;
  * Created by pturc_000 on 7/13/2016.
  */
 public class ItemClearer implements Runnable {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public void run() {

@@ -15,7 +15,7 @@ import java.util.Optional;
  * Created by TimeTheCat on 1/15/2017.
  */
 public class MobEventHandler {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Listener
     public void onMobSpawn(ConstructEntityEvent.Pre event, @Root Entity entity) {

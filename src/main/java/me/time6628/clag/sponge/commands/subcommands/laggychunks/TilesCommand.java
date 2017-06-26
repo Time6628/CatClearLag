@@ -22,7 +22,7 @@ import java.util.TreeMap;
  */
 public class TilesCommand extends LaggyChunksCommand implements CommandExecutor {
 
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         List<Chunk> chunksToSort = (List<Chunk>) ((Player) src).getWorld().getLoadedChunks();

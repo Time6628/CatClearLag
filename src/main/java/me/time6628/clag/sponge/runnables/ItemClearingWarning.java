@@ -15,7 +15,7 @@ import java.util.Collections;
 public class ItemClearingWarning implements Runnable {
 
     private int seconds;
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     public ItemClearingWarning(int seconds) {
         this.seconds = seconds;

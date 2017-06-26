@@ -44,6 +44,14 @@ public class Texts {
         Texts.messageColor = messageColor;
     }
 
+    public static TextColor getMessageColor() {
+        return messageColor;
+    }
+
+    public static TextColor getWarningColor() {
+        return warningColor;
+    }
+
     public static String getStringClearMsg() {
         return stringClearMsg;
     }
@@ -52,17 +60,14 @@ public class Texts {
         Texts.stringClearMsg = stringClearMsg;
     }
 
-    public static TextColor getSecondsColor() {
-        return secondsColor;
-    }
-
-    static void setSecondsColor(TextColor secondsColor) {
-        Texts.secondsColor = secondsColor;
-    }
-
     public static TextTemplate warningMessage = TextTemplate.of(
             warningColor, "Ground items will be cleared in ",
             arg("seconds").color(secondsColor),
             warningColor, "seconds."
     );
+
+    public static void setSecondsColor(TextColor secondsColor) {
+        Texts.secondsColor = secondsColor;
+    }
+
 }

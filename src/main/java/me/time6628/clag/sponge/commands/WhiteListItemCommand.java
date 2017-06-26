@@ -24,7 +24,7 @@ import java.util.Optional;
  * Created by TimeTheCat on 1/5/2017.
  */
 public class WhiteListItemCommand implements CommandExecutor {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

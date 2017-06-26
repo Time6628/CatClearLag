@@ -14,7 +14,7 @@ import org.spongepowered.api.text.Text;
  * Created by TimeTheCat on 1/31/2017.
  */
 public class RemoveXPCommand implements CommandExecutor {
-    @Inject private CatClearLag plugin;
+    private CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

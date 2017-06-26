@@ -1,9 +1,7 @@
 package me.time6628.clag.sponge;
 
 import com.google.common.reflect.TypeToken;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import me.time6628.clag.sponge.commands.ForceGCCommand;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
 import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
@@ -12,7 +10,6 @@ import me.time6628.clag.sponge.commands.subcommands.laggychunks.EntitiesCommand;
 import me.time6628.clag.sponge.commands.subcommands.laggychunks.TilesCommand;
 import me.time6628.clag.sponge.commands.subcommands.removeentities.*;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
-import me.time6628.clag.sponge.injectors.InjectorModule;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
@@ -64,7 +61,7 @@ import java.util.stream.Collectors;
  */
 @Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8", description = "DIE LAG, DIE!")
 public class CatClearLag {
-
+    public static CatClearLag instance;
 
     private Logger logger;
 
@@ -73,12 +70,8 @@ public class CatClearLag {
 
     private PluginContainer pluginContainer;
 
-    @Inject
-    @DefaultConfig(sharedRoot = false)
     private File defaultCfg;
 
-    @Inject
-    @DefaultConfig(sharedRoot = false)
     private ConfigurationLoader<CommentedConfigurationNode> cfgMgr;
 
     private Game game;
@@ -86,24 +79,22 @@ public class CatClearLag {
     //private Scheduler scheduler;
     private int interval = 0;
     private List<Integer> warning;
-    private List<String> whitelistItemsAsStrings;
     private List<String> whitelistedItems;
     private Integer mobLimitPerChunk = 20;
     private int hostileLimit;
     private int limitInterval;
-    private TextColor messageColor;
-    private TextColor warningColor;
     private int xpOrbLimit;
     private List<String> whitelistedEntities;
 
-    private final Injector injector;
-
     @Inject
-    public CatClearLag(Logger logger, Game game, PluginContainer instance) {
+    public CatClearLag(Logger logger, Game game, PluginContainer container, @DefaultConfig(sharedRoot = false) File defaultCfg, @DefaultConfig
+            (sharedRoot = false) ConfigurationLoader<CommentedConfigurationNode> cfgMgr) {
         this.logger = logger;
         this.game = game;
-        this.pluginContainer = instance;
-        this.injector = Guice.createInjector(new InjectorModule(this));
+        this.pluginContainer = container;
+        this.defaultCfg = defaultCfg;
+        this.cfgMgr = cfgMgr;
+
     }
 
     @Listener
@@ -130,8 +121,8 @@ public class CatClearLag {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
-                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
-                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
+                this.cfg.getNode("messages", "warning-seconds-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(TypeToken.of(TextTemplate.class), Texts.warningMessage);
 
                 getLogger().info("Config created.");
                 getCfgMgr().save(cfg);
@@ -161,8 +152,8 @@ public class CatClearLag {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
-                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
-                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
+                this.cfg.getNode("messages", "warning-seconds-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(TypeToken.of(TextTemplate.class), Texts.warningMessage);
                 //version
                 this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
@@ -178,8 +169,8 @@ public class CatClearLag {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
-                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
-                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
+                this.cfg.getNode("messages", "warning-seconds-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(TypeToken.of(TextTemplate.class), Texts.warningMessage);
                 //version
                 this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
@@ -187,8 +178,8 @@ public class CatClearLag {
                 //0.4
                 this.cfg.getNode("entity-whitelist").setValue(new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}});
                 this.cfg.getNode("messages", "items-cleared-message").setValue("{count} items have been cleared.");
-                this.cfg.getNode("messages", "warning-message-color").setValue(TextColors.WHITE.getId());
-                this.cfg.getNode("messages", "clear-warning-message").setValue(Texts.warningMessage);
+                this.cfg.getNode("messages", "warning-seconds-color").setValue(TextColors.WHITE.getId());
+                this.cfg.getNode("messages", "clear-warning-message").setValue(TypeToken.of(TextTemplate.class), Texts.warningMessage);
                 //version
                 this.cfg.getNode("Version").setValue(0.4);
                 getCfgMgr().save(cfg);
@@ -199,7 +190,7 @@ public class CatClearLag {
             Texts.setPrefix(TextSerializers.FORMATTING_CODE.deserialize(cfg.getNode("messages", "prefix").getString()));
             Optional<TextColor> t = getColorFromID(this.cfg.getNode("messages", "message-color").getString());
             Optional<TextColor> w = getColorFromID(this.cfg.getNode("messages", "warning-message-color").getString());
-            Optional<TextColor> k = getColorFromID(this.cfg.getNode("messages", "seconds-color").getString());
+            Optional<TextColor> k = getColorFromID(this.cfg.getNode("messages", "warning-seconds-color").getString());
             Texts.setMessageColor(t.orElse(TextColors.LIGHT_PURPLE));
             Texts.setWarningColor(w.orElse(TextColors.RED));
             Texts.setSecondsColor(k.orElse(TextColors.WHITE));
@@ -210,7 +201,6 @@ public class CatClearLag {
             this.warning = cfg.getNode("warnings").getList(o -> (Integer) o);
 
             //whitelist
-            whitelistItemsAsStrings = cfg.getNode("whitelist").getList(o -> (String) o);
             whitelistedItems = cfg.getNode("whitelist").getList(TypeToken.of(String.class));//all items should be fine, if they are added through the in-game commands
             whitelistedEntities = cfg.getNode("entity-whitelist").getList(TypeToken.of(String.class));
 
@@ -243,12 +233,13 @@ public class CatClearLag {
                         .interval(interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
                         .submit(this));
-        builder.execute(new EntityChecker())
+        Task t3 = builder.execute(new EntityChecker())
                 .async()
                 .delay(limitInterval, TimeUnit.MINUTES)
                 .interval(interval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
                 .submit(this);
+        pluginContainer.getInstance().ifPresent( a -> instance = (CatClearLag) a);
     }
 
     private void registerEvents() {
@@ -519,23 +510,16 @@ public class CatClearLag {
         return xpOrbLimit;
     }
 
+    //TODO: move these to Texts
     public Text colorMessage(String text) {
-        return Text.builder().color(getMessageColor()).append(Text.of(text)).build();
+        return Text.builder().color(Texts.getMessageColor()).append(Text.of(text)).build();
     }
 
     public Text colorWarningMessage(String text) {
-        return Text.builder().color(getWarningColor()).append(Text.of(text)).build();
+        return Text.builder().color(Texts.getWarningColor()).append(Text.of(text)).build();
     }
 
     public Optional<TextColor> getColorFromID(String id) {
         return game.getRegistry().getType(TextColor.class, id);
-    }
-
-    public TextColor getMessageColor() {
-        return messageColor;
-    }
-    
-    public TextColor getWarningColor() {
-        return warningColor;
     }
 }
