@@ -30,7 +30,8 @@ public class LaggyChunksCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-
+        plugin.getPaginationService().builder().contents(getCommands()).title(Text.builder().color(TextColors.LIGHT_PURPLE).append(Text.of("Commands"))
+                .build()).sendTo(src);
 
         return CommandResult.success();
     }
@@ -56,4 +57,12 @@ public class LaggyChunksCommand implements CommandExecutor {
         }));
     }
 
+    public List<Text> getCommands() {
+        List<Text> texts = new ArrayList<>();
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/lc tiles")).onHover(TextActions.showText(Text.of("Search for chunks with "
+                + "lots of tiles."))).append(Text.of("/lc tiles")).build());
+        texts.add(Text.builder().onClick(TextActions.suggestCommand("/lc entities")).onHover(TextActions.showText(Text.of("Search for chunks with "
+                + "lots of entities."))).append(Text.of("/lc entities")).build());
+        return texts;
+    }
 }

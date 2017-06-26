@@ -94,7 +94,7 @@ public class CatClearLag {
         this.pluginContainer = container;
         this.defaultCfg = defaultCfg;
         this.cfgMgr = cfgMgr;
-
+        instance = this;
     }
 
     @Listener
@@ -233,13 +233,12 @@ public class CatClearLag {
                         .interval(interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
                         .submit(this));
-        Task t3 = builder.execute(new EntityChecker())
+        builder.execute(new EntityChecker())
                 .async()
                 .delay(limitInterval, TimeUnit.MINUTES)
                 .interval(interval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
                 .submit(this);
-        pluginContainer.getInstance().ifPresent( a -> instance = (CatClearLag) a);
     }
 
     private void registerEvents() {
