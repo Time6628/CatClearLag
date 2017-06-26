@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import me.time6628.clag.sponge.commands.ForceGCCommand;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
 import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
+import me.time6628.clag.sponge.commands.UnloadChunksCommand;
 import me.time6628.clag.sponge.commands.WhiteListItemCommand;
 import me.time6628.clag.sponge.commands.subcommands.laggychunks.EntitiesCommand;
 import me.time6628.clag.sponge.commands.subcommands.laggychunks.TilesCommand;
@@ -48,6 +49,7 @@ import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
@@ -59,7 +61,7 @@ import java.util.stream.Collectors;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8", description = "DIE LAG, DIE!")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8", description = "A plugin to assist in removing lag from your server.")
 public class CatClearLag {
     public static CatClearLag instance;
 
@@ -323,10 +325,17 @@ public class CatClearLag {
                 .arguments(GenericArguments.optional(GenericArguments.catalogedElement(Text.of("item"), ItemType.class)))
                 .build();
 
+        CommandSpec cSpecUC = CommandSpec.builder()
+                .description(Text.of("Force all chunks to unload."))
+                .permission("catclearlag.command.unloadchunks")
+                .executor(new UnloadChunksCommand())
+                .build();
+
         Sponge.getCommandManager().register(this, re, "re");
         Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
         Sponge.getCommandManager().register(this, cSpecLC, "laggychunks", "lc");
         Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
+        Sponge.getCommandManager().register(this, cSpecUC, "unloadchunks", "uc");
     }
 
 
@@ -458,6 +467,28 @@ public class CatClearLag {
         List<Entity> ents = getXPOrbs();
         ents.forEach((entity) -> {
             entity.remove();
+            i[0]++;
+        });
+        return i[0];
+    }
+
+    public List<Chunk> getChunks() {
+        List<Chunk> chunks = new ArrayList<>();
+        //get all worlds
+        Collection<World> worlds = Sponge.getServer().getWorlds();
+        worlds.forEach((temp) -> {
+            //get all the entities in the world
+            Collection<Chunk> tempLoadedChunks = (Collection<Chunk>) temp.getLoadedChunks();
+            chunks.addAll(tempLoadedChunks);
+        });
+        return chunks;
+    }
+
+    public Integer unloadChunks() {
+        final int[] i = {0};
+        List<Chunk> chunks = getChunks();
+        chunks.forEach(chunk -> {
+            chunk.unloadChunk();
             i[0]++;
         });
         return i[0];
