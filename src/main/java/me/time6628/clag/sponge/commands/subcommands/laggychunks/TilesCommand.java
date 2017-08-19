@@ -1,6 +1,5 @@
 package me.time6628.clag.sponge.commands.subcommands.laggychunks;
 
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
 import org.spongepowered.api.command.CommandException;
@@ -22,7 +21,7 @@ import java.util.TreeMap;
  */
 public class TilesCommand extends LaggyChunksCommand implements CommandExecutor {
 
-    private CatClearLag plugin = CatClearLag.instance;
+    private final CatClearLag plugin = CatClearLag.instance;
 
     @Override public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         List<Chunk> chunksToSort = (List<Chunk>) ((Player) src).getWorld().getLoadedChunks();

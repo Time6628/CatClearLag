@@ -1,21 +1,18 @@
 package me.time6628.clag.sponge.commands.subcommands.removeentities;
 
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
-import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 
 /**
  * Created by TimeTheCat on 1/30/2017.
  */
 public class RemoveLivingCommand implements CommandExecutor {
-    private CatClearLag plugin = CatClearLag.instance;
+    private final CatClearLag plugin = CatClearLag.instance;
 
 
     @Override

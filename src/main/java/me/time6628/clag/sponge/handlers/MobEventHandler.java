@@ -1,6 +1,5 @@
 package me.time6628.clag.sponge.handlers;
 
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
@@ -15,17 +14,17 @@ import java.util.Optional;
  * Created by TimeTheCat on 1/15/2017.
  */
 public class MobEventHandler {
-    private CatClearLag plugin = CatClearLag.instance;
+    private final CatClearLag plugin = CatClearLag.instance;
 
     @Listener
     public void onMobSpawn(ConstructEntityEvent.Pre event, @Root Entity entity) {
         if (entity instanceof Living) {
             Optional<Chunk> chunk = entity.getWorld().getChunk(entity.getLocation().getChunkPosition());
-            if (chunk.isPresent()) {
-                if (chunk.get().getEntities().size() >= plugin.getMobLimitPerChunk()) {
+            chunk.ifPresent(chunk1 -> {
+                if (chunk1.getEntities().size() >= plugin.getMobLimitPerChunk()) {
                     event.setCancelled(true);
                 }
-            }
+            });
         }
     }
 }

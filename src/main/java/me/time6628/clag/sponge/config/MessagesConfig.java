@@ -6,7 +6,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import static org.spongepowered.api.text.TextTemplate.arg;
 
@@ -14,19 +13,19 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class MessagesConfig {
 
     @Setting("Message Color")
-    public TextColor messageColor = TextColors.LIGHT_PURPLE;
+    public final TextColor messageColor = TextColors.LIGHT_PURPLE;
 
     @Setting("WarningColor")
-    public TextColor warningColor = TextColors.RED;
+    private final TextColor warningColor = TextColors.RED;
 
     @Setting("Seconds Color")
-    public TextColor secondsColor = TextColors.WHITE;
+    private final TextColor secondsColor = TextColors.WHITE;
 
     @Setting("Prefix")
-    public Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
+    public final Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
 
     @Setting("Clearing Items Message")
-    public TextTemplate clearMsg = TextTemplate.of(
+    public final TextTemplate clearMsg = TextTemplate.of(
             prefix, warningColor,
             arg("count").color(secondsColor), " items have been cleared."
     );

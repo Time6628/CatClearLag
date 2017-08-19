@@ -1,7 +1,5 @@
 package me.time6628.clag.sponge.commands;
 
-import com.flowpowered.math.vector.Vector3d;
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -26,7 +24,7 @@ import java.util.*;
  * Created by TimeTheCat on 12/18/2016.
  */
 public class LaggyChunksCommand implements CommandExecutor {
-    private CatClearLag plugin = CatClearLag.instance;
+    private final CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -57,7 +55,7 @@ public class LaggyChunksCommand implements CommandExecutor {
         }));
     }
 
-    public List<Text> getCommands() {
+    private List<Text> getCommands() {
         List<Text> texts = new ArrayList<>();
         texts.add(Text.builder().onClick(TextActions.suggestCommand("/lc tiles")).onHover(TextActions.showText(Text.of("Search for chunks with "
                 + "lots of tiles."))).append(Text.of("/lc tiles")).build());

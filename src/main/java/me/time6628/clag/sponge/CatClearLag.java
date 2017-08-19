@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
@@ -31,7 +30,6 @@ import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -48,7 +46,6 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Created by TimeTheCat on 7/2/2016.
@@ -57,15 +54,15 @@ import java.util.stream.Collectors;
 public class CatClearLag {
     public static CatClearLag instance;
 
-    private Logger logger;
+    private final Logger logger;
 
     private ConfigLoader cfgLoader;
 
-    private File configDir;
+    private final File configDir;
 
-    private Game game;
+    private final Game game;
 
-    private GuiceObjectMapperFactory factory;
+    private final GuiceObjectMapperFactory factory;
 
     private MessagesConfig messages;
     private CCLConfig cclConfig;
@@ -267,7 +264,7 @@ public class CatClearLag {
         return new EntityRemover<>(ExperienceOrb.class).removeEntities();
     }
 
-    public List<Chunk> getChunks() {
+    private List<Chunk> getChunks() {
         List<Chunk> chunks = new ArrayList<>();
         //get all worlds
         Collection<World> worlds = Sponge.getServer().getWorlds();

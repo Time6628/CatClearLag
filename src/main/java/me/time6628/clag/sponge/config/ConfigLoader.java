@@ -56,7 +56,7 @@ public class ConfigLoader {
         }
     }
 
-    public boolean saveConfig(CCLConfig newConfig) {
+    public void saveConfig(CCLConfig newConfig) {
         try {
             File file = new File(plugin.getConfigDir(), "catclearlag.conf");
             if (!file.exists()) {
@@ -66,10 +66,8 @@ public class ConfigLoader {
             CommentedConfigurationNode config = loader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
             config.getValue(TypeToken.of(CCLConfig.class), newConfig);
             loader.save(config);
-            return true;
         } catch (Exception e) {
             plugin.getLogger().error("Could not load config.", e);
-            return false;
         }
     }
 

@@ -1,8 +1,6 @@
 package me.time6628.clag.sponge.commands.subcommands.removeentities;
 
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
-import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -14,7 +12,7 @@ import org.spongepowered.api.text.Text;
  * Created by TimeTheCat on 1/31/2017.
  */
 public class RemoveXPCommand implements CommandExecutor {
-    private CatClearLag plugin = CatClearLag.instance;
+    private final CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

@@ -1,8 +1,6 @@
 package me.time6628.clag.sponge.commands;
 
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
-import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;

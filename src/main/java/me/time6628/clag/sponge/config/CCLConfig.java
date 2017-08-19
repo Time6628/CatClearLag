@@ -13,42 +13,42 @@ import java.util.List;
 public class CCLConfig {
 
     @Setting("Interval")
-    public int interval = 10;
+    public final int interval = 10;
 
     @Setting(value = "Warnings")
-    public List<Integer> warnings = new ArrayList<Integer>() {{
+    public final List<Integer> warnings = new ArrayList<Integer>() {{
         add(540);
         add(570);
     }};
 
     @Setting("Whitelist")
-    public List<String> whitelist = new ArrayList<String>() {{
+    public final List<String> whitelist = new ArrayList<String>() {{
         add(ItemTypes.DIAMOND.getId());
         add(BlockTypes.DIAMOND_BLOCK.getId());
         add(BlockTypes.BEACON.getDefaultState().getId());
     }};
 
     @Setting("Entity Whitelist")
-    public List<String> entityWhiteList = new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}};
+    public final List<String> entityWhiteList = new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}};
 
     @Setting("Limits")
-    public
+    public final
     Limits limits = new Limits();
 
     @ConfigSerializable
     public static class Limits {
 
         @Setting("Max Mobs Per Chunk")
-        public int mobLimitPerChunk = 20;
+        public final int mobLimitPerChunk = 20;
 
         @Setting("Hostile Limit")
-        public int hostileLimit = 500;
+        public final int hostileLimit = 500;
 
         @Setting("Entity Check Interval")
-        public int entityCheckInterval = 5;
+        public final int entityCheckInterval = 5;
 
         @Setting("XP Orb Limit")
-        public int maxXPOrbs = 300;
+        public final int maxXPOrbs = 300;
     }
 
 }

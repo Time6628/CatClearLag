@@ -1,6 +1,5 @@
 package me.time6628.clag.sponge.commands;
 
-import com.google.inject.Inject;
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -8,7 +7,6 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.ClickAction;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -19,7 +17,7 @@ import java.util.List;
  * Created by TimeTheCat on 1/30/2017.
  */
 public class RemoveEntitiesCommand implements CommandExecutor {
-    private CatClearLag plugin = CatClearLag.instance;
+    private final CatClearLag plugin = CatClearLag.instance;
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
