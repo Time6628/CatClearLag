@@ -23,6 +23,6 @@ public class ItemClearingWarning implements Runnable {
 
     @Override
     public void run() {
-        plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(plugin.getMessages().prefix).append(Texts.warningMessage.apply(Collections.singletonMap("seconds", seconds)).build()).build());
+        plugin.getGame().getServer().getBroadcastChannel().send(Texts.warningMessage.apply(Collections.singletonMap("seconds", seconds)).build());
     }
 }

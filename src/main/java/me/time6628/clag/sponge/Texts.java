@@ -25,7 +25,7 @@ public class Texts {
     );
 
     public static TextTemplate warningMessage = TextTemplate.of(
-            warningColor, "Ground items will be cleared in ",
+            prefix, warningColor, "Ground items will be cleared in ",
             arg("seconds").color(secondsColor),
             warningColor, " seconds."
     );

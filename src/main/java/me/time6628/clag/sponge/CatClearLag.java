@@ -1,6 +1,5 @@
 package me.time6628.clag.sponge;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 import me.time6628.clag.sponge.commands.ForceGCCommand;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
@@ -17,23 +16,17 @@ import me.time6628.clag.sponge.handlers.MobEventHandler;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
 import me.time6628.clag.sponge.runnables.ItemClearingWarning;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.GuiceObjectMapperFactory;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
@@ -43,24 +36,18 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextTemplate;
-import org.spongepowered.api.text.format.TextColor;
-import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -234,53 +221,16 @@ public class CatClearLag {
 
 
     public Integer clearGroundItems() {
-        final int[] i = {0};
-        //get all the worlds
-        Collection<World> worlds = Sponge.getServer().getWorlds();
-        //for each world
-        worlds.forEach((temp) -> {
-            //get all the item entities in the world
-            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof Item).collect(Collectors.toList());
-            //for all the entities, remove the item ones
-            entities.forEach((entity -> {
-                Item entityItem = (Item) entity;
-                Optional<BlockType> type = entityItem.getItemType().getBlock();
-                String id;
-                id = type.map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> entityItem.getItemType().getId());
-                i[0]++;
-                if (!cclConfig.entityWhiteList.contains(id)) entity.remove();
-            }));
-        });
-        return i[0];
+        Predicate<Item> test = item -> !cclConfig.whitelist.contains(item.getItemType().getBlock().map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> item.getItemType().getId()));
+        return new EntityRemover<>(Item.class, test).removeEntities();
     }
 
     public Integer removeHostile() {
-        final int[] i = {0};
-        List<Hostile> hostiles = getHostiles();
-        hostiles.forEach((entity) -> {
-            entity.remove();
-            i[0]++;
-        });
-        return i[0];
+        return new EntityRemover<>(Hostile.class).removeEntities();
     }
 
     public Integer removeAll() {
-        final int[] i = {0};
-        //get all the worlds
-        Collection<World> worlds = Sponge.getServer().getWorlds();
-        //for each world
-        worlds.forEach((temp) -> {
-            //get all the entities in the world
-            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> !(entity instanceof Player)).collect(Collectors.toList());
-            //remove them all
-            entities.forEach(entity -> {
-                if (!cclConfig.entityWhiteList.contains(entity.getType().getId())) {
-                    entity.remove();
-                    i[0]++;
-                }
-            });
-        });
-        return i[0];
+        return new EntityRemover<>(Entity.class).removeEntities();
     }
 
     public Logger getLogger() {
@@ -302,55 +252,19 @@ public class CatClearLag {
     }
 
     public List<Hostile> getHostiles() {
-        EntityRemover<Hostile> er = new EntityRemover<>();
-        return er.getEntitys();
-    }
-
-    public List<Entity> getLiving() {
-        List<Entity> liv = new ArrayList<>();
-        //get all worlds
-        Collection<World> worlds = Sponge.getServer().getWorlds();
-        //for each world
-        worlds.forEach((temp) -> {
-            //get all the entities in the world
-            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof Living && !(entity instanceof Player)).collect(Collectors.toList());
-
-            liv.addAll(entities);
-        });
-        return liv;
+        return new EntityRemover<>(Hostile.class).getEntitys();
     }
 
     public Integer removeLiving() {
-        final int[] i = {0};
-        List<Entity> hostiles = getLiving();
-        hostiles.forEach((entity) -> {
-            entity.remove();
-            i[0]++;
-        });
-        return i[0];
+        return new EntityRemover<>(Living.class).removeEntities();
     }
 
-    public List<Entity> getXPOrbs() {
-        List<Entity> xp = new ArrayList<>();
-        //get all worlds
-        Collection<World> worlds = Sponge.getServer().getWorlds();
-        //for each world
-        worlds.forEach((temp) -> {
-            //get all the entities in the world
-            Collection<Entity> entities = temp.getEntities().stream().filter(entity -> entity instanceof ExperienceOrb && !(entity instanceof Player)).collect(Collectors.toList());
-            xp.addAll(entities);
-        });
-        return xp;
+    public List<ExperienceOrb> getXPOrbs() {
+        return new EntityRemover<>(ExperienceOrb.class).getEntitys();
     }
 
     public Integer removeXP() {
-        final int[] i = {0};
-        List<Entity> ents = getXPOrbs();
-        ents.forEach((entity) -> {
-            entity.remove();
-            i[0]++;
-        });
-        return i[0];
+        return new EntityRemover<>(ExperienceOrb.class).removeEntities();
     }
 
     public List<Chunk> getChunks() {
