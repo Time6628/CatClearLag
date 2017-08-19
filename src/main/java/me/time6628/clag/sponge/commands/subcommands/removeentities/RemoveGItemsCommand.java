@@ -19,9 +19,9 @@ public class RemoveGItemsCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        src.sendMessage(Text.builder().append(Texts.getPrefix()).append(plugin.colorMessage("Removing all ground items...")).build());
+        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removing all ground items...")).build());
         int i = plugin.clearGroundItems();
-        src.sendMessage(Text.builder().append(Texts.getPrefix()).append(plugin.colorMessage(i + " items removed.")).build());
+        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage(i + " items removed.")).build());
         return CommandResult.success();
     }
 }

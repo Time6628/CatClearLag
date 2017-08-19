@@ -13,61 +13,21 @@ import org.spongepowered.api.text.serializer.TextSerializers;
  * Created by TimeTheCat on 4/13/2017.
  */
 public class Texts {
-    private static TextColor messageColor = TextColors.LIGHT_PURPLE;
-    private static TextColor warningColor = TextColors.RED;
-    private static TextColor secondsColor = TextColors.WHITE;
-    private static Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
-    private static String stringClearMsg = "{count} items have been cleared.";
 
-    public static Text clearMsg(int items) {
-        return Text.builder()
-                .append(prefix)
-                .color(messageColor)
-                .append(Text.of(stringClearMsg.replaceAll("\\{count}", String.valueOf(items))))
-                .build();
-    }
+    public static TextColor messageColor = TextColors.LIGHT_PURPLE;
+    public static TextColor warningColor = TextColors.RED;
+    public static TextColor secondsColor = TextColors.WHITE;
+    public static Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
 
-
-    static void setPrefix(Text prefix) {
-        Texts.prefix = prefix;
-    }
-
-    public static Text getPrefix() {
-        return prefix;
-    }
-
-    static void setWarningColor(TextColor warningColor) {
-        Texts.warningColor = warningColor;
-    }
-
-    static void setMessageColor(TextColor messageColor) {
-        Texts.messageColor = messageColor;
-    }
-
-    public static TextColor getMessageColor() {
-        return messageColor;
-    }
-
-    public static TextColor getWarningColor() {
-        return warningColor;
-    }
-
-    public static String getStringClearMsg() {
-        return stringClearMsg;
-    }
-
-    static void setStringClearMsg(String stringClearMsg) {
-        Texts.stringClearMsg = stringClearMsg;
-    }
+    public static TextTemplate clearMsg = TextTemplate.of(
+            prefix, warningColor,
+            arg("count").color(secondsColor), " items have been cleared."
+    );
 
     public static TextTemplate warningMessage = TextTemplate.of(
             warningColor, "Ground items will be cleared in ",
             arg("seconds").color(secondsColor),
             warningColor, " seconds."
     );
-
-    public static void setSecondsColor(TextColor secondsColor) {
-        Texts.secondsColor = secondsColor;
-    }
 
 }

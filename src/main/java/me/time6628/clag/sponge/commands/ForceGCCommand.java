@@ -18,9 +18,9 @@ public class ForceGCCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        src.sendMessage(Text.builder().append(Texts.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Requesting Garbage Collection...")).build());
+        src.sendMessage(Text.builder().append(CatClearLag.instance.getMessages().prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Requesting Garbage Collection...")).build());
         System.gc();
-        src.sendMessage(Text.builder().append(Texts.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Garbage Collection Requested.")).build());
+        src.sendMessage(Text.builder().append(CatClearLag.instance.getMessages().prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Garbage Collection Requested.")).build());
         return CommandResult.success();
     }
 }

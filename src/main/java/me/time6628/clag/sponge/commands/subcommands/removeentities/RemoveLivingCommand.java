@@ -20,9 +20,9 @@ public class RemoveLivingCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        src.sendMessage(Text.builder().append(Texts.getPrefix()).append(plugin.colorMessage("Removing all living entities...")).build());
+        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removing all living entities...")).build());
         int affectedEnts = plugin.removeLiving();
-        src.sendMessage(Text.builder().append(Texts.getPrefix()).append(plugin.colorMessage("Removed " + affectedEnts + " living entites.")).build());
+        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removed " + affectedEnts + " living entites.")).build());
         return CommandResult.affectedEntities(affectedEnts);
     }
 }

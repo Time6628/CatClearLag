@@ -6,15 +6,13 @@ import me.time6628.clag.sponge.Texts;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.CollectionUtils;
 import org.spongepowered.api.world.World;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -27,6 +25,6 @@ public class ItemClearer implements Runnable {
     public void run() {
         int i = plugin.clearGroundItems();
         //broadcast that they have all been removed
-        plugin.getGame().getServer().getBroadcastChannel().send(Texts.clearMsg(i));
+        plugin.getGame().getServer().getBroadcastChannel().send(plugin.getMessages().clearMsg.apply(Collections.singletonMap("count", i)).build());
     }
 }
