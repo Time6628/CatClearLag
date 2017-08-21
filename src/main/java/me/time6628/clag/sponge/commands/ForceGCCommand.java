@@ -6,6 +6,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -20,5 +21,13 @@ public class ForceGCCommand implements CommandExecutor {
         System.gc();
         src.sendMessage(Text.builder().append(CatClearLag.instance.getMessages().prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Garbage Collection Requested.")).build());
         return CommandResult.success();
+    }
+
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("Force Garabage Collection"))
+                .permission("catclearlag.command.forcegc")
+                .executor(new ForceGCCommand())
+                .build();
     }
 }

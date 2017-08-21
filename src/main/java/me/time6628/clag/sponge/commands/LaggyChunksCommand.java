@@ -1,12 +1,15 @@
 package me.time6628.clag.sponge.commands;
 
 import me.time6628.clag.sponge.CatClearLag;
+import me.time6628.clag.sponge.commands.subcommands.laggychunks.EntitiesCommand;
+import me.time6628.clag.sponge.commands.subcommands.laggychunks.TilesCommand;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.ClickAction;
@@ -62,5 +65,15 @@ public class LaggyChunksCommand implements CommandExecutor {
         texts.add(Text.builder().onClick(TextActions.suggestCommand("/lc entities")).onHover(TextActions.showText(Text.of("Search for chunks with "
                 + "lots of entities."))).append(Text.of("/lc entities")).build());
         return texts;
+    }
+
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least entities or tiles."))
+                .permission("catclearlag.command.laggychunks")
+                .executor(new LaggyChunksCommand())
+                .child(EntitiesCommand.getCommand(), "entities", "e")
+                .child(TilesCommand.getCommand(), "tiles", "t")
+                .build();
     }
 }

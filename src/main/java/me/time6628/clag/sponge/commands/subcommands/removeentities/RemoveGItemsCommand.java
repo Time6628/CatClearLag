@@ -6,6 +6,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 
 /**
@@ -20,5 +21,13 @@ public class RemoveGItemsCommand implements CommandExecutor {
         int i = plugin.clearGroundItems();
         src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage(i + " items removed.")).build());
         return CommandResult.success();
+    }
+
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("Remove all ground items from the server."))
+                .permission("catclearlag.command.removegitems")
+                .executor(new RemoveGItemsCommand())
+                .build();
     }
 }

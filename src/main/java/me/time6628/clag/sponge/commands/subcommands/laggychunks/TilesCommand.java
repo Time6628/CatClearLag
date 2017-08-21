@@ -7,6 +7,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -41,5 +42,13 @@ public class TilesCommand extends LaggyChunksCommand implements CommandExecutor 
                                 .build())
                 .sendTo(src);
         return CommandResult.success();
+    }
+
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least tiles."))
+                .permission("catclearlag.command.laggychunks")
+                .executor(new TilesCommand())
+                .build();
     }
 }

@@ -126,94 +126,12 @@ public class CatClearLag {
     }
 
     private void registerCommands() {
-
         getLogger().info("Registering commands...");
-
-        CommandSpec cSpecRH = CommandSpec.builder()
-                .description(Text.of("Remove all hostile entities from the server."))
-                .permission("catclearlag.command.removehostile")
-                .executor(new RemoveHostilesCommand())
-                .build();
-
-        CommandSpec cSpecRA = CommandSpec.builder()
-                .description(Text.of("Remove all entities from the server."))
-                .permission("catclearlag.command.removeall")
-                .executor(new RemoveAllCommand())
-                .build();
-
-        CommandSpec cSpecRG = CommandSpec.builder()
-                .description(Text.of("Remove all ground items from the server."))
-                .permission("catclearlag.command.removegitems")
-                .executor(new RemoveGItemsCommand())
-                .build();
-
-        CommandSpec cSpecRL = CommandSpec.builder()
-                .description(Text.of("Remove all living entities from the server."))
-                .permission("catclearlag.command.removelving")
-                .executor(new RemoveLivingCommand())
-                .build();
-
-        CommandSpec cSpecRXP = CommandSpec.builder()
-                .description(Text.of("Remove all XP Orbs from the server."))
-                .permission("catclearlag.command.removexp")
-                .executor(new RemoveXPCommand())
-                .build();
-
-        CommandSpec re = CommandSpec.builder()
-                .description(Text.of("Remove various types of entities."))
-                .permission("catclearlag.command.removeentities")
-                .child(cSpecRH, "hostiles", "host", "h")
-                .child(cSpecRA, "all", "a")
-                .child(cSpecRG, "items", "i")
-                .child(cSpecRL, "living", "l")
-                .child(cSpecRXP, "xp", "x")
-                .executor(new RemoveEntitiesCommand())
-                .build();
-
-        CommandSpec cSpec4 = CommandSpec.builder()
-                .description(Text.of("Force Garabage Collection"))
-                .permission("catclearlag.command.forcegc")
-                .executor(new ForceGCCommand())
-                .build();
-
-        CommandSpec cSpecLCE = CommandSpec.builder()
-                .description(Text.of("List chunks in order of most to least entities."))
-                .permission("catclearlag.command.laggychunks")
-                .executor(new EntitiesCommand())
-                .build();
-
-        CommandSpec cSpecLCT = CommandSpec.builder()
-                .description(Text.of("List chunks in order of most to least tiles."))
-                .permission("catclearlag.command.laggychunks")
-                .executor(new TilesCommand())
-                .build();
-
-        CommandSpec cSpecLC = CommandSpec.builder()
-                .description(Text.of("List chunks in order of most to least entities or tiles."))
-                .permission("catclearlag.command.laggychunks")
-                .executor(new LaggyChunksCommand())
-                .child(cSpecLCE, "entities", "e")
-                .child(cSpecLCT, "tiles", "t")
-                .build();
-
-        CommandSpec cSpec6 = CommandSpec.builder()
-                .description(Text.of("Add an itemtype to the clearlag whitelist"))
-                .permission("catclearlag.command.whitelistitem")
-                .executor(new WhiteListItemCommand())
-                .arguments(GenericArguments.optional(GenericArguments.catalogedElement(Text.of("item"), ItemType.class)))
-                .build();
-
-        CommandSpec cSpecUC = CommandSpec.builder()
-                .description(Text.of("Force all chunks to unload."))
-                .permission("catclearlag.command.unloadchunks")
-                .executor(new UnloadChunksCommand())
-                .build();
-
-        Sponge.getCommandManager().register(this, re, "re");
-        Sponge.getCommandManager().register(this, cSpec4, "forcegc", "forcegarbagecollection");
-        Sponge.getCommandManager().register(this, cSpecLC, "laggychunks", "lc");
-        Sponge.getCommandManager().register(this, cSpec6, "clwhitelist", "cwl");
-        Sponge.getCommandManager().register(this, cSpecUC, "unloadchunks", "uc");
+        Sponge.getCommandManager().register(this, RemoveEntitiesCommand.getCommand(), "re");
+        Sponge.getCommandManager().register(this, ForceGCCommand.getCommand(), "forcegc", "forcegarbagecollection");
+        Sponge.getCommandManager().register(this, LaggyChunksCommand.getCommand(), "laggychunks", "lc");
+        Sponge.getCommandManager().register(this, WhiteListItemCommand.getCommand(), "clwhitelist", "cwl");
+        Sponge.getCommandManager().register(this, UnloadChunksCommand.getCommand(), "unloadchunks", "uc");
     }
 
 
