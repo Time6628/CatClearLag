@@ -1,6 +1,8 @@
 package me.time6628.clag.sponge;
 
 import com.google.inject.Inject;
+import me.time6628.clag.sponge.api.CCLService;
+import me.time6628.clag.sponge.api.Type;
 import me.time6628.clag.sponge.commands.ForceGCCommand;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
 import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
@@ -66,6 +68,7 @@ public class CatClearLag {
 
     private MessagesConfig messages;
     private CCLConfig cclConfig;
+    private CCLService cclService = new CCLService();
 
     @Inject
     public CatClearLag(Logger logger, Game game, @ConfigDir(sharedRoot = false) File configDir, GuiceObjectMapperFactory factory) {
@@ -91,7 +94,7 @@ public class CatClearLag {
         if (cfgLoader.loadConfig()) cclConfig = cfgLoader.getCclConfig();
         if (cfgLoader.loadMessages()) messages = cfgLoader.getMessagesConfig();
 
-
+        game.getServiceManager().setProvider(this, CCLService.class, cclService);
     }
 
     @Listener
@@ -136,16 +139,15 @@ public class CatClearLag {
 
 
     public Integer clearGroundItems() {
-        Predicate<Item> test = item -> !cclConfig.whitelist.contains(item.getItemType().getBlock().map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> item.getItemType().getId()));
-        return new EntityRemover<>(Item.class, test).removeEntities();
+        return new EntityRemover<Item>(Item.class, cclService.getPredicate(Type.ITEM)).removeEntities();
     }
 
     public Integer removeHostile() {
-        return new EntityRemover<>(Hostile.class).removeEntities();
+        return new EntityRemover<Hostile>(Hostile.class, cclService.getPredicate(Type.HOSTILE)).removeEntities();
     }
 
     public Integer removeAll() {
-        return new EntityRemover<>(Entity.class).removeEntities();
+        return new EntityRemover<Entity>(Entity.class, cclService.getPredicate(Type.ALL)).removeEntities();
     }
 
     public Logger getLogger() {
@@ -167,19 +169,19 @@ public class CatClearLag {
     }
 
     public List<Hostile> getHostiles() {
-        return new EntityRemover<>(Hostile.class).getEntitys();
+        return new EntityRemover<Hostile>(Hostile.class, cclService.getPredicate(Type.HOSTILE)).getEntitys();
     }
 
     public Integer removeLiving() {
-        return new EntityRemover<>(Living.class).removeEntities();
+        return new EntityRemover<Living>(Living.class, cclService.getPredicate(Type.LIVING)).removeEntities();
     }
 
     public List<ExperienceOrb> getXPOrbs() {
-        return new EntityRemover<>(ExperienceOrb.class).getEntitys();
+        return new EntityRemover<ExperienceOrb>(ExperienceOrb.class, cclService.getPredicate(Type.XP)).getEntitys();
     }
 
     public Integer removeXP() {
-        return new EntityRemover<>(ExperienceOrb.class).removeEntities();
+        return new EntityRemover<ExperienceOrb>(ExperienceOrb.class, cclService.getPredicate(Type.XP)).removeEntities();
     }
 
     private List<Chunk> getChunks() {

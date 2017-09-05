@@ -39,7 +39,6 @@ class EntityRemover<C extends Entity> {
         for (Predicate<C> extraCheck : extraChecks) {
             predicate = predicate.and(extraCheck);
         }
-        predicate = predicate.and(c -> !(c instanceof Player));
     }
 
     List<C> getEntitys() {
