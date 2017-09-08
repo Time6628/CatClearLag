@@ -7,13 +7,16 @@ import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
 public class CCLService {
+
     private Map<Type, Predicate> checks;
 
     public CCLService() {
+        checks = new HashMap<>();
         Predicate playerPredicate = o -> !(o instanceof Player);
         Predicate<Item> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(item.getItemType().getBlock().map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> item.getItemType().getId()));
         checks.put(Type.HOSTILE, playerPredicate.and(o -> o instanceof Hostile));

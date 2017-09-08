@@ -22,10 +22,16 @@ public class Texts {
             arg("count").color(secondsColor), " items have been cleared."
     );
 
-    public static final TextTemplate warningMessage = TextTemplate.of(
+    public static TextTemplate warningMessage = TextTemplate.of(
             prefix, warningColor, "Ground items will be cleared in ",
             arg("seconds").color(secondsColor),
             warningColor, " seconds."
+    );
+
+    public static TextTemplate whitelistItem = TextTemplate.of(
+            prefix, TextColors.LIGHT_PURPLE, "Added ",
+            arg("item").color(TextColors.GREEN),
+            TextColors.LIGHT_PURPLE, " to item whitelist."
     );
 
 }
