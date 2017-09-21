@@ -8,7 +8,6 @@ import org.spongepowered.api.item.ItemTypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 @ConfigSerializable
 public class CCLConfig {

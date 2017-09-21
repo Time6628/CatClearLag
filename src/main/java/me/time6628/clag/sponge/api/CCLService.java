@@ -2,6 +2,7 @@ package me.time6628.clag.sponge.api;
 
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
@@ -23,6 +24,7 @@ public class CCLService {
         checks.put(Type.ITEM, playerPredicate.and(o -> o instanceof Item).and(whitelistCheck));
         checks.put(Type.ALL, playerPredicate.and(Entity.class::isInstance));
         checks.put(Type.LIVING, playerPredicate.and(o -> o instanceof Living));
+        checks.put(Type.XP, playerPredicate.and(o -> o instanceof ExperienceOrb));
     }
 
     /**
