@@ -21,7 +21,6 @@ import java.util.TreeMap;
  * Created by TimeTheCat on 6/26/2017.
  */
 public class TilesCommand extends LaggyChunksCommand implements CommandExecutor {
-
     private final CatClearLag plugin = CatClearLag.instance;
 
     @Override public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
