@@ -39,7 +39,6 @@ public class RemoveEntitiesCommand implements CommandExecutor {
     }
 
     public static CommandSpec getCommand() {
-
         return CommandSpec.builder()
                 .description(Text.of("Remove various types of entities."))
                 .permission("catclearlag.command.removeentities")

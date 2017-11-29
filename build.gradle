@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.spongepowered:spongeapi:6.+"
+    compile "org.spongepowered:spongeapi:7.+"
 }
 
 spongestart {
