@@ -53,7 +53,7 @@ import java.util.function.Predicate;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8.1", description = "A plugin to assist in removing lag from your server.")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8.2", description = "A plugin to assist in removing lag from your server.")
 public class CatClearLag {
     public static CatClearLag instance;
 
