@@ -1,5 +1,6 @@
 package me.time6628.clag.sponge;
 
+import com.google.common.base.Predicates;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
@@ -17,18 +18,9 @@ class EntityRemover<C extends Entity> {
 
     private final Class<C> sourceType;
 
-    public EntityRemover(Class<C> cClass) {
-        sourceType = cClass;
-        if (this.sourceType.getClass().isAssignableFrom(Entity.class)) {
-            this.predicate = x -> true;
-        } else {
-            this.predicate = this.sourceType::isInstance;
-        }
-        predicate = predicate.and(c -> !(c instanceof Player));
-    }
+    public EntityRemover(Class<C> cClass, Predicate<C> extraChecks) {
 
-    @SafeVarargs
-    public EntityRemover(Class<C> cClass, Predicate<C>... extraChecks) {
+        predicate = extraChecks;
 
         sourceType = cClass;
         if (this.sourceType.getClass().isAssignableFrom(Entity.class)) {
@@ -36,9 +28,7 @@ class EntityRemover<C extends Entity> {
         } else {
             this.predicate = this.sourceType::isInstance;
         }
-        for (Predicate<C> extraCheck : extraChecks) {
-            predicate = predicate.and(extraCheck);
-        }
+
     }
 
     List<C> getEntitys() {
