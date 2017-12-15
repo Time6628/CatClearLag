@@ -159,7 +159,7 @@ public class CatClearLag {
     }
 
     private void registerEvents() {
-        Sponge.getEventManager().registerListeners(this, new MobEventHandler());
+        if (getCclConfig().limits.perChunkLimitEnabled) Sponge.getEventManager().registerListeners(this, new MobEventHandler());
     }
 
     private void registerCommands() {
