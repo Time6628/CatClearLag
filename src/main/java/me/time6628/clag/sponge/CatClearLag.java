@@ -33,6 +33,7 @@ import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.item.ItemType;
@@ -69,6 +70,7 @@ public class CatClearLag {
     private MessagesConfig messages;
     private CCLConfig cclConfig;
     private CCLService cclService = new CCLService();
+    private List<Task> tasks;
 
     @Inject
     public CatClearLag(Logger logger, Game game, @ConfigDir(sharedRoot = false) File configDir, GuiceObjectMapperFactory factory) {
@@ -98,30 +100,62 @@ public class CatClearLag {
     }
 
     @Listener
-    public void onInit(GameInitializationEvent event) {
-        getLogger().info("Starting plugin...");
-        registerCommands();
-        registerEvents();
+    public void onReload(GameReloadEvent event) {
+        cfgLoader = new ConfigLoader(this);
+        if (cfgLoader.loadConfig()) cclConfig = cfgLoader.getCclConfig();
+        if (cfgLoader.loadMessages()) messages = cfgLoader.getMessagesConfig();
+        for (Task task : tasks) {
+            task.cancel();
+        }
+        tasks = new ArrayList<>();
         Task.Builder builder = getGame().getScheduler().createTaskBuilder();
-        builder.execute(new ItemClearer())
+        tasks.add(builder.execute(new ItemClearer())
                 .async()
                 .delay(cclConfig.interval, TimeUnit.MINUTES)
                 .interval(cclConfig.interval, TimeUnit.MINUTES)
                 .name("CatClearLag Item Remover")
-                .submit(this);
+                .submit(this));
         cclConfig.warnings.forEach((d) ->
-                builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
+                tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
                         .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(cclConfig.interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
-                        .submit(this));
-        builder.execute(new EntityChecker())
+                        .submit(this)));
+        tasks.add(builder.execute(new EntityChecker())
                 .async()
                 .delay(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .interval(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
-                .submit(this);
+                .submit(this));
+    }
+
+    @Listener
+    public void onInit(GameInitializationEvent event) {
+        getLogger().info("Starting plugin...");
+        registerCommands();
+        registerEvents();
+        tasks = new ArrayList<>();
+        Task.Builder builder = getGame().getScheduler().createTaskBuilder();
+        tasks.add(builder.execute(new ItemClearer())
+                .async()
+                .delay(cclConfig.interval, TimeUnit.MINUTES)
+                .interval(cclConfig.interval, TimeUnit.MINUTES)
+                .name("CatClearLag Item Remover")
+                .submit(this));
+        cclConfig.warnings.forEach((d) ->
+                tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
+                        .async()
+                        .delay(d, TimeUnit.SECONDS)
+                        .interval(cclConfig.interval, TimeUnit.MINUTES)
+                        .name("CatClearLag Removal Warnings")
+                        .submit(this)));
+        tasks.add(builder.execute(new EntityChecker())
+                .async()
+                .delay(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
+                .interval(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
+                .name("CatClearLag hostile checker")
+                .submit(this));
     }
 
     private void registerEvents() {

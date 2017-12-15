@@ -15,7 +15,6 @@ import org.spongepowered.api.text.Text;
 public class RemoveLivingCommand implements CommandExecutor {
     private final CatClearLag plugin = CatClearLag.instance;
 
-
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removing all living entities...")).build());

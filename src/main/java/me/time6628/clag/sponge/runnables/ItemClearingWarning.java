@@ -1,7 +1,6 @@
 package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
-import me.time6628.clag.sponge.Texts;
 
 import java.util.Collections;
 
@@ -19,6 +18,6 @@ public class ItemClearingWarning implements Runnable {
 
     @Override
     public void run() {
-        plugin.getGame().getServer().getBroadcastChannel().send(Texts.warningMessage.apply(Collections.singletonMap("seconds", seconds)).build());
+        plugin.getGame().getServer().getBroadcastChannel().send(plugin.getMessages().warningMessage.apply(Collections.singletonMap("seconds", seconds)).build());
     }
 }

@@ -13,19 +13,19 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class MessagesConfig {
 
     @Setting("Message Color")
-    public final TextColor messageColor = TextColors.LIGHT_PURPLE;
+    public TextColor messageColor = TextColors.LIGHT_PURPLE;
 
     @Setting("WarningColor")
-    private final TextColor warningColor = TextColors.RED;
+    public TextColor warningColor = TextColors.RED;
 
     @Setting("Seconds Color")
-    private final TextColor secondsColor = TextColors.WHITE;
+    public TextColor secondsColor = TextColors.WHITE;
 
     @Setting("Prefix")
-    public final Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
+    public Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
 
     @Setting("Clearing Items Message")
-    public final TextTemplate clearMsg = TextTemplate.of(
+    public TextTemplate clearMsg = TextTemplate.of(
             prefix, warningColor,
             arg("count").color(secondsColor), " items have been cleared."
     );

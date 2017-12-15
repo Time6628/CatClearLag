@@ -2,24 +2,29 @@ package me.time6628.clag.sponge.api;
 
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
 public class CCLService {
+
     private Map<Type, Predicate> checks;
 
     public CCLService() {
+        checks = new HashMap<>();
         Predicate playerPredicate = o -> !(o instanceof Player);
         Predicate<Item> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(item.getItemType().getBlock().map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> item.getItemType().getId()));
         checks.put(Type.HOSTILE, playerPredicate.and(o -> o instanceof Hostile));
         checks.put(Type.ITEM, playerPredicate.and(o -> o instanceof Item).and(whitelistCheck));
         checks.put(Type.ALL, playerPredicate.and(Entity.class::isInstance));
         checks.put(Type.LIVING, playerPredicate.and(o -> o instanceof Living));
+        checks.put(Type.XP, playerPredicate.and(o -> o instanceof ExperienceOrb));
     }
 
     /**
