@@ -2,7 +2,7 @@ package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
 
-import java.util.*;
+import java.util.Collections;
 
 /**
  * Created by pturc_000 on 7/13/2016.

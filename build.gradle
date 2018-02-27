@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.qixalite:SpongeStart:1.5"
+        classpath "gradle.plugin.com.qixalite:SpongeStart:1.6.2"
     }
 }
 
@@ -27,7 +27,7 @@ version = '0.8.2'
 repositories {
     mavenCentral()
     maven {
-        url 'http://repo.spongepowered.org/maven'
+        url = 'http://repo.spongepowered.org/maven'
     }
 }
 
@@ -36,5 +36,5 @@ dependencies {
 }
 
 spongestart {
-    eula true
+    eula = true
 }
