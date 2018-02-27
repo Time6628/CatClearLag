@@ -1,9 +1,7 @@
 package me.time6628.clag.sponge;
 
-import com.google.common.base.Predicates;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
