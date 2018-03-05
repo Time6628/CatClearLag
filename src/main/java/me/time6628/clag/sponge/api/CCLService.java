@@ -20,10 +20,11 @@ public class CCLService {
         checks = new HashMap<>();
         Predicate playerPredicate = o -> !(o instanceof Player);
         Predicate<Item> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(item.getItemType().getBlock().map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> item.getItemType().getId()));
-        checks.put(Type.HOSTILE, playerPredicate.and(o -> o instanceof Hostile));
+        Predicate<Entity> entityWhitelist = entity -> !CatClearLag.instance.getCclConfig().entityWhiteList.contains(entity.getType().getId());
+        checks.put(Type.HOSTILE, playerPredicate.and(o -> o instanceof Hostile).and(entityWhitelist));
         checks.put(Type.ITEM, playerPredicate.and(o -> o instanceof Item).and(whitelistCheck));
-        checks.put(Type.ALL, playerPredicate.and(Entity.class::isInstance));
-        checks.put(Type.LIVING, playerPredicate.and(o -> o instanceof Living));
+        checks.put(Type.ALL, playerPredicate.and(Entity.class::isInstance).and(entityWhitelist));
+        checks.put(Type.LIVING, playerPredicate.and(o -> o instanceof Living).and(entityWhitelist));
         checks.put(Type.XP, playerPredicate.and(o -> o instanceof ExperienceOrb));
     }
 

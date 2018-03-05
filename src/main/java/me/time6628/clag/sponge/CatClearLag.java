@@ -8,9 +8,6 @@ import me.time6628.clag.sponge.commands.LaggyChunksCommand;
 import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
 import me.time6628.clag.sponge.commands.UnloadChunksCommand;
 import me.time6628.clag.sponge.commands.WhiteListItemCommand;
-import me.time6628.clag.sponge.commands.subcommands.laggychunks.EntitiesCommand;
-import me.time6628.clag.sponge.commands.subcommands.laggychunks.TilesCommand;
-import me.time6628.clag.sponge.commands.subcommands.removeentities.*;
 import me.time6628.clag.sponge.config.CCLConfig;
 import me.time6628.clag.sponge.config.ConfigLoader;
 import me.time6628.clag.sponge.config.MessagesConfig;
@@ -23,8 +20,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
@@ -36,7 +31,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
@@ -48,7 +42,6 @@ import org.spongepowered.api.world.World;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 /**
  * Created by TimeTheCat on 7/2/2016.
@@ -69,7 +62,7 @@ public class CatClearLag {
 
     private MessagesConfig messages;
     private CCLConfig cclConfig;
-    private CCLService cclService = new CCLService();
+    private final CCLService cclService = new CCLService();
     private List<Task> tasks;
 
     @Inject
@@ -199,11 +192,11 @@ public class CatClearLag {
                 return bs.get().getId();
             }
         }
-        return si.getItem().getId();
+        return si.getType().getId();
     }
 
     public List<Hostile> getHostiles() {
-        return new EntityRemover<Hostile>(Hostile.class, cclService.getPredicate(Type.HOSTILE)).getEntitys();
+        return new EntityRemover<Hostile>(Hostile.class, cclService.getPredicate(Type.HOSTILE)).getEntities();
     }
 
     public Integer removeLiving() {
@@ -211,7 +204,7 @@ public class CatClearLag {
     }
 
     public List<ExperienceOrb> getXPOrbs() {
-        return new EntityRemover<ExperienceOrb>(ExperienceOrb.class, cclService.getPredicate(Type.XP)).getEntitys();
+        return new EntityRemover<ExperienceOrb>(ExperienceOrb.class, cclService.getPredicate(Type.XP)).getEntities();
     }
 
     public Integer removeXP() {

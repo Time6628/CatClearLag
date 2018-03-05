@@ -1,7 +1,6 @@
 package me.time6628.clag.sponge.commands;
 
 import me.time6628.clag.sponge.CatClearLag;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -16,7 +15,7 @@ import org.spongepowered.api.text.format.TextColors;
 public class ForceGCCommand implements CommandExecutor {
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    public CommandResult execute(CommandSource src, CommandContext args) {
         src.sendMessage(Text.builder().append(CatClearLag.instance.getMessages().prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Requesting Garbage Collection...")).build());
         System.gc();
         src.sendMessage(Text.builder().append(CatClearLag.instance.getMessages().prefix).color(TextColors.LIGHT_PURPLE).append(Text.of("Garbage Collection Requested.")).build());

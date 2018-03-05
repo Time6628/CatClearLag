@@ -3,7 +3,6 @@ package me.time6628.clag.sponge.commands;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.commands.subcommands.laggychunks.EntitiesCommand;
 import me.time6628.clag.sponge.commands.subcommands.laggychunks.TilesCommand;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -30,7 +29,7 @@ public class LaggyChunksCommand implements CommandExecutor {
     private final CatClearLag plugin = CatClearLag.instance;
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    public CommandResult execute(CommandSource src, CommandContext args) {
         plugin.getPaginationService().builder().contents(getCommands()).title(Text.builder().color(TextColors.LIGHT_PURPLE).append(Text.of("Commands"))
                 .build()).sendTo(src);
 
