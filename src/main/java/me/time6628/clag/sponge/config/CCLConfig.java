@@ -37,6 +37,9 @@ public class CCLConfig {
     @ConfigSerializable
     public static class Limits {
 
+        @Setting("Per Chunk Limit Enabled")
+        public boolean perChunkLimitEnabled = false;
+
         @Setting("Max Mobs Per Chunk")
         public int mobLimitPerChunk = 20;
 
