@@ -14,19 +14,8 @@ class EntityRemover<C extends Entity> {
 
     private final Predicate<C> predicate;
 
-    private final Class<C> sourceType;
-
-    public EntityRemover(Class<C> cClass, Predicate<C> extraChecks) {
-
-        predicate = extraChecks;
-
-        sourceType = cClass;
-        if (this.sourceType.getClass().isAssignableFrom(Entity.class)) {
-            this.predicate.and(x -> true);
-        } else {
-            this.predicate.and(this.sourceType::isInstance);
-        }
-
+    public EntityRemover(Predicate<C> checks) {
+        predicate = checks;
     }
 
     List<C> getEntities() {

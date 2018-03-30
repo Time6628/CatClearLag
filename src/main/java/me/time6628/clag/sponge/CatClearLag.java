@@ -166,15 +166,15 @@ public class CatClearLag {
 
 
     public Integer clearGroundItems() {
-        return new EntityRemover<Item>(Item.class, cclService.getPredicate(Type.ITEM)).removeEntities();
+        return new EntityRemover<Item>(cclService.getPredicate(Type.ITEM)).removeEntities();
     }
 
     public Integer removeHostile() {
-        return new EntityRemover<Hostile>(Hostile.class, cclService.getPredicate(Type.HOSTILE)).removeEntities();
+        return new EntityRemover<Hostile>(cclService.getPredicate(Type.HOSTILE)).removeEntities();
     }
 
     public Integer removeAll() {
-        return new EntityRemover<Entity>(Entity.class, cclService.getPredicate(Type.ALL)).removeEntities();
+        return new EntityRemover<Entity>(cclService.getPredicate(Type.ALL)).removeEntities();
     }
 
     public Logger getLogger() {
@@ -196,19 +196,19 @@ public class CatClearLag {
     }
 
     public List<Hostile> getHostiles() {
-        return new EntityRemover<Hostile>(Hostile.class, cclService.getPredicate(Type.HOSTILE)).getEntities();
+        return new EntityRemover<Hostile>(cclService.getPredicate(Type.HOSTILE)).getEntities();
     }
 
     public Integer removeLiving() {
-        return new EntityRemover<Living>(Living.class, cclService.getPredicate(Type.LIVING)).removeEntities();
+        return new EntityRemover<Living>(cclService.getPredicate(Type.LIVING)).removeEntities();
     }
 
     public List<ExperienceOrb> getXPOrbs() {
-        return new EntityRemover<ExperienceOrb>(ExperienceOrb.class, cclService.getPredicate(Type.XP)).getEntities();
+        return new EntityRemover<ExperienceOrb>(cclService.getPredicate(Type.XP)).getEntities();
     }
 
     public Integer removeXP() {
-        return new EntityRemover<ExperienceOrb>(ExperienceOrb.class, cclService.getPredicate(Type.XP)).removeEntities();
+        return new EntityRemover<ExperienceOrb>(cclService.getPredicate(Type.XP)).removeEntities();
     }
 
     private List<Chunk> getChunks() {
