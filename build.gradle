@@ -10,19 +10,14 @@ buildscript {
             url = 'https://plugins.gradle.org/m2/'
         }
     }
-
-    dependencies {
-        classpath "gradle.plugin.com.qixalite:SpongeStart:1.5"
-    }
 }
 
 apply plugin: "java"
-apply plugin: "com.qixalite.spongestart"
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-version = '0.8.2'
+version = '0.8.3'
 
 repositories {
     mavenCentral()
@@ -33,8 +28,4 @@ repositories {
 
 dependencies {
     compile "org.spongepowered:spongeapi:7.+"
-}
-
-spongestart {
-    eula true
 }

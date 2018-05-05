@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8.2", description = "A plugin to assist in removing lag from your server.")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8.3", description = "A plugin to assist in removing lag from your server.")
 public class CatClearLag {
     public static CatClearLag instance;
 
@@ -237,12 +237,7 @@ public class CatClearLag {
         logger.info("adding " + id + " to the whitelist.");
         cclConfig.whitelist.add(id);
         cfgLoader.saveConfig(cclConfig);
-    }
-
-    public void addEntityIDToWhitelist(String id) {
-        logger.info("adding " + id + " to the entity whitelist.");
-        cclConfig.entityWhiteList.add(id);
-        cfgLoader.saveConfig(cclConfig);
+        cclConfig = cfgLoader.getCclConfig();
     }
 
     public Integer getMobLimitPerChunk() {
