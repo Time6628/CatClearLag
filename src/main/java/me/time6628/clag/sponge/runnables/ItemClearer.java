@@ -1,6 +1,7 @@
 package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
+import me.time6628.clag.sponge.Messages;
 
 import java.util.*;
 
@@ -14,6 +15,6 @@ public class ItemClearer implements Runnable {
     public void run() {
         int i = plugin.clearGroundItems();
         //broadcast that they have all been removed
-        plugin.getGame().getServer().getBroadcastChannel().send(plugin.getMessages().clearMsg.apply(Collections.singletonMap("count", i)).build());
+        plugin.getGame().getServer().getBroadcastChannel().send(Messages.getClearMsg(i));
     }
 }

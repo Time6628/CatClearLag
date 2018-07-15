@@ -74,7 +74,7 @@ public class CatClearLag {
         instance = this;
     }
 
-    public MessagesConfig getMessages() {
+    public MessagesConfig getMessagesCfg() {
         return messages;
     }
 
@@ -254,10 +254,6 @@ public class CatClearLag {
 
     public int getXpOrbLimit() {
         return cclConfig.limits.maxXPOrbs;
-    }
-
-    public Text colorMessage(String text) {
-        return Text.builder().color(messages.messageColor).append(Text.of(text)).build();
     }
 
     public File getConfigDir() {

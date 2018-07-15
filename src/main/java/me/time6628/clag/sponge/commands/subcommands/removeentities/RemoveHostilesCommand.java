@@ -1,6 +1,7 @@
 package me.time6628.clag.sponge.commands.subcommands.removeentities;
 
 import me.time6628.clag.sponge.CatClearLag;
+import me.time6628.clag.sponge.Messages;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -16,9 +17,9 @@ public class RemoveHostilesCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
-        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removing hostiles...")).build());
+        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Removing hostiles...")).build());
         int affectedEnts = plugin.removeHostile();
-        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage(affectedEnts + " hostiles removed.")).build());
+        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage(affectedEnts + " hostiles removed.")).build());
         return CommandResult.affectedEntities(affectedEnts);
     }
 

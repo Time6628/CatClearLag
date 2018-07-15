@@ -1,6 +1,7 @@
 package me.time6628.clag.sponge.commands.subcommands.removeentities;
 
 import me.time6628.clag.sponge.CatClearLag;
+import me.time6628.clag.sponge.Messages;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -16,9 +17,9 @@ public class RemoveXPCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
-        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removing all XP Orbs...")).build());
+        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Removing all XP Orbs...")).build());
         int affectedEnts = plugin.removeXP();
-        src.sendMessage(Text.builder().append(plugin.getMessages().prefix).append(plugin.colorMessage("Removed " + affectedEnts + " living entites.")).build());
+        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Removed " + affectedEnts + " living entites.")).build());
         return CommandResult.affectedEntities(affectedEnts);
     }
 

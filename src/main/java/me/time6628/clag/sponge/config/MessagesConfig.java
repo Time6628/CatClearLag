@@ -15,25 +15,12 @@ public class MessagesConfig {
     @Setting("Message Color")
     public TextColor messageColor = TextColors.LIGHT_PURPLE;
 
-    @Setting("WarningColor")
-    public TextColor warningColor = TextColors.RED;
-
-    @Setting("Seconds Color")
-    public TextColor secondsColor = TextColors.WHITE;
-
     @Setting("Prefix")
-    public Text prefix = Text.builder().color(TextColors.DARK_PURPLE).append(Text.of("[ClearLag] ")).build();
+    public String prefix = "&5[CatClearLag] ";
 
     @Setting("Clearing Items Message")
-    public TextTemplate clearMsg = TextTemplate.of(
-            prefix, warningColor,
-            arg("count").color(secondsColor), " items have been cleared."
-    );
+    public String clearMsg = "&f%d items have been cleared.";
 
     @Setting("Warning Message")
-    public TextTemplate warningMessage = TextTemplate.of(
-            warningColor, "Ground items will be cleared in ",
-            arg("seconds").color(secondsColor),
-            warningColor, " seconds."
-    );
+    public String warningMsg = "&cGround items will be cleared in &f%d seconds.";
 }
