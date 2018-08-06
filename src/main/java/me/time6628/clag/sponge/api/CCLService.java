@@ -19,7 +19,7 @@ public class CCLService {
     public CCLService() {
         checks = new HashMap<>();
         Predicate playerPredicate = o -> !(o instanceof Player);
-        Predicate<Item> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(item.getItemType().getBlock().map(blockType -> blockType.getDefaultState().getId()).orElseGet(() -> item.getItemType().getId()));
+        Predicate<Item> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(item.getItemType().getId());
         Predicate<Entity> entityWhitelist = entity -> !CatClearLag.instance.getCclConfig().entityWhiteList.contains(entity.getType().getId());
         checks.put(Type.HOSTILE, playerPredicate.and(o -> o instanceof Hostile).and(entityWhitelist));
         checks.put(Type.ITEM, playerPredicate.and(o -> o instanceof Item).and(whitelistCheck));

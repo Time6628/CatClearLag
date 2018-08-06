@@ -186,12 +186,6 @@ public class CatClearLag {
     }
 
     public String getItemID(ItemStack si) {
-        if (si.supports(Keys.ITEM_BLOCKSTATE)) {
-            Optional<BlockState> bs = si.get(Keys.ITEM_BLOCKSTATE);
-            if (bs.isPresent()) {
-                return bs.get().getId();
-            }
-        }
         return si.getType().getId();
     }
 
