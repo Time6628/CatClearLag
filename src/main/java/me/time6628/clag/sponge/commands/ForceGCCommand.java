@@ -1,6 +1,5 @@
 package me.time6628.clag.sponge.commands;
 
-import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Messages;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;

@@ -3,8 +3,6 @@ package me.time6628.clag.sponge.runnables;
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Messages;
 
-import java.util.*;
-
 /**
  * Created by pturc_000 on 7/13/2016.
  */

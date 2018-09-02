@@ -2,12 +2,8 @@ package me.time6628.clag.sponge.config;
 
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
-
-import static org.spongepowered.api.text.TextTemplate.arg;
 
 @ConfigSerializable
 public class MessagesConfig {

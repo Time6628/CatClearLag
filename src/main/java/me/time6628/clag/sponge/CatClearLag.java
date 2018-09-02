@@ -19,10 +19,7 @@ import ninja.leaping.configurate.objectmapping.GuiceObjectMapperFactory;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
@@ -35,7 +32,6 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
@@ -62,7 +58,7 @@ public class CatClearLag {
 
     private MessagesConfig messages;
     private CCLConfig cclConfig;
-    private final CCLService cclService = new CCLService();
+    private CCLService cclService;
     private List<Task> tasks;
 
     @Inject
@@ -72,6 +68,7 @@ public class CatClearLag {
         this.configDir = configDir;
         this.factory = factory;
         instance = this;
+        cclService = new CCLService();
     }
 
     public MessagesConfig getMessagesCfg() {
@@ -174,7 +171,7 @@ public class CatClearLag {
     }
 
     public Integer removeAll() {
-        return new EntityRemover<Entity>(cclService.getPredicate(Type.ALL)).removeEntities();
+        return new EntityRemover<>(cclService.getPredicate(Type.ALL)).removeEntities();
     }
 
     public Logger getLogger() {
@@ -258,4 +255,7 @@ public class CatClearLag {
         return factory;
     }
 
+    public CCLService getCclService() {
+        return cclService;
+    }
 }
