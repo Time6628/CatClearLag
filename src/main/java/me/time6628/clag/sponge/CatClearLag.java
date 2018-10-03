@@ -42,10 +42,10 @@ public class CatClearLag {
     private final File configDir;
     private final Game game;
     private final GuiceObjectMapperFactory factory;
+    private final CCLService cclService;
     private ConfigLoader cfgLoader;
     private MessagesConfig messages;
     private CCLConfig cclConfig;
-    private final CCLService cclService;
     private List<Task> tasks;
 
     @Inject
