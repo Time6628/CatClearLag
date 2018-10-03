@@ -29,7 +29,9 @@ public class CCLConfig {
     }};
 
     @Setting("Entity Whitelist")
-    public List<String> entityWhiteList = new ArrayList<String>(){{add(EntityTypes.BOAT.getId());}};
+    public List<String> entityWhiteList = new ArrayList<String>() {{
+        add(EntityTypes.BOAT.getId());
+    }};
 
     @Setting("Limits")
     public Limits limits = new Limits();

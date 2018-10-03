@@ -7,7 +7,7 @@ import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.Hostile;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.entity.living.animal.Llama;
+import org.spongepowered.api.entity.living.animal.Animal;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 
 public class CCLService {
 
-    private Map<Type, Predicate<Entity>> checks;
+    private final Map<Type, Predicate<Entity>> checks;
 
     public CCLService() {
         checks = new HashMap<>();
@@ -27,7 +27,7 @@ public class CCLService {
         checks.put(Type.ALL, notAPlayer().and(Entity.class::isInstance).and(entityWhitelist));
         checks.put(Type.LIVING, notAPlayer().and(o -> o instanceof Living).and(entityWhitelist));
         checks.put(Type.XP, notAPlayer().and(o -> o instanceof ExperienceOrb));
-        checks.put(Type.ANIMAL, notAPlayer().and(o -> o instanceof Llama).and(entityWhitelist));
+        checks.put(Type.ANIMAL, notAPlayer().and(o -> o instanceof Animal).and(entityWhitelist));
         checks.put(Type.NAMED, notAPlayer().and(entity -> !entity.get(DisplayNameData.class).isPresent()));
     }
 
@@ -37,7 +37,8 @@ public class CCLService {
 
     /**
      * Add a predicate to be used when CatClearLag checks entities.
-     * @param type The type entity to add the check to.
+     *
+     * @param type           The type entity to add the check to.
      * @param predicateToAdd A custom predicate to be used when the entities are checked.
      * @return The new predicate.
      */
@@ -48,7 +49,8 @@ public class CCLService {
     /**
      * Remove a predicate to be used when CatClearLag checks entities.
      * Please note, it negates it to remove it, so provide a un-negated predicate.
-     * @param type The type entity to add the check to.
+     *
+     * @param type              The type entity to add the check to.
      * @param predicateToRemove A custom predicate to be used when the entity is checked.
      * @return The new predicate.
      */

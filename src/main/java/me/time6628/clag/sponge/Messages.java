@@ -1,7 +1,11 @@
 package me.time6628.clag.sponge;
 
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
+
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Messages {
 
@@ -28,4 +32,9 @@ public class Messages {
     public static Text colorMessage(String text) {
         return Text.builder().color(plugin.getMessagesCfg().messageColor).append(Text.of(text)).build();
     }
+
+    public static final TextTemplate addToWhileList = TextTemplate.of(
+            TextColors.LIGHT_PURPLE, "Added ",
+            TextColors.WHITE, arg("item"),
+            TextColors.LIGHT_PURPLE, " to the whitelist.");
 }

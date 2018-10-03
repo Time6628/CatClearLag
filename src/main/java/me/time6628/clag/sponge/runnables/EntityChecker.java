@@ -2,6 +2,7 @@ package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Messages;
+import me.time6628.clag.sponge.utils.EntityHelpers;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -13,14 +14,14 @@ public class EntityChecker implements Runnable {
 
     @Override
     public void run() {
-        if (plugin.getHostiles().size() > plugin.getHostileLimit()) {
+        if (EntityHelpers.getHostiles().size() > plugin.getHostileLimit()) {
             plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.RED).append(Text.of("Too many hostiles, removing them.")).build());
-            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + plugin.removeHostile() + " hostile entities.")).build());
+            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + EntityHelpers.removeHostile() + " hostile entities.")).build());
         }
 
-        if (plugin.getXPOrbs().size() > plugin.getXpOrbLimit()) {
+        if (EntityHelpers.getXPOrbs().size() > plugin.getXpOrbLimit()) {
             plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.RED).append(Text.of("Too many XP Orbs, removing them.")).build());
-            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + plugin.removeXP() + " XP orbs.")).build());
+            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + EntityHelpers.removeXP() + " XP orbs.")).build());
         }
     }
 }

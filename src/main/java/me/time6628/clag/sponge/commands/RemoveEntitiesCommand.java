@@ -25,9 +25,28 @@ import java.util.function.Predicate;
 public class RemoveEntitiesCommand implements CommandExecutor {
     private final CatClearLag plugin = CatClearLag.instance;
 
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("Remove various types of entities."))
+                .permission("catclearlag.command.remove")
+                .arguments(
+                        GenericArguments.flags()
+                                .permissionFlag("catclearlag.command.remove.hostile", "h", "-hostile")
+                                .permissionFlag("catclearlag.command.remove.all", "a", "-all")
+                                .permissionFlag("catclearlag.command.remove.items", "i", "-item")
+                                .permissionFlag("catclearlag.command.remove.living", "l", "-living")
+                                .permissionFlag("catclearlag.command.remove.xp", "x", "-xp")
+                                .permissionFlag("catclearlag.command.remove.passive", "p", "-passive")
+                                .permissionFlag("catclearlag.command.remove.named", "n", "-named")
+                                .permissionFlag("catclearlag.command.remove.animal", "m", "-animal")
+                                .buildWith(GenericArguments.none()))
+                .executor(new RemoveEntitiesCommand())
+                .build();
+    }
+
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
-        if (args.hasAny("a") || args.hasAny("h") || args.hasAny("i") || args.hasAny("x") || args.hasAny("l") || args.hasAny("n")) {
+        if (args.hasAny("a") || args.hasAny("h") || args.hasAny("i") || args.hasAny("x") || args.hasAny("l") || args.hasAny("n") || args.hasAny("m")) {
             Predicate<Entity> pred = null;
             if (args.hasAny("a"))
                 pred = combinePred(pred, Type.ALL);
@@ -39,17 +58,17 @@ public class RemoveEntitiesCommand implements CommandExecutor {
                 pred = combinePred(pred, Type.XP);
             if (args.hasAny("l"))
                 pred = combinePred(pred, Type.LIVING);
-            if (args.hasAny("n"))
-                pred = combinePred(pred, Type.NAMED);
             if (args.hasAny("m"))
                 pred = combinePred(pred, Type.ANIMAL);
+            if (args.hasAny("n"))
+                pred = combinePred(pred, Type.NAMED);
             EntityRemover<Entity> remover = new EntityRemover<>(pred);
             src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Removing entities...")).build());
             int affectedEnts = remover.removeEntities();
             src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage(affectedEnts + " entities removed.")).build());
             return CommandResult.affectedEntities(affectedEnts);
         } else {
-            plugin.getPaginationService().builder().contents(getFlags()).title(Text.builder().color(TextColors.LIGHT_PURPLE).append(Text.of("Commands"))
+            plugin.getPaginationService().builder().contents(getFlags()).title(Text.builder().color(TextColors.LIGHT_PURPLE).append(Text.of("/re Help"))
                     .build()).sendTo(src);
         }
         return CommandResult.success();
@@ -72,25 +91,6 @@ public class RemoveEntitiesCommand implements CommandExecutor {
                 .onClick(TextActions.suggestCommand(cmd))
                 .append(Text.of(cmd))
                 .append(Text.of(" - " + desc))
-                .build();
-    }
-
-    public static CommandSpec getCommand() {
-        return CommandSpec.builder()
-                .description(Text.of("Remove various types of entities."))
-                .permission("catclearlag.command.remove")
-                .arguments(
-                        GenericArguments.flags()
-                                .permissionFlag("catclearlag.command.remove.hostile", "h", "-hostile")
-                                .permissionFlag("catclearlag.command.remove.all", "a", "-all")
-                                .permissionFlag("catclearlag.command.remove.items", "i", "-item")
-                                .permissionFlag("catclearlag.command.remove.living", "l", "-living")
-                                .permissionFlag("catclearlag.command.remove.xp", "x", "-xp")
-                                .permissionFlag("catclearlag.command.remove.passive", "p", "-passive")
-                                .permissionFlag("catclearlag.command.remove.named", "n", "-named")
-                                .permissionFlag("catclearlag.command.remove.animal", "m", "-animal")
-                                .buildWith(GenericArguments.none()))
-                .executor(new RemoveEntitiesCommand())
                 .build();
     }
 

@@ -20,13 +20,25 @@ import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by TimeTheCat on 12/18/2016.
  */
 public class LaggyChunksCommand implements CommandExecutor {
     private final CatClearLag plugin = CatClearLag.instance;
+
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least entities or tiles."))
+                .permission("catclearlag.command.laggychunks")
+                .executor(new LaggyChunksCommand())
+                .child(EntitiesCommand.getCommand(), "entities", "e")
+                .child(TilesCommand.getCommand(), "tiles", "t")
+                .build();
+    }
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
@@ -44,7 +56,7 @@ public class LaggyChunksCommand implements CommandExecutor {
             }
             Player player = (Player) commandSource;
             Location<World> a = new Location<>(chunk.getWorld(), chunk.getPosition());
-            Location<World> b = new Location<>(a.getExtent(), a.getX() * 16, a.getExtent().getBlockMax().getY(), a.getZ() * 16);
+            Location<World> b = new Location<>(a.getExtent(), a.getX() * 16 + 8, a.getExtent().getBlockMax().getY(), a.getZ() * 16 + 8);
             Optional<BlockRayHit<World>> c = BlockRay.from(b).stopFilter(BlockRay.onlyAirFilter()).to(a.getPosition().sub(b.getX(), 1, b.getZ()))
                     .end();
 
@@ -64,15 +76,5 @@ public class LaggyChunksCommand implements CommandExecutor {
         texts.add(Text.builder().onClick(TextActions.suggestCommand("/lc entities")).onHover(TextActions.showText(Text.of("Search for chunks with "
                 + "lots of entities."))).append(Text.of("/lc entities")).build());
         return texts;
-    }
-
-    public static CommandSpec getCommand() {
-        return CommandSpec.builder()
-                .description(Text.of("List chunks in order of most to least entities or tiles."))
-                .permission("catclearlag.command.laggychunks")
-                .executor(new LaggyChunksCommand())
-                .child(EntitiesCommand.getCommand(), "entities", "e")
-                .child(TilesCommand.getCommand(), "tiles", "t")
-                .build();
     }
 }
