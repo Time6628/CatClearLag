@@ -42,7 +42,7 @@ public class CCLService {
      * @param predicateToAdd A custom predicate to be used when the entities are checked.
      * @return The new predicate.
      */
-    public Predicate<Entity> addCheck(Type type, Predicate predicateToAdd) {
+    public Predicate<Entity> addCheck(Type type, Predicate<Entity> predicateToAdd) {
         return checks.put(type, checks.get(type).and(predicateToAdd));
     }
 
@@ -54,7 +54,7 @@ public class CCLService {
      * @param predicateToRemove A custom predicate to be used when the entity is checked.
      * @return The new predicate.
      */
-    public Predicate<Entity> removeCheck(Type type, Predicate predicateToRemove) {
+    public Predicate<Entity> removeCheck(Type type, Predicate<Entity> predicateToRemove) {
         return checks.put(type, checks.get(type).and(predicateToRemove.negate()));
     }
 

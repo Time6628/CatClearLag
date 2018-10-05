@@ -10,7 +10,9 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
@@ -52,8 +54,9 @@ public class RemoveEntitiesCommand implements CommandExecutor {
                 pred = combinePred(pred, Type.ALL);
             if (args.hasAny("h"))
                 pred = combinePred(pred, Type.HOSTILE);
-            if (args.hasAny("i"))
+            if (args.hasAny("i")) {
                 pred = combinePred(pred, Type.ITEM);
+            }
             if (args.hasAny("x"))
                 pred = combinePred(pred, Type.XP);
             if (args.hasAny("l"))

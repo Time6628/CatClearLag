@@ -36,6 +36,9 @@ public class CCLConfig {
     @Setting("Limits")
     public Limits limits = new Limits();
 
+    @Setting("Live Time")
+    public LiveTime liveTime = new LiveTime();
+
     @ConfigSerializable
     public static class Limits {
 
@@ -53,6 +56,15 @@ public class CCLConfig {
 
         @Setting("XP Orb Limit")
         public int maxXPOrbs = 300;
+    }
+
+    @ConfigSerializable
+    public static class LiveTime {
+        @Setting
+        public boolean enabled = false;
+
+        @Setting("Min Item Live Time")
+        public int minLiveTime = 20;
     }
 
 }

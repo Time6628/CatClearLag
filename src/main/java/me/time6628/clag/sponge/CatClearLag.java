@@ -2,10 +2,12 @@ package me.time6628.clag.sponge;
 
 import com.google.inject.Inject;
 import me.time6628.clag.sponge.api.CCLService;
+import me.time6628.clag.sponge.api.Type;
 import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.config.CCLConfig;
 import me.time6628.clag.sponge.config.ConfigLoader;
 import me.time6628.clag.sponge.config.MessagesConfig;
+import me.time6628.clag.sponge.handlers.ItemManager;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
@@ -15,6 +17,8 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -26,6 +30,7 @@ import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,6 +52,7 @@ public class CatClearLag {
     private MessagesConfig messages;
     private CCLConfig cclConfig;
     private List<Task> tasks;
+    private ItemManager itemManager;
 
     @Inject
     public CatClearLag(Logger logger, Game game, @ConfigDir(sharedRoot = false) File configDir, GuiceObjectMapperFactory factory) {
@@ -113,6 +119,11 @@ public class CatClearLag {
         registerCommands();
         registerEvents();
         tasks = new ArrayList<>();
+        if (cclConfig.liveTime.enabled) {
+            this.itemManager = new ItemManager();
+            getGame().getEventManager().registerListeners(this, itemManager);
+            getCclService().addCheck(Type.ITEM, entity -> ! itemManager.getItems().contains(entity));
+        }
         Task.Builder builder = getGame().getScheduler().createTaskBuilder();
         tasks.add(builder.execute(new ItemClearer())
                 .async()
