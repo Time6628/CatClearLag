@@ -3,14 +3,11 @@ package me.time6628.clag.sponge;
 import com.google.inject.Inject;
 import me.time6628.clag.sponge.api.CCLService;
 import me.time6628.clag.sponge.api.Type;
-import me.time6628.clag.sponge.commands.ForceGCCommand;
-import me.time6628.clag.sponge.commands.LaggyChunksCommand;
-import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
-import me.time6628.clag.sponge.commands.UnloadChunksCommand;
-import me.time6628.clag.sponge.commands.WhiteListItemCommand;
+import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.config.CCLConfig;
 import me.time6628.clag.sponge.config.ConfigLoader;
 import me.time6628.clag.sponge.config.MessagesConfig;
+import me.time6628.clag.sponge.handlers.ItemManager;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
@@ -20,15 +17,12 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.entity.ExperienceOrb;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Item;
-import org.spongepowered.api.entity.living.Hostile;
-import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
@@ -36,7 +30,10 @@ import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
-import java.util.*;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,19 +44,15 @@ public class CatClearLag {
     public static CatClearLag instance;
 
     private final Logger logger;
-
-    private ConfigLoader cfgLoader;
-
     private final File configDir;
-
     private final Game game;
-
     private final GuiceObjectMapperFactory factory;
-
+    private final CCLService cclService;
+    private ConfigLoader cfgLoader;
     private MessagesConfig messages;
     private CCLConfig cclConfig;
-    private CCLService cclService;
     private List<Task> tasks;
+    private ItemManager itemManager;
 
     @Inject
     public CatClearLag(Logger logger, Game game, @ConfigDir(sharedRoot = false) File configDir, GuiceObjectMapperFactory factory) {
@@ -126,6 +119,11 @@ public class CatClearLag {
         registerCommands();
         registerEvents();
         tasks = new ArrayList<>();
+        if (cclConfig.liveTime.enabled) {
+            this.itemManager = new ItemManager();
+            getGame().getEventManager().registerListeners(this, itemManager);
+            getCclService().addCheck(Type.ITEM, entity -> ! itemManager.getItems().contains(entity));
+        }
         Task.Builder builder = getGame().getScheduler().createTaskBuilder();
         tasks.add(builder.execute(new ItemClearer())
                 .async()
@@ -149,7 +147,8 @@ public class CatClearLag {
     }
 
     private void registerEvents() {
-        if (getCclConfig().limits.perChunkLimitEnabled) Sponge.getEventManager().registerListeners(this, new MobEventHandler());
+        if (getCclConfig().limits.perChunkLimitEnabled)
+            Sponge.getEventManager().registerListeners(this, new MobEventHandler());
     }
 
     private void registerCommands() {
@@ -161,45 +160,12 @@ public class CatClearLag {
         Sponge.getCommandManager().register(this, UnloadChunksCommand.getCommand(), "unloadchunks", "uc");
     }
 
-
-    public Integer clearGroundItems() {
-        return new EntityRemover<Item>(cclService.getPredicate(Type.ITEM)).removeEntities();
-    }
-
-    public Integer removeHostile() {
-        return new EntityRemover<Hostile>(cclService.getPredicate(Type.HOSTILE)).removeEntities();
-    }
-
-    public Integer removeAll() {
-        return new EntityRemover<>(cclService.getPredicate(Type.ALL)).removeEntities();
-    }
-
     public Logger getLogger() {
         return logger;
     }
 
     public PaginationService getPaginationService() {
         return game.getServiceManager().provide(PaginationService.class).get();
-    }
-
-    public String getItemID(ItemStack si) {
-        return si.getType().getId();
-    }
-
-    public List<Hostile> getHostiles() {
-        return new EntityRemover<Hostile>(cclService.getPredicate(Type.HOSTILE)).getEntities();
-    }
-
-    public Integer removeLiving() {
-        return new EntityRemover<Living>(cclService.getPredicate(Type.LIVING)).removeEntities();
-    }
-
-    public List<ExperienceOrb> getXPOrbs() {
-        return new EntityRemover<ExperienceOrb>(cclService.getPredicate(Type.XP)).getEntities();
-    }
-
-    public Integer removeXP() {
-        return new EntityRemover<ExperienceOrb>(cclService.getPredicate(Type.XP)).removeEntities();
     }
 
     private List<Chunk> getChunks() {

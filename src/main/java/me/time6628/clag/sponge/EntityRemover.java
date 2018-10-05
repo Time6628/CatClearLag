@@ -25,7 +25,7 @@ public class EntityRemover<C extends Entity> {
         //for each world
         worlds.forEach((temp) -> {
             //get all the entities in the world
-            Collection<Entity> w = temp.getEntities().stream().filter(entity -> predicate.test(entity)).collect(Collectors.toList());
+            Collection<Entity> w = temp.getEntities().stream().filter(predicate).collect(Collectors.toList());
             entities.addAll((Collection<? extends C>) w);
         });
         return entities;

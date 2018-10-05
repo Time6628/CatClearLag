@@ -22,7 +22,16 @@ import java.util.TreeMap;
 public class TilesCommand extends LaggyChunksCommand implements CommandExecutor {
     private final CatClearLag plugin = CatClearLag.instance;
 
-    @Override public CommandResult execute(CommandSource src, CommandContext args) {
+    public static CommandSpec getCommand() {
+        return CommandSpec.builder()
+                .description(Text.of("List chunks in order of most to least tiles."))
+                .permission("catclearlag.command.laggychunks")
+                .executor(new TilesCommand())
+                .build();
+    }
+
+    @Override
+    public CommandResult execute(CommandSource src, CommandContext args) {
         List<Chunk> chunksToSort = (List<Chunk>) ((Player) src).getWorld().getLoadedChunks();
         TreeMap<Chunk, Integer> sortedChunks = new TreeMap<>((o1, o2) -> Integer.compare(o2.getTileEntities().size(), o1.getTileEntities().size()));
         for (Chunk chunk : chunksToSort) {
@@ -40,13 +49,5 @@ public class TilesCommand extends LaggyChunksCommand implements CommandExecutor 
                                 .build())
                 .sendTo(src);
         return CommandResult.success();
-    }
-
-    public static CommandSpec getCommand() {
-        return CommandSpec.builder()
-                .description(Text.of("List chunks in order of most to least tiles."))
-                .permission("catclearlag.command.laggychunks")
-                .executor(new TilesCommand())
-                .build();
     }
 }

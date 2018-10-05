@@ -16,18 +16,19 @@ public class UnloadChunksCommand implements CommandExecutor {
 
     private final CatClearLag plugin = CatClearLag.instance;
 
-    @Override public CommandResult execute(CommandSource src, CommandContext args) {
-        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Unloading all chunks...")).build());
-        int chunks = plugin.unloadChunks();
-        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage(chunks + " chunks unloaded.")).build());
-        return CommandResult.successCount(chunks);
-    }
-
     public static CommandSpec getCommand() {
         return CommandSpec.builder()
                 .description(Text.of("Force all chunks to unload."))
                 .permission("catclearlag.command.unloadchunks")
                 .executor(new UnloadChunksCommand())
                 .build();
+    }
+
+    @Override
+    public CommandResult execute(CommandSource src, CommandContext args) {
+        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Unloading all chunks...")).build());
+        int chunks = plugin.unloadChunks();
+        src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage(chunks + " chunks unloaded.")).build());
+        return CommandResult.successCount(chunks);
     }
 }
