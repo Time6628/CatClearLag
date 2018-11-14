@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -30,7 +28,6 @@ import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8.3", description = "A plugin to assist in removing lag from your server.")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.9.0", description = "A plugin to assist in removing lag from your server.")
 public class CatClearLag {
     public static CatClearLag instance;
 
