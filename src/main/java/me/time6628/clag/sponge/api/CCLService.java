@@ -29,9 +29,10 @@ public class CCLService {
         checks.put(Type.XP, notAPlayer().and(o -> o instanceof ExperienceOrb));
         checks.put(Type.ANIMAL, notAPlayer().and(o -> o instanceof Animal).and(entityWhitelist));
         checks.put(Type.NAMED, notAPlayer().and(entity -> !entity.get(DisplayNameData.class).isPresent()));
+        checks.put(Type.ENTITY, notAPlayer());
     }
 
-    public Predicate<Entity> notAPlayer() {
+    private Predicate<Entity> notAPlayer() {
         return entity -> !(entity instanceof Player);
     }
 
