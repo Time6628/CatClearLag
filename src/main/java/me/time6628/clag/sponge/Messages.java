@@ -20,20 +20,32 @@ public class Messages {
     }
 
     public static Text getClearMsg(int count) {
-        return Text.builder()
+        return getClearMsg(count, true);
+    }
+
+    public static Text getClearMsg(int count, boolean withPrefix) {
+        return withPrefix ? Text.builder()
                 .append(getPrefix())
                 .append(TextSerializers.FORMATTING_CODE.deserialize(String.format(plugin.getMessagesCfg().clearMsg, count)))
-                .build();
+                .build()
+                : Text.builder()
+                .append(TextSerializers.FORMATTING_CODE.deserialize(String.format(plugin.getMessagesCfg().clearMsg, count)))
+                .build()
+                ;
     }
 
     public static Text getWarningMsg(int seconds) {
-        if (seconds >= 60)
-            return Text.builder()
-                    .append(getPrefix())
+        return getWarningMsg(seconds, true);
+    }
+
+    public static Text getWarningMsg(int seconds, boolean withPrefix) {
+        Text.Builder builder = Text.builder();
+        if (withPrefix) builder.append(getPrefix());
+        if (seconds >= 60 && seconds % 60 != 0)
+            return builder
                     .append(TextSerializers.FORMATTING_CODE.deserialize(String.format(plugin.getMessagesCfg().warningMsgMins, seconds / 60, seconds % 60)))
                     .build();
-        return Text.builder()
-                .append(getPrefix())
+        return builder
                 .append(TextSerializers.FORMATTING_CODE.deserialize(String.format(plugin.getMessagesCfg().warningMsg, seconds)))
                 .build();
     }

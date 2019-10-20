@@ -12,12 +12,19 @@ buildscript {
     }
 }
 
-apply plugin: "java"
+plugins {
+    id 'com.qixalite.spongestart2' version '4.0.0'
+    id 'java'
+}
+
+spongestart {
+    minecraft '1.12.2'
+}
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-version = '0.9.1'
+version = '0.9.3'
 
 repositories {
     mavenCentral()

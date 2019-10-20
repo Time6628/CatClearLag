@@ -10,9 +10,8 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.Item;
+import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
@@ -41,6 +40,8 @@ public class RemoveEntitiesCommand implements CommandExecutor {
                                 .permissionFlag("catclearlag.command.remove.passive", "p", "-passive")
                                 .permissionFlag("catclearlag.command.remove.named", "n", "-named")
                                 .permissionFlag("catclearlag.command.remove.animal", "m", "-animal")
+                                .valueFlag(GenericArguments.catalogedElement(Text.of("entity"), EntityType.class), "e", "-entity")
+                                //.permissionFlag("catclearlag.command.remove.entity", "e", "-entity")
                                 .buildWith(GenericArguments.none()))
                 .executor(new RemoveEntitiesCommand())
                 .build();
@@ -48,15 +49,21 @@ public class RemoveEntitiesCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
-        if (args.hasAny("a") || args.hasAny("h") || args.hasAny("i") || args.hasAny("x") || args.hasAny("l") || args.hasAny("n") || args.hasAny("m")) {
+        if (args.hasAny("a") ||
+                args.hasAny("h") ||
+                args.hasAny("i") ||
+                args.hasAny("x") ||
+                args.hasAny("l") ||
+                args.hasAny("n") ||
+                args.hasAny("m") ||
+                args.getOne("entity").isPresent()) {
             Predicate<Entity> pred = null;
             if (args.hasAny("a"))
                 pred = combinePred(pred, Type.ALL);
             if (args.hasAny("h"))
                 pred = combinePred(pred, Type.HOSTILE);
-            if (args.hasAny("i")) {
+            if (args.hasAny("i"))
                 pred = combinePred(pred, Type.ITEM);
-            }
             if (args.hasAny("x"))
                 pred = combinePred(pred, Type.XP);
             if (args.hasAny("l"))
@@ -65,6 +72,10 @@ public class RemoveEntitiesCommand implements CommandExecutor {
                 pred = combinePred(pred, Type.ANIMAL);
             if (args.hasAny("n"))
                 pred = combinePred(pred, Type.NAMED);
+            if (args.getOne("entity").isPresent()) {
+                EntityType type = (EntityType) args.getOne("entity").get();
+                pred = combinePred(pred, type);
+            }
             EntityRemover<Entity> remover = new EntityRemover<>(pred);
             src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Removing entities...")).build());
             int affectedEnts = remover.removeEntities();
@@ -86,6 +97,7 @@ public class RemoveEntitiesCommand implements CommandExecutor {
         texts.add(ez("/re -l", "Remove all living entities."));
         texts.add(ez("/re -m", "Remove all animals."));
         texts.add(ez("/re -n", "Prevents name tagged entities from being removed."));
+        texts.add(ez("/re -e", "Remove a specific type of entity, like /re -e minecraft:wolf"));
         return texts;
     }
 
@@ -98,8 +110,12 @@ public class RemoveEntitiesCommand implements CommandExecutor {
     }
 
     private Predicate<Entity> combinePred(Predicate<Entity> pred, Type type) {
-        if (pred == null) {
-            return plugin.getCclService().getPredicate(type);
-        } else return pred.or(plugin.getCclService().getPredicate(type));
+        return pred == null ? plugin.getCclService().getPredicate(type) :
+                pred.or(plugin.getCclService().getPredicate(type));
+    }
+
+    private Predicate<Entity> combinePred(Predicate<Entity> pred, EntityType entityType) {
+        return pred == null ? plugin.getCclService().getPredicate(Type.ENTITY).and(pre -> pre.getType().equals(entityType)) :
+                pred.or(plugin.getCclService().getPredicate(Type.ENTITY).and(pre -> pre.getType().equals(entityType)));
     }
 }

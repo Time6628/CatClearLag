@@ -7,5 +7,6 @@ public enum Type {
     XP,
     ALL,
     NAMED,
-    ANIMAL
+    ANIMAL,
+    ENTITY
 }

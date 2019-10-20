@@ -3,6 +3,8 @@ package me.time6628.clag.sponge.config;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.boss.BossBarColor;
+import org.spongepowered.api.boss.BossBarColors;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.item.ItemTypes;
 
@@ -38,6 +40,18 @@ public class CCLConfig {
 
     @Setting("Live Time")
     public LiveTime liveTime = new LiveTime();
+
+    @Setting("Boss Bar")
+    public BossBar bossBar = new BossBar();
+
+    @ConfigSerializable
+    public static class BossBar {
+        @Setting(value = "Hide Boss Bar After", comment = "Hide the boss bar after this amount of time.")
+        public int hideBoss = 15;
+
+        @Setting(value = "Boss Bar Color", comment = "BLUE, GREEN, PINK, PURPLE, RED, WHITE, YELLOW")
+        public BossBarColor bossBarColor = BossBarColors.RED;
+    }
 
     @ConfigSerializable
     public static class Limits {
