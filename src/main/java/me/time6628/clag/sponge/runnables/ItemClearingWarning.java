@@ -2,8 +2,6 @@ package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Messages;
-import org.spongepowered.api.boss.BossBar;
-import org.spongepowered.api.boss.BossBarColors;
 import org.spongepowered.api.boss.BossBarOverlays;
 import org.spongepowered.api.boss.ServerBossBar;
 import org.spongepowered.api.effect.sound.SoundCategories;
