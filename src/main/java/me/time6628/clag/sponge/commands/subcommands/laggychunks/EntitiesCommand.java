@@ -2,6 +2,7 @@ package me.time6628.clag.sponge.commands.subcommands.laggychunks;
 
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
+import me.time6628.clag.sponge.utils.ChunkHelpers;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -35,7 +36,7 @@ public class EntitiesCommand extends LaggyChunksCommand implements CommandExecut
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        List<Chunk> chunksToSort = getChunks(src);
+        List<Chunk> chunksToSort = ChunkHelpers.getChunks(src);
         TreeMap<Chunk, Integer> sortedChunks = new TreeMap<>((o1, o2) -> Integer.compare(o2.getEntities().size(), o1.getEntities().size()));
         for (Chunk chunk : chunksToSort) {
             sortedChunks.put(chunk, chunk.getEntities().size());
@@ -52,16 +53,5 @@ public class EntitiesCommand extends LaggyChunksCommand implements CommandExecut
                                 .build())
                 .sendTo(src);
         return CommandResult.success();
-    }
-
-    private List<Chunk> getChunks(CommandSource source) throws CommandException{
-        if (source instanceof Player) {
-            return (List<Chunk>) ((Player) source).getWorld().getLoadedChunks();
-        } else {
-            final Server server =  Sponge.getServer();
-            return (List<Chunk>) server.getWorld(server.getDefaultWorldName())
-                    .orElseThrow(()->new CommandException(Text.of("Failed to get default world!")))
-                    .getLoadedChunks();
-        }
     }
 }
