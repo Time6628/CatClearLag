@@ -2,16 +2,13 @@ package me.time6628.clag.sponge.commands.subcommands.laggychunks;
 
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.commands.LaggyChunksCommand;
-import me.time6628.clag.sponge.utils.ChunkHelpers;
-import org.spongepowered.api.Server;
-import org.spongepowered.api.Sponge;
+import me.time6628.clag.sponge.utils.ChunkHelper;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Chunk;
@@ -36,7 +33,7 @@ public class EntitiesCommand extends LaggyChunksCommand implements CommandExecut
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        List<Chunk> chunksToSort = ChunkHelpers.getChunks(src);
+        List<Chunk> chunksToSort = ChunkHelper.getChunks(src);
         TreeMap<Chunk, Integer> sortedChunks = new TreeMap<>((o1, o2) -> Integer.compare(o2.getEntities().size(), o1.getEntities().size()));
         for (Chunk chunk : chunksToSort) {
             sortedChunks.put(chunk, chunk.getEntities().size());

@@ -10,7 +10,7 @@ import org.spongepowered.api.world.Chunk;
 
 import java.util.List;
 
-public class ChunkHelpers {
+public class ChunkHelper {
     public static List<Chunk> getChunks(CommandSource source) throws CommandException {
         if (source instanceof Player) {
             return (List<Chunk>) ((Player) source).getWorld().getLoadedChunks();
