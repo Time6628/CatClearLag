@@ -29,6 +29,7 @@ public class ItemClearer implements Runnable {
             player.sendMessage(ChatTypes.ACTION_BAR, messageRaw);
         }
         plugin.getGame().getServer().getBroadcastChannel().send(message);
+        ItemClearingWarning.bossBarUpdater.cancel(true);
         plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
             //plugin.getLogger().info("bossBarPercent {}", ItemClearingWarning.bossBar.getPercent());
             if (ItemClearingWarning.bossBar.getPercent() == 0.0f) {

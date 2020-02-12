@@ -21,5 +21,5 @@ public class MessagesConfig {
     public String warningMsg = "&cGround items will be cleared in &f%d seconds.";
 
     @Setting("Warning Message mins")
-    public String warningMsgMins = "&cGround items will be cleared in &f%d minutes &f%d seconds.";
+    public String warningMsgMins = "&cGround items will be cleared in &f%d:&f%d minutes.";
 }

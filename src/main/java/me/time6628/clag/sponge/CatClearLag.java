@@ -22,6 +22,7 @@ import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.world.Chunk;
@@ -96,7 +97,7 @@ public class CatClearLag {
                 .name("CatClearLag Item Remover")
                 .submit(this));
         cclConfig.warnings.forEach((d) ->
-                tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d), 1.0f - ((float) cclConfig.warnings.indexOf(d)) / ((float) cclConfig.warnings.size())))
+                tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
                         .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(cclConfig.interval, TimeUnit.MINUTES)
@@ -121,18 +122,16 @@ public class CatClearLag {
             getGame().getEventManager().registerListeners(this, itemManager);
             getCclService().addCheck(Type.ITEM, entity -> !itemManager.getItems().contains(entity));
         }
-        Task.Builder builder = getGame().getScheduler().createTaskBuilder();
+        Scheduler scheduler = getGame().getScheduler();
         if (getCclConfig().interval != -1) {
-            tasks.add(builder.execute(new ItemClearer())
-                    .async()
+            tasks.add(scheduler.createTaskBuilder().execute(new ItemClearer())
                     .delay(cclConfig.interval, TimeUnit.MINUTES)
                     .interval(cclConfig.interval, TimeUnit.MINUTES)
                     .name("CatClearLag Item Remover")
                     .submit(this));
             cclConfig.warnings.forEach((d) ->
             {
-                logger.info("PERCENT {}", 1.0f - ((float) cclConfig.warnings.indexOf(d)) / ((float) cclConfig.warnings.size()));
-                tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d), 1.0f - ((float) cclConfig.warnings.indexOf(d)) / ((float) cclConfig.warnings.size())))
+                tasks.add(scheduler.createTaskBuilder().execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
                         .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(cclConfig.interval, TimeUnit.MINUTES)
@@ -140,8 +139,7 @@ public class CatClearLag {
                         .submit(this));
             });
         }
-        tasks.add(builder.execute(new EntityChecker())
-                .async()
+        tasks.add(scheduler.createTaskBuilder().execute(new EntityChecker())
                 .delay(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .interval(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
