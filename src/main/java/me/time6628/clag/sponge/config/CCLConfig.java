@@ -10,6 +10,7 @@ import org.spongepowered.api.item.ItemTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @ConfigSerializable
 public class CCLConfig {
@@ -79,6 +80,14 @@ public class CCLConfig {
 
         @Setting("Min Item Live Time")
         public int minLiveTime = 20;
+    }
+
+    @ConfigSerializable
+    public static class PlayerData {
+        @Setting
+        UUID player;
+        @Setting
+        long battleLimit;
     }
 
 }

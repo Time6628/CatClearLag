@@ -8,5 +8,6 @@ public enum Type {
     ALL,
     NAMED,
     ANIMAL,
-    ENTITY
+    ENTITY,
+    COMBINED
 }

@@ -15,13 +15,17 @@ public class EntityChecker implements Runnable {
     @Override
     public void run() {
         if (EntityHelpers.getHostiles().size() > plugin.getHostileLimit()) {
+            int affectedEntities = EntityHelpers.removeHostile();
+            if (affectedEntities == -1) return;
             plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.RED).append(Text.of("Too many hostiles, removing them.")).build());
-            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + EntityHelpers.removeHostile() + " hostile entities.")).build());
+            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + affectedEntities + " hostile entities.")).build());
         }
 
         if (EntityHelpers.getXPOrbs().size() > plugin.getXpOrbLimit()) {
+            int affectedEntities = EntityHelpers.removeXP();
+            if (affectedEntities == -1) return;
             plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.RED).append(Text.of("Too many XP Orbs, removing them.")).build());
-            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + EntityHelpers.removeXP() + " XP orbs.")).build());
+            plugin.getGame().getServer().getBroadcastChannel().send(Text.builder().append(Messages.getPrefix()).color(TextColors.LIGHT_PURPLE).append(Text.of("Removed " + affectedEntities + " XP orbs.")).build());
         }
     }
 }

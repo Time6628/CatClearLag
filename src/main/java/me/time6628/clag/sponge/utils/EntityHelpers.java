@@ -15,30 +15,30 @@ public class EntityHelpers {
     private final static CatClearLag plugin = CatClearLag.instance;
 
     public static List<Hostile> getHostiles() {
-        return new EntityRemover<Hostile>(plugin.getCclService().getPredicate(Type.HOSTILE)).getEntities();
+        return new EntityRemover<Hostile>(plugin.getCclService().getPredicate(Type.HOSTILE), Type.HOSTILE).getEntities();
     }
 
     public static Integer removeLiving() {
-        return new EntityRemover<Living>(plugin.getCclService().getPredicate(Type.LIVING)).removeEntities();
+        return new EntityRemover<Living>(plugin.getCclService().getPredicate(Type.LIVING), Type.LIVING).removeEntities();
     }
 
     public static List<ExperienceOrb> getXPOrbs() {
-        return new EntityRemover<ExperienceOrb>(plugin.getCclService().getPredicate(Type.XP)).getEntities();
+        return new EntityRemover<ExperienceOrb>(plugin.getCclService().getPredicate(Type.XP), Type.XP).getEntities();
     }
 
     public static Integer removeXP() {
-        return new EntityRemover<ExperienceOrb>(plugin.getCclService().getPredicate(Type.XP)).removeEntities();
+        return new EntityRemover<ExperienceOrb>(plugin.getCclService().getPredicate(Type.XP), Type.XP).removeEntities();
     }
 
     public static Integer clearGroundItems() {
-        return new EntityRemover<Item>(plugin.getCclService().getPredicate(Type.ITEM)).removeEntities();
+        return new EntityRemover<Item>(plugin.getCclService().getPredicate(Type.ITEM), Type.ITEM).removeEntities();
     }
 
     public static Integer removeHostile() {
-        return new EntityRemover<Hostile>(plugin.getCclService().getPredicate(Type.HOSTILE)).removeEntities();
+        return new EntityRemover<Hostile>(plugin.getCclService().getPredicate(Type.HOSTILE), Type.HOSTILE).removeEntities();
     }
 
     public static Integer removeAll() {
-        return new EntityRemover<>(plugin.getCclService().getPredicate(Type.ALL)).removeEntities();
+        return new EntityRemover<>(plugin.getCclService().getPredicate(Type.ALL), Type.ALL).removeEntities();
     }
 }

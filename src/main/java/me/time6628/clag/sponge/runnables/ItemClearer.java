@@ -20,6 +20,10 @@ public class ItemClearer implements Runnable {
     @Override
     public void run() {
         int i = EntityHelpers.clearGroundItems();
+        if (i == -1) {
+            plugin.getLogger().info("Another plugin has cancelled the auto clearing of items.");
+            return;
+        }
         Text message = Messages.getClearMsg(i);
         Text messageRaw = Messages.getClearMsg(i, false);
         ItemClearingWarning.bossBar.setName(messageRaw);

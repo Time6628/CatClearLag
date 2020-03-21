@@ -10,7 +10,7 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.animal.Animal;
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -19,7 +19,7 @@ public class CCLService {
     private final Map<Type, Predicate<Entity>> checks;
 
     public CCLService() {
-        checks = new HashMap<>();
+        checks = new EnumMap<>(Type.class);
         Predicate<Entity> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(((Item) item).getItemType().getId());
         Predicate<Entity> entityWhitelist = entity -> !CatClearLag.instance.getCclConfig().entityWhiteList.contains(entity.getType().getId());
         checks.put(Type.HOSTILE, notAPlayer().and(o -> o instanceof Hostile).and(entityWhitelist));

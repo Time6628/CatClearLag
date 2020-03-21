@@ -76,10 +76,14 @@ public class RemoveEntitiesCommand implements CommandExecutor {
                 EntityType type = (EntityType) args.getOne("entity").get();
                 pred = combinePred(pred, type);
             }
-            EntityRemover<Entity> remover = new EntityRemover<>(pred);
+            EntityRemover<Entity> remover = new EntityRemover<>(pred, Type.COMBINED);
             src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Removing entities...")).build());
             int affectedEnts = remover.removeEntities();
-            src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage(affectedEnts + " entities removed.")).build());
+            if (affectedEnts == -1) {
+                src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage("Another plugin cancelled the entity removal.")).build());
+            } else {
+                src.sendMessage(Text.builder().append(Messages.getPrefix()).append(Messages.colorMessage(affectedEnts + " entities removed.")).build());
+            }
             return CommandResult.affectedEntities(affectedEnts);
         } else {
             plugin.getPaginationService().builder().contents(getFlags()).title(Text.builder().color(TextColors.LIGHT_PURPLE).append(Text.of("/re Help"))
