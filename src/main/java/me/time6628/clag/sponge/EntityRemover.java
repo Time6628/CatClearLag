@@ -1,7 +1,7 @@
 package me.time6628.clag.sponge;
 
 import me.time6628.clag.sponge.api.Type;
-import me.time6628.clag.sponge.events.ClearLagEvent;
+import me.time6628.clag.sponge.api.events.ClearLagEvent;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.world.World;

@@ -1,4 +1,4 @@
-package me.time6628.clag.sponge.events;
+package me.time6628.clag.sponge.api.events;
 
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.api.Type;
