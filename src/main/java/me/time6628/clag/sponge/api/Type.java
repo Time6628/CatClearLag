@@ -5,5 +5,9 @@ public enum Type {
     ITEM,
     LIVING,
     XP,
-    ALL
+    ALL,
+    NAMED,
+    ANIMAL,
+    ENTITY,
+    COMBINED
 }

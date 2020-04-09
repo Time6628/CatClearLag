@@ -12,7 +12,10 @@ import java.io.File;
 public class ConfigLoader {
 
     private final CatClearLag plugin;
+
     private CCLConfig cclConfig;
+    private ConfigurationLoader<CommentedConfigurationNode> cclLoader;
+
     private MessagesConfig messagesConfig;
 
     public ConfigLoader(CatClearLag pl) {
@@ -28,10 +31,10 @@ public class ConfigLoader {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setFile(file).build();
-            CommentedConfigurationNode config = loader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
+            cclLoader = HoconConfigurationLoader.builder().setFile(file).build();
+            CommentedConfigurationNode config = cclLoader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
             cclConfig = config.getValue(TypeToken.of(CCLConfig.class), new CCLConfig());
-            loader.save(config);
+            cclLoader.save(config);
             return true;
         } catch (Exception e) {
             plugin.getLogger().error("Could not load config.", e);
@@ -62,10 +65,9 @@ public class ConfigLoader {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setFile(file).build();
-            CommentedConfigurationNode config = loader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
-            config.getValue(TypeToken.of(CCLConfig.class), newConfig);
-            loader.save(config);
+            CommentedConfigurationNode config = cclLoader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
+            config.setValue(TypeToken.of(CCLConfig.class), newConfig);
+            cclLoader.save(config);
         } catch (Exception e) {
             plugin.getLogger().error("Could not load config.", e);
         }

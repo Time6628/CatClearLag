@@ -3,14 +3,11 @@ package me.time6628.clag.sponge;
 import com.google.inject.Inject;
 import me.time6628.clag.sponge.api.CCLService;
 import me.time6628.clag.sponge.api.Type;
-import me.time6628.clag.sponge.commands.ForceGCCommand;
-import me.time6628.clag.sponge.commands.LaggyChunksCommand;
-import me.time6628.clag.sponge.commands.RemoveEntitiesCommand;
-import me.time6628.clag.sponge.commands.UnloadChunksCommand;
-import me.time6628.clag.sponge.commands.WhiteListItemCommand;
+import me.time6628.clag.sponge.commands.*;
 import me.time6628.clag.sponge.config.CCLConfig;
 import me.time6628.clag.sponge.config.ConfigLoader;
 import me.time6628.clag.sponge.config.MessagesConfig;
+import me.time6628.clag.sponge.handlers.ItemManager;
 import me.time6628.clag.sponge.handlers.MobEventHandler;
 import me.time6628.clag.sponge.runnables.EntityChecker;
 import me.time6628.clag.sponge.runnables.ItemClearer;
@@ -19,51 +16,41 @@ import ninja.leaping.configurate.objectmapping.GuiceObjectMapperFactory;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.ExperienceOrb;
-import org.spongepowered.api.entity.Item;
-import org.spongepowered.api.entity.living.Hostile;
-import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationService;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by TimeTheCat on 7/2/2016.
  */
-@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.8.3", description = "A plugin to assist in removing lag from your server.")
+@Plugin(name = "CatClearLag", id = "catclearlag", version = "0.9.0", description = "A plugin to assist in removing lag from your server.")
 public class CatClearLag {
     public static CatClearLag instance;
 
     private final Logger logger;
-
-    private ConfigLoader cfgLoader;
-
     private final File configDir;
-
     private final Game game;
-
     private final GuiceObjectMapperFactory factory;
-
+    private final CCLService cclService;
+    private ConfigLoader cfgLoader;
     private MessagesConfig messages;
     private CCLConfig cclConfig;
-    private final CCLService cclService = new CCLService();
     private List<Task> tasks;
+    private ItemManager itemManager;
 
     @Inject
     public CatClearLag(Logger logger, Game game, @ConfigDir(sharedRoot = false) File configDir, GuiceObjectMapperFactory factory) {
@@ -72,6 +59,7 @@ public class CatClearLag {
         this.configDir = configDir;
         this.factory = factory;
         instance = this;
+        cclService = new CCLService();
     }
 
     public MessagesConfig getMessagesCfg() {
@@ -129,22 +117,29 @@ public class CatClearLag {
         registerCommands();
         registerEvents();
         tasks = new ArrayList<>();
-        Task.Builder builder = getGame().getScheduler().createTaskBuilder();
-        tasks.add(builder.execute(new ItemClearer())
-                .async()
-                .delay(cclConfig.interval, TimeUnit.MINUTES)
-                .interval(cclConfig.interval, TimeUnit.MINUTES)
-                .name("CatClearLag Item Remover")
-                .submit(this));
-        cclConfig.warnings.forEach((d) ->
-                tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
+        if (cclConfig.liveTime.enabled) {
+            this.itemManager = new ItemManager();
+            getGame().getEventManager().registerListeners(this, itemManager);
+            getCclService().addCheck(Type.ITEM, entity -> !itemManager.getItems().contains(entity));
+        }
+        Scheduler scheduler = getGame().getScheduler();
+        if (getCclConfig().interval != -1) {
+            tasks.add(scheduler.createTaskBuilder().execute(new ItemClearer())
+                    .delay(cclConfig.interval, TimeUnit.MINUTES)
+                    .interval(cclConfig.interval, TimeUnit.MINUTES)
+                    .name("CatClearLag Item Remover")
+                    .submit(this));
+            cclConfig.warnings.forEach((d) ->
+            {
+                tasks.add(scheduler.createTaskBuilder().execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
                         .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(cclConfig.interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
-                        .submit(this)));
-        tasks.add(builder.execute(new EntityChecker())
-                .async()
+                        .submit(this));
+            });
+        }
+        tasks.add(scheduler.createTaskBuilder().execute(new EntityChecker())
                 .delay(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .interval(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
@@ -152,7 +147,8 @@ public class CatClearLag {
     }
 
     private void registerEvents() {
-        if (getCclConfig().limits.perChunkLimitEnabled) Sponge.getEventManager().registerListeners(this, new MobEventHandler());
+        if (getCclConfig().limits.perChunkLimitEnabled)
+            Sponge.getEventManager().registerListeners(this, new MobEventHandler());
     }
 
     private void registerCommands() {
@@ -164,51 +160,12 @@ public class CatClearLag {
         Sponge.getCommandManager().register(this, UnloadChunksCommand.getCommand(), "unloadchunks", "uc");
     }
 
-
-    public Integer clearGroundItems() {
-        return new EntityRemover<Item>(cclService.getPredicate(Type.ITEM)).removeEntities();
-    }
-
-    public Integer removeHostile() {
-        return new EntityRemover<Hostile>(cclService.getPredicate(Type.HOSTILE)).removeEntities();
-    }
-
-    public Integer removeAll() {
-        return new EntityRemover<Entity>(cclService.getPredicate(Type.ALL)).removeEntities();
-    }
-
     public Logger getLogger() {
         return logger;
     }
 
     public PaginationService getPaginationService() {
         return game.getServiceManager().provide(PaginationService.class).get();
-    }
-
-    public String getItemID(ItemStack si) {
-        if (si.supports(Keys.ITEM_BLOCKSTATE)) {
-            Optional<BlockState> bs = si.get(Keys.ITEM_BLOCKSTATE);
-            if (bs.isPresent()) {
-                return bs.get().getId();
-            }
-        }
-        return si.getType().getId();
-    }
-
-    public List<Hostile> getHostiles() {
-        return new EntityRemover<Hostile>(cclService.getPredicate(Type.HOSTILE)).getEntities();
-    }
-
-    public Integer removeLiving() {
-        return new EntityRemover<Living>(cclService.getPredicate(Type.LIVING)).removeEntities();
-    }
-
-    public List<ExperienceOrb> getXPOrbs() {
-        return new EntityRemover<ExperienceOrb>(cclService.getPredicate(Type.XP)).getEntities();
-    }
-
-    public Integer removeXP() {
-        return new EntityRemover<ExperienceOrb>(cclService.getPredicate(Type.XP)).removeEntities();
     }
 
     private List<Chunk> getChunks() {
@@ -264,4 +221,7 @@ public class CatClearLag {
         return factory;
     }
 
+    public CCLService getCclService() {
+        return cclService;
+    }
 }

@@ -1,6 +1,7 @@
 package me.time6628.clag.sponge.commands;
 
 import me.time6628.clag.sponge.CatClearLag;
+import me.time6628.clag.sponge.Messages;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -14,6 +15,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -22,39 +24,6 @@ import java.util.Optional;
 public class WhiteListItemCommand implements CommandExecutor {
     private final CatClearLag plugin = CatClearLag.instance;
 
-    @Override
-    public CommandResult execute(CommandSource src, CommandContext args) {
-        if (!(src instanceof Player)) return CommandResult.empty();
-        Optional<ItemType> otype = args.getOne(Text.of("item"));
-        if (otype.isPresent()) {
-            plugin.addIDToWhiteList(otype.get().getId());
-            //TODO: replace with TextTemplate
-            src.sendMessage(Text.builder()
-                    .color(TextColors.DARK_PURPLE)
-                    .append(Text.of("Added "))
-                    .color(TextColors.GREEN)
-                    .append(Text.of(otype.get().getId() + " "))
-                    .color(TextColors.DARK_PURPLE)
-                    .append(Text.of(" to the ClearLag whitelist."))
-                    .build());
-        } else if (((Player) src).getItemInHand(HandTypes.MAIN_HAND).isPresent()) {
-            ItemStack si = ((Player) src).getItemInHand(HandTypes.MAIN_HAND).get();
-            plugin.addIDToWhiteList(plugin.getItemID(si));
-            //TODO: replace with TextTemplate
-            src.sendMessage(Text.builder()
-                    .color(TextColors.DARK_PURPLE)
-                    .append(Text.of("Added "))
-                    .color(TextColors.GREEN)
-                    .append(Text.of(si + " "))
-                    .color(TextColors.DARK_PURPLE)
-                    .append(Text.of(" to the ClearLag whitelist."))
-                    .build());
-        } else {
-            src.sendMessage(Text.of(TextColors.RED, "Could not add item to whitelist."));
-        }
-        return CommandResult.success();
-    }
-
     public static CommandSpec getCommand() {
         return CommandSpec.builder()
                 .description(Text.of("Add an itemtype to the clearlag whitelist"))
@@ -62,5 +31,26 @@ public class WhiteListItemCommand implements CommandExecutor {
                 .executor(new WhiteListItemCommand())
                 .arguments(GenericArguments.optional(GenericArguments.catalogedElement(Text.of("item"), ItemType.class)))
                 .build();
+    }
+
+    @Override
+    public CommandResult execute(CommandSource src, CommandContext args) {
+        if (!(src instanceof Player)) return CommandResult.empty();
+        Optional<ItemType> otype = args.getOne(Text.of("item"));
+        if (otype.isPresent()) {
+            src.sendMessage(Messages.addToWhileList.apply(Collections.singletonMap("item", addItemToWhitelist(otype.get()))).build());
+        } else if (((Player) src).getItemInHand(HandTypes.MAIN_HAND).isPresent()) {
+            ItemStack si = ((Player) src).getItemInHand(HandTypes.MAIN_HAND).get();
+            src.sendMessage(Messages.addToWhileList.apply(Collections.singletonMap("item", addItemToWhitelist(si.getType()))).build());
+        } else {
+            src.sendMessage(Text.of(TextColors.RED, "Could not add item to whitelist."));
+        }
+        return CommandResult.success();
+    }
+
+
+    private String addItemToWhitelist(ItemType item) {
+        plugin.addIDToWhiteList(item.getId());
+        return item.getId();
     }
 }

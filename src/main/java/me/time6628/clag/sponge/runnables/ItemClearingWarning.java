@@ -2,13 +2,25 @@ package me.time6628.clag.sponge.runnables;
 
 import me.time6628.clag.sponge.CatClearLag;
 import me.time6628.clag.sponge.Messages;
+import org.spongepowered.api.boss.BossBarOverlays;
+import org.spongepowered.api.boss.ServerBossBar;
+import org.spongepowered.api.effect.sound.SoundCategories;
+import org.spongepowered.api.effect.sound.SoundTypes;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.SpongeExecutorService;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.chat.ChatTypes;
 
-import java.util.Collections;
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by TimeTheCat on 7/20/2016.
  */
 public class ItemClearingWarning implements Runnable {
+
+    public static ServerBossBar bossBar;
+    public static SpongeExecutorService.SpongeFuture<?> bossBarUpdater;
 
     private final int seconds;
     private final CatClearLag plugin = CatClearLag.instance;
@@ -19,6 +31,32 @@ public class ItemClearingWarning implements Runnable {
 
     @Override
     public void run() {
-        plugin.getGame().getServer().getBroadcastChannel().send(Messages.getWarningMsg(seconds));
+        Text message = Messages.getWarningMsg(seconds);
+        Text rawMessage = Messages.getWarningMsg(seconds, false);
+        Collection<Player> onlinePlayers = plugin.getGame().getServer().getOnlinePlayers();
+        if (bossBar == null || !bossBar.isVisible()) {
+            bossBar = ServerBossBar.builder()
+                    .color(plugin.getCclConfig().bossBar.bossBarColor)
+                    .darkenSky(false)
+                    .createFog(false)
+                    .playEndBossMusic(false)
+                    .percent(1.0f)
+                    .name(rawMessage)
+                    .visible(true)
+                    .overlay(BossBarOverlays.PROGRESS)
+                    .build();
+            bossBar.addPlayers(onlinePlayers);
+            bossBarUpdater = plugin.getGame().getScheduler().createAsyncExecutor(plugin).scheduleAtFixedRate(() -> {
+                if (bossBar != null) {
+                    bossBar.setPercent(bossBar.getPercent() - (1.0f / seconds));
+                    bossBar.setName(Messages.getWarningMsg((int) (seconds * bossBar.getPercent()), false));
+                }
+            }, 1, 1, TimeUnit.SECONDS);
+        }
+        for (Player player : onlinePlayers) {
+            player.playSound(SoundTypes.ITEM_BOTTLE_FILL, SoundCategories.VOICE, player.getPosition(), 25);
+            player.sendMessage(ChatTypes.ACTION_BAR, rawMessage);
+        }
+        plugin.getGame().getServer().getBroadcastChannel().send(message);
     }
 }
