@@ -1,19 +1,13 @@
-ClearLag-Sponge
+## CatClearLag Docs
 
-# Commands
-/re - Remove certain entities based on flags
+### Building
+[How to build with Gradle](build.md)
 
-flags:
- - `-a` - all entities
- - `-h` - all hostiles
- - `-i` - all items
- - `-x` - xp entities
- - `-l` - living entities
- - `-m` - animal entities
- - `-n` - exclude named entities
+### Configs
+[Plugin config](plugin.md)
 
-/uc - Unload chunks. May cause weirdness, you have been warned.
+[Messages config](messages.md)
 
-/lc <e|t> - look for chunks that contain lots of entities(e) or tiles(t)
-
-/gc - Request a GC.
+### Commands
+[Commands](commands.md)  
+[Permissions](permissions.md)
