@@ -16,11 +16,13 @@ Entities from mods should use their modname followed by a colon as the prefix.
 Whitelisted entities need to be the id names. Number ids are deprecated.
 If you need multiple objects whitelisted, add a comma after the first entity's end quote then put the next entity in quotes.
 For example:
+```
 "Entity Whitelist"=[
 	"minecraft:boat",
 	"minecraft:armor_stand",
 	"mymod:entity"
 ]
+```
 
 ### Interval
 Interval is in **minutes**.
@@ -58,7 +60,7 @@ Number of seconds since the last clear to display warnings.
 570 would be 30 seconds at interval 10.
 
 The general formula to calcute the warnings:
-Interval * 60 - <seconds before a clear>
+`Interval * 60 - seconds before a clear`
 
 ### Whitelist
 This is the same as entity whitelist except instead of entities, this is for items.

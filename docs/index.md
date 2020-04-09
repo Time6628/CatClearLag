@@ -9,5 +9,5 @@
 [Messages config](messages.md)
 
 ### Commands
-[Commands](commands.md)
+[Commands](commands.md)  
 [Permissions](permissions.md)
