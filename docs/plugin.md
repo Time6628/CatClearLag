@@ -62,6 +62,8 @@ Number of seconds since the last clear to display warnings.
 The general formula to calcute the warnings:
 `Interval * 60 - seconds before a clear`
 
+If you want to disable warnings, just use []
+
 ### Whitelist
 This is the same as entity whitelist except instead of entities, this is for items.
 
