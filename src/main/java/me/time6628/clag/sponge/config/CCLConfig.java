@@ -5,20 +5,26 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.boss.BossBarColor;
 import org.spongepowered.api.boss.BossBarColors;
+import org.spongepowered.api.effect.sound.SoundCategories;
+import org.spongepowered.api.effect.sound.SoundCategory;
+import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.item.ItemTypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @ConfigSerializable
 public class CCLConfig {
 
-    @Setting("Interval")
+    @Setting(value = "Interval", comment = "Interval in minutes to run entity clear.")
     public int interval = 10;
 
-    @Setting(value = "Warnings")
+    @Setting(value = "Item Despawn Rate", comment = "Set this to the same value as in the Sponge config, otherwise it will not work correctly")
+    public int itemDespawnRate = 6000;
+
+    @Setting(value = "Warnings", comment = "interval * 60 - seconds you want to warn at")
     public List<Integer> warnings = new ArrayList<Integer>() {{
         add(540);
         add(570);
@@ -45,8 +51,15 @@ public class CCLConfig {
     @Setting("Boss Bar")
     public BossBar bossBar = new BossBar();
 
+    @Setting("Sounds")
+    public Sounds sounds = new Sounds();
+
     @ConfigSerializable
     public static class BossBar {
+
+        @Setting
+        public boolean enabled = true;
+
         @Setting(value = "Hide Boss Bar After", comment = "Hide the boss bar after this amount of time.")
         public int hideBoss = 15;
 
@@ -78,16 +91,23 @@ public class CCLConfig {
         @Setting
         public boolean enabled = false;
 
-        @Setting("Min Item Live Time")
+        @Setting(value = "Min Item Live Time", comment = "Minimum amount of time an item should live before being able to be cleared")
         public int minLiveTime = 20;
     }
 
     @ConfigSerializable
-    public static class PlayerData {
+    public static class Sounds {
         @Setting
-        UUID player;
-        @Setting
-        long battleLimit;
+        public boolean enabled = true;
+
+        @Setting(value = "Warning sound", comment = "Sound sent to all players for warnings")
+        public SoundType warningSound = SoundTypes.ITEM_BOTTLE_FILL;
+
+        @Setting(value = "Cleared sound", comment = "Sound sent to all players for when items are cleared")
+        public SoundType clearedSound = SoundTypes.ENTITY_SPLASH_POTION_BREAK;
+
+        @Setting(value = "Sound Category")
+        public SoundCategory soundCategory = SoundCategories.VOICE;
     }
 
 }

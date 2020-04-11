@@ -158,6 +158,7 @@ public class CatClearLag {
         Sponge.getCommandManager().register(this, LaggyChunksCommand.getCommand(), "laggychunks", "lc");
         Sponge.getCommandManager().register(this, WhiteListItemCommand.getCommand(), "clwhitelist", "cwl");
         Sponge.getCommandManager().register(this, UnloadChunksCommand.getCommand(), "unloadchunks", "uc");
+        Sponge.getCommandManager().register(this, CLDebugCommand.getCommand(), "cldebug");
     }
 
     public Logger getLogger() {
@@ -223,5 +224,9 @@ public class CatClearLag {
 
     public CCLService getCclService() {
         return cclService;
+    }
+
+    public boolean isBossBarEnabled() {
+        return cclConfig.bossBar.enabled;
     }
 }

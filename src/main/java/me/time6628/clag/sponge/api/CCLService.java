@@ -1,7 +1,7 @@
 package me.time6628.clag.sponge.api;
 
 import me.time6628.clag.sponge.CatClearLag;
-import org.spongepowered.api.data.manipulator.mutable.DisplayNameData;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.Item;
@@ -23,12 +23,16 @@ public class CCLService {
         Predicate<Entity> whitelistCheck = item -> !CatClearLag.instance.getCclConfig().whitelist.contains(((Item) item).getItemType().getId());
         Predicate<Entity> entityWhitelist = entity -> !CatClearLag.instance.getCclConfig().entityWhiteList.contains(entity.getType().getId());
         checks.put(Type.HOSTILE, notAPlayer().and(o -> o instanceof Hostile).and(entityWhitelist));
-        checks.put(Type.ITEM, notAPlayer().and(o -> o instanceof Item).and(whitelistCheck));
+        checks.put(Type.ITEM, notAPlayer().and(o -> o instanceof Item && o.get(Keys.DESPAWN_DELAY).isPresent() &&
+                o.get(Keys.DESPAWN_DELAY).get() < CatClearLag.instance.getCclConfig().itemDespawnRate
+        ).and(whitelistCheck));
         checks.put(Type.ALL, notAPlayer().and(Entity.class::isInstance).and(entityWhitelist));
         checks.put(Type.LIVING, notAPlayer().and(o -> o instanceof Living).and(entityWhitelist));
         checks.put(Type.XP, notAPlayer().and(o -> o instanceof ExperienceOrb));
         checks.put(Type.ANIMAL, notAPlayer().and(o -> o instanceof Animal).and(entityWhitelist));
-        checks.put(Type.NAMED, notAPlayer().and(entity -> !entity.get(DisplayNameData.class).isPresent()));
+        checks.put(Type.NAMED, notAPlayer().and(entity -> !entity.get(Keys.DISPLAY_NAME).isPresent() &&
+                (entity.get(Keys.PERSISTS).isPresent() && !entity.get(Keys.PERSISTS).get()) &&
+                !entity.get(Keys.TAMED_OWNER).isPresent()));
         checks.put(Type.ENTITY, notAPlayer());
     }
 
