@@ -25,8 +25,10 @@ public class ItemClearer implements Runnable {
         Text message = Messages.getClearMsg(i);
         Text messageRaw = Messages.getClearMsg(i, false);
         if (plugin.isBossBarEnabled()) {
-            ItemClearingWarning.bossBar.setName(messageRaw);
-            ItemClearingWarning.bossBar.setPercent(0.0f);
+            if (ItemClearingWarning.bossBar != null) {
+                ItemClearingWarning.bossBar.setName(messageRaw);
+                ItemClearingWarning.bossBar.setPercent(0.0f);
+            }
         }
         for (Player player : plugin.getGame().getServer().getOnlinePlayers()) {
             if (plugin.getCclConfig().sounds.enabled)
