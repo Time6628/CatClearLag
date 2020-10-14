@@ -182,13 +182,30 @@ public class CatClearLag {
     }
 
     public Integer unloadChunks() {
-        final int[] i = {0};
+        int success_count=0,last_failed_count=-1;
         List<Chunk> chunks = getChunks();
-        chunks.forEach(chunk -> {
-            chunk.unloadChunk();
-            i[0]++;
-        });
-        return i[0];
+        int i=0;
+        ArrayList<Chunk> failedChunks = new ArrayList<>();
+        while (last_failed_count!=failedChunks.size()){
+            i++;
+            if(i>5){
+                System.out.println("[CatClearLag] UnloadChunks: Ran more than five loops, break.");
+                break;
+            }
+            System.out.println("[CatClearLag] UnloadChunks: New iteration.");
+            for(Chunk chunk : chunks) {
+                if(!chunk.unloadChunk()){
+                    System.out.println("[CatClearLag] UnloadChunks: Chunk "+chunk.getPosition().getX()+","+chunk.getPosition().getY()+","+chunk.getPosition().getZ()+" failed to unload");
+                    failedChunks.add(chunk);
+                } else {
+                    success_count++;
+                }
+            }
+            chunks=new ArrayList<>(failedChunks);
+            last_failed_count=failedChunks.size();
+            failedChunks=new ArrayList();
+        }
+        return success_count;
     }
 
     public void addIDToWhiteList(String id) {
