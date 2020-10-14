@@ -205,7 +205,7 @@ public class CatClearLag {
             last_failed_count=failedChunks.size();
         }
         for (Chunk chunk: failedChunks){
-            System.out.println("[CatClearLag] UnloadChunks: Chunk "+chunk.getPosition().getX()+","+chunk.getPosition().getY()+","+chunk.getPosition().getZ()+" failed to unload");
+            System.out.println("[CatClearLag] UnloadChunks: Chunk "+chunk.getWorld().getName()+" "+chunk.getPosition().getX()+","+chunk.getPosition().getY()+","+chunk.getPosition().getZ()+" failed to unload");
         }
         return success_count;
     }
