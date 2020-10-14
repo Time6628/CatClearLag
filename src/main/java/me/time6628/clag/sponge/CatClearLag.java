@@ -187,23 +187,25 @@ public class CatClearLag {
         int i=0;
         ArrayList<Chunk> failedChunks = new ArrayList<>();
         while (last_failed_count!=failedChunks.size()){
-            i++;
-            if(i>5){
-                System.out.println("[CatClearLag] UnloadChunks: Ran more than five loops, break.");
-                break;
-            }
+            failedChunks=new ArrayList();
             System.out.println("[CatClearLag] UnloadChunks: New iteration.");
             for(Chunk chunk : chunks) {
                 if(!chunk.unloadChunk()){
-                    System.out.println("[CatClearLag] UnloadChunks: Chunk "+chunk.getPosition().getX()+","+chunk.getPosition().getY()+","+chunk.getPosition().getZ()+" failed to unload");
                     failedChunks.add(chunk);
                 } else {
                     success_count++;
                 }
             }
+            i++;
+            if(i>20){
+                System.out.println("[CatClearLag] UnloadChunks: Ran more than 100 loops, break.");
+                break;
+            }
             chunks=new ArrayList<>(failedChunks);
             last_failed_count=failedChunks.size();
-            failedChunks=new ArrayList();
+        }
+        for (Chunk chunk: failedChunks){
+            System.out.println("[CatClearLag] UnloadChunks: Chunk "+chunk.getPosition().getX()+","+chunk.getPosition().getY()+","+chunk.getPosition().getZ()+" failed to unload");
         }
         return success_count;
     }
