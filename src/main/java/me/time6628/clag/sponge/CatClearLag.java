@@ -127,13 +127,11 @@ public class CatClearLag {
                     .name("CatClearLag Item Remover")
                     .submit(this));
             cclConfig.warnings.forEach((d) ->
-            {
-                tasks.add(scheduler.createTaskBuilder().execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
-                        .delay(d, TimeUnit.SECONDS)
-                        .interval(cclConfig.interval, TimeUnit.MINUTES)
-                        .name("CatClearLag Removal Warnings")
-                        .submit(this));
-            });
+                    tasks.add(scheduler.createTaskBuilder().execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
+                            .delay(d, TimeUnit.SECONDS)
+                            .interval(cclConfig.interval, TimeUnit.MINUTES)
+                            .name("CatClearLag Removal Warnings")
+                            .submit(this)));
         }
         tasks.add(scheduler.createTaskBuilder().execute(new EntityChecker())
                 .delay(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
@@ -162,7 +160,7 @@ public class CatClearLag {
     }
 
     public PaginationService getPaginationService() {
-        return game.getServiceManager().provide(PaginationService.class).get();
+        return game.getServiceManager().provideUnchecked(PaginationService.class);
     }
 
     private List<Chunk> getChunks() {
