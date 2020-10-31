@@ -2,6 +2,7 @@ package me.time6628.clag.sponge.handlers;
 
 import me.time6628.clag.sponge.CatClearLag;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.hanging.Hanging;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.ConstructEntityEvent;
@@ -18,10 +19,10 @@ public class MobEventHandler {
 
     @Listener
     public void onMobSpawn(ConstructEntityEvent.Pre event, @Root Entity entity) {
-        if (entity instanceof Living) {
+        if (entity instanceof Living || entity instanceof Hanging) {
             Optional<Chunk> chunk = entity.getWorld().getChunk(entity.getLocation().getChunkPosition());
             chunk.ifPresent(chunk1 -> {
-                if (chunk1.getEntities().size() >= plugin.getMobLimitPerChunk()) {
+                if (chunk1.getEntities().stream().filter(entity1 -> entity1 instanceof Living || entity1 instanceof Hanging).count() >= plugin.getMobLimitPerChunk()) {
                     event.setCancelled(true);
                 }
             });
