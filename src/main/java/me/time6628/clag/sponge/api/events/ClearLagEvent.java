@@ -26,7 +26,7 @@ public class ClearLagEvent extends AbstractEvent {
 
     public static class Pre extends ClearLagEvent implements Cancellable {
         private boolean cancel;
-        private Type clearType;
+        private final Type clearType;
 
         public Pre(Type clearType) {
             this.clearType = clearType;

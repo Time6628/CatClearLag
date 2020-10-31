@@ -28,7 +28,7 @@ public class CCLService {
         ).and(whitelistCheck));
         checks.put(Type.ALL, notAPlayer().and(Entity.class::isInstance).and(entityWhitelist));
         checks.put(Type.LIVING, notAPlayer().and(o -> o instanceof Living).and(entityWhitelist));
-        checks.put(Type.XP, notAPlayer().and(o -> o instanceof ExperienceOrb));
+        checks.put(Type.XP, notAPlayer().and(o -> o instanceof ExperienceOrb).and(entityWhitelist));
         checks.put(Type.ANIMAL, notAPlayer().and(o -> o instanceof Animal).and(entityWhitelist));
         checks.put(Type.NAMED, notAPlayer().and(entity -> !entity.get(Keys.DISPLAY_NAME).isPresent() &&
                 (entity.get(Keys.PERSISTS).isPresent() && !entity.get(Keys.PERSISTS).get()) &&
