@@ -32,7 +32,7 @@ public class ConfigLoader {
                 file.createNewFile();
             }
             cclLoader = HoconConfigurationLoader.builder().setFile(file).build();
-            CommentedConfigurationNode config = cclLoader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
+            CommentedConfigurationNode config = cclLoader.load(ConfigurationOptions.defaults().withObjectMapperFactory(plugin.getFactory()).withShouldCopyDefaults(true));
             cclConfig = config.getValue(TypeToken.of(CCLConfig.class), new CCLConfig());
             cclLoader.save(config);
             return true;
@@ -49,7 +49,7 @@ public class ConfigLoader {
                 file.createNewFile();
             }
             ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setFile(file).build();
-            CommentedConfigurationNode config = loader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
+            CommentedConfigurationNode config = loader.load(ConfigurationOptions.defaults().withObjectMapperFactory(plugin.getFactory()).withShouldCopyDefaults(true));
             messagesConfig = config.getValue(TypeToken.of(MessagesConfig.class), new MessagesConfig());
             loader.save(config);
             return true;
@@ -65,7 +65,7 @@ public class ConfigLoader {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            CommentedConfigurationNode config = cclLoader.load(ConfigurationOptions.defaults().setObjectMapperFactory(plugin.getFactory()).setShouldCopyDefaults(true));
+            CommentedConfigurationNode config = cclLoader.load(ConfigurationOptions.defaults().withObjectMapperFactory(plugin.getFactory()).withShouldCopyDefaults(true));
             config.setValue(TypeToken.of(CCLConfig.class), newConfig);
             cclLoader.save(config);
         } catch (Exception e) {

@@ -19,7 +19,7 @@ public class ItemManager {
     private final CatClearLag plugin = CatClearLag.instance;
 
     private final Set<Item> items;
-    private final Map<Item, SpongeExecutorService.SpongeFuture> futures;
+    private final Map<Item, SpongeExecutorService.SpongeFuture<?>> futures;
 
     public ItemManager() {
         this.items = new HashSet<>();
@@ -31,7 +31,7 @@ public class ItemManager {
     public void onEntitySpawn(DropItemEvent.Dispense event, @Getter("getEntities") List<Entity> entity) {
         entity.forEach(entity1 -> {
             items.add((Item) entity1);
-            SpongeExecutorService.SpongeFuture future = plugin.getGame().getScheduler().createAsyncExecutor(plugin)
+            SpongeExecutorService.SpongeFuture<?> future = plugin.getGame().getScheduler().createAsyncExecutor(plugin)
                     .schedule(() -> {
                         items.remove(entity1);
                     }, plugin.getCclConfig().liveTime.minLiveTime, TimeUnit.SECONDS);
