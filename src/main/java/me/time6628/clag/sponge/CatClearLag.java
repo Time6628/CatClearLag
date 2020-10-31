@@ -91,20 +91,17 @@ public class CatClearLag {
         tasks = new ArrayList<>();
         Task.Builder builder = getGame().getScheduler().createTaskBuilder();
         tasks.add(builder.execute(new ItemClearer())
-                .async()
                 .delay(cclConfig.interval, TimeUnit.MINUTES)
                 .interval(cclConfig.interval, TimeUnit.MINUTES)
                 .name("CatClearLag Item Remover")
                 .submit(this));
         cclConfig.warnings.forEach((d) ->
                 tasks.add(builder.execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
-                        .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(cclConfig.interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
                         .submit(this)));
         tasks.add(builder.execute(new EntityChecker())
-                .async()
                 .delay(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .interval(cclConfig.limits.entityCheckInterval, TimeUnit.MINUTES)
                 .name("CatClearLag hostile checker")
@@ -132,7 +129,6 @@ public class CatClearLag {
             cclConfig.warnings.forEach((d) ->
             {
                 tasks.add(scheduler.createTaskBuilder().execute(new ItemClearingWarning(((cclConfig.interval * 60) - d)))
-                        .async()
                         .delay(d, TimeUnit.SECONDS)
                         .interval(cclConfig.interval, TimeUnit.MINUTES)
                         .name("CatClearLag Removal Warnings")
