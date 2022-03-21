@@ -3,7 +3,7 @@ buildscript {
         mavenLocal()
         maven {
             name = 'sponge'
-            url = 'http://repo.spongepowered.org/maven'
+            url = 'https://repo.spongepowered.org/maven'
         }
         maven {
             name = 'gradle'
@@ -29,7 +29,7 @@ version = '0.9.5.2'
 repositories {
     mavenCentral()
     maven {
-        url 'http://repo.spongepowered.org/maven'
+        url 'https://repo.spongepowered.org/maven'
     }
 }
 
